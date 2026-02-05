@@ -58,7 +58,7 @@ Testing & Continuous Integration
 
 High precision RealHP<N> ComplexHP<N>
 *************************************
-
+  Fix #401 (for Boost 1.88): when using ThinRealWrapper<long double> disable std::fpclassify and constexpr detection (!1156)
 
 ==================================================
 yade-2026.1.0

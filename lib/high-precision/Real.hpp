@@ -68,6 +68,12 @@
  *   et_off         → slower calculations, faster compilation
  */
 
+// Special case: when using ThinRealWrapper<long double> disable Boost 1.88 using std::fpclassify and constexpr detection
+#if (((YADE_REAL_BIT <= 80) and (YADE_REAL_BIT > 64)) or defined(YADE_NON_386_LONG_DOUBLE))
+#define BOOST_MATH_DISABLE_STD_FPCLASSIFY
+#define BOOST_MATH_NO_CONSTEXPR_DETECTION
+#endif
+
 #include <boost/config.hpp>
 #include <boost/version.hpp>
 #if (((__GNUC__ > 7) or (not BOOST_GCC)) and (BOOST_VERSION >= 106700))

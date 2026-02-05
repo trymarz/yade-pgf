@@ -118,6 +118,7 @@ variables:
                           echo -e "\n\e[92m===\nNice, the ChangeLog has $CHANGELOG_LINES lines added\n===\e[0m\n" ;
                           git diff origin/master -- ChangeLog ;
                   fi;
+                  git reset --hard ;
                   echo -e "\n\e[92m===\nclang-format version is $CLANG_VERSION \n===\e[0m\n" ;
                   scripts/clang-formatter.sh ./ ;
                   scripts/python-formatter.sh ./ --allow-dirty ;
