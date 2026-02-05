@@ -41,6 +41,7 @@ PotentialParticles / Blocks
 
 OpenMPI / OpenMP threads
 ************************
+  Temporarily drop support for Open MPI 5.0.9, until it is fixed. (!1160)
 
 OpenFoam coupling
 *****************
