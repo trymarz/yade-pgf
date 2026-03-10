@@ -25,7 +25,12 @@ class TestGUIHelper:
 		#   v.lookAt, v.viewDir, v.eyePosition, v.upVector
 		# see scripts/checks-and-tests/gui/testGuiMixedAlphaBox.py for example.
 		self.cameraParams = cameraParams
-		self.viewWaitTimeSeconds = 30.0  # sometimes the build servers are oveloaded. Let's try 30 seconds and see if it works. When testing locally put here 1 second.
+		# sometimes the build servers are oveloaded. Let's try 30 seconds and see if it works. When testing locally put here 1 second.
+		self.viewWaitTimeSeconds = 30.0
+		# previously these two were 0.25 second, but on (sometimes) overloaded build servers that was too fast, and it produced wrong screenshots.
+		self.nextScreenshotWaitTime = 3.0
+		self.clickWaitTime = 3.0
+
 		self.scrNum = 0
 		# FIXME : this number 14 is hardcoded in scripts/checks-and-tests/gui/testGui.sh when testing if screenshots are present.
 		self.maxTestNum = 14
@@ -50,14 +55,14 @@ class TestGUIHelper:
 		#quit()
 
 	def makeNextScreenshot(self):
-		time.sleep(0.25)
+		time.sleep(self.nextScreenshotWaitTime)
 		subprocess.run(["/usr/bin/scrot", "-z", "scr" + "_" + self.name + "_" + str(self.scrNum).zfill(2) + ".png"])
-		time.sleep(0.25)
+		time.sleep(self.nextScreenshotWaitTime)
 
 	def clickOnScreen(self, x, y, mouseButton=1):
-		time.sleep(0.25)
+		time.sleep(self.clickWaitTime)
 		subprocess.run(["/usr/bin/xdotool", "mousemove", str(x), str(y), "click", str(mouseButton), "mousemove", "restore"])
-		time.sleep(0.25)
+		time.sleep(self.clickWaitTime)
 
 	def screenshotEngine(self):
 		self.scrNum += 1
