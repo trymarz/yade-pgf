@@ -58,6 +58,11 @@ echo -e "\n\n=== Will now test inside xterm, all useful output, including gdb cr
 
 mkdir -p ${CREATE_NEW_SCREENSHOTS} # screenshots
 
+# Set XDG_RUNTIME_DIR so that Yade warnings in the console do not trigger random extra warning about XDG_RUNTIME_DIR not set
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p $XDG_RUNTIME_DIR
+chmod 0700 $XDG_RUNTIME_DIR
+
 # Loop over files ${GUI_TESTS_PATH}/testGui*py
 # TODO: tell the called scripts what name to use "Empty" "Simple", etc. currently these names are written manually inside
 #  * scripts/checks-and-tests/gui/testGuiEmpty.py

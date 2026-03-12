@@ -7,6 +7,7 @@
 *************************************************************************/
 
 #include "TriaxialStressController.hpp"
+#include <lib/base/LoggingUtils.hpp>
 #include <lib/high-precision/Constants.hpp>
 #include <core/Clump.hpp>
 #include <core/Scene.hpp>
@@ -106,8 +107,16 @@ void TriaxialStressController::controlExternalStress(
 		} else
 			translation = wall_max_vel * math::sign(translation) * scene->dt;
 	}
-	previousTranslation[wall]
-	        = (1 - stressDamping) * translation * normal[wall] + 0.8 * previousTranslation[wall]; // formula for "steady-flow" evolution with fluctuations
+	if (legacyStressDamping) {
+		previousTranslation[wall] = (1 - stressDamping) * translation * normal[wall]
+		        + 0.8 * previousTranslation[wall]; // formula for "steady-flow" evolution with fluctuations
+	} else {
+		previousTranslation[wall] = (1 - stressDamping) * translation * normal[wall]
+		        + stressDamping * previousTranslation[wall]; // formula for "steady-flow" evolution with fluctuations
+		LOG_ONCE_WARN("Note that default stressDamping behaviour changed since February 2026. It may affect the velocity of walls. Set "
+		              "'legacyStressDamping' true to use the legacy behaviour.");
+	}
+
 	//Don't update position since Newton is doing that starting from bzr2612
 	// 	p->se3.position += previousTranslation[wall];
 	externalWork += previousTranslation[wall].dot(getForce(scene, wall_id[wall]));

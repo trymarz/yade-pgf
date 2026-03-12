@@ -11,6 +11,7 @@ scr = TestGUIHelper("Video", True)
 guiIterPeriod = 20
 
 from yade import qt
+yade.log.setLevel("TriaxialStressController", 2) #Do not show warning introduced with MR !1162 so it won't affect the screenshot of terminal.
 
 openViewAt = 61  # must be synchronized with clicking
 snapEveryNthIter = 5  # save image every 5 iterations

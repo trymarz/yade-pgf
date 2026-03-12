@@ -5,6 +5,10 @@ Sun, Aug 04 20:05:00 2024 +0100
 Bug Fixes
 *********
 
+Breaking Changes
+*********
+  Fix the stressDamping in TriaxialStressController that altered max_vel (affects default behaviour of TriaxialStressController) (!1162)
+    
 Code Formatting & Organization
 ******************************
 
@@ -9932,75 +9936,3 @@ Olivier Galizzi (147):
       Added tree file to rename files and directories
       Added some concepts into yade.sxw
 
-== START sections template - copy it to the top after each release, so that people can add their ChangeLog entries in a proper section ==
-Alpha shapes
-Bug fixes
-Clang-format & reorganize
-Clumps
-Documentation / Comments
-Examples
-Fluid & thermal & particle saturation
-GUI
-High precision RealHP<N> ComplexHP<N>
-LevelSet & Vol. Interacting LevelSet
-OpenMPI calculations
-Packaging improvements & building
-Polyhedra / Facets
-PotentialParticles / Blocks
-Small improvements
-Tests & checks & CI
-== END sections template ==
-
-== START Another categories template, to use at the top of this file ==
-
-Bug Fixes
-*********
-
-Code Formatting & Organization
-******************************
-
-Documentation & Comments
-************************
-
-Examples
-********
-
-User Interface (GUI)
-********************
-
-Models & Shapes
-***************
-Alpha shapes
-------------
-
-Clumps
-------
-
-Fluid & thermal & particle saturation
--------------------------------------
-
-LevelSet & Volume Interacting LevelSet
---------------------------------------
-
-Polyhedra / Facets
-------------------
-
-PotentialParticles / Blocks
----------------------------
-
-OpenMPI / OpenMP threads
-************************
-
-OpenFoam coupling
-*****************
-
-Packaging & Build Improvements
-******************************
-
-Small Enhancements
-******************
-
-Testing & Continuous Integration
-********************************
-
-== END Another categories template ==
