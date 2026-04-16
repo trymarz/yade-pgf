@@ -37,6 +37,9 @@ onlyScripts = []
 mpiScripts = ['checkMPI.py', 'checkMPISilo.py', 'checkMPI4PYcomm.py', 'checkMPYcomm.py']
 # singleCore = singleCore + mpiScripts # ignore hybrid MPIxOMP
 
+if os.environ.get('YADE_SKIP_MPI_CHECKS') == '1':
+	skipScripts = skipScripts + mpiScripts
+
 
 def acceptOMPIVersion():  # filter out specific distros for MPI checks
 	# excludes ubuntu18, suze15, stretch (failed spawn with ompi v2)

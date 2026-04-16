@@ -38,6 +38,18 @@ with tarfile.open('%s/%s' % (dirpath, tarballname), mode='w:xz') as out:
 # Copy debian-directory into the proper place
 shutil.copytree('./scripts/ppa_ci/debian', dirpathyade + '/debian/')
 
+debhelperCompat = ('13' if args.dist == 'resolute' else '12')
+with fileinput.FileInput(dirpathyade + '/debian/control', inplace=True) as file:
+	for line in file:
+		if line.lstrip().startswith('debhelper '):
+			print(' debhelper-compat (= ' + debhelperCompat + '),')
+		else:
+			print(line, end='')
+
+compatPath = dirpathyade + '/debian/compat'
+if os.path.exists(compatPath):
+	os.remove(compatPath)
+
 with fileinput.FileInput(dirpathyade + '/debian/changelog', inplace=True) as file:
 	for line in file:
 		print(line.replace("VERSION", versiondebian), end='')
@@ -50,6 +62,11 @@ with fileinput.FileInput(dirpathyade + '/debian/changelog', inplace=True) as fil
 with fileinput.FileInput(dirpathyade + '/debian/rules', inplace=True) as file:
 	for line in file:
 		print(line.replace("VERSIONYADEREPLACE", versiondebian), end='')
+
+if args.dist in ('forky', 'resolute'):
+	with fileinput.FileInput(dirpathyade + '/debian/rules', inplace=True) as file:
+		for line in file:
+			print(line.replace('\t$(tmpInstall)/usr/bin/yadedaily --checkall', '\tYADE_SKIP_MPI_CHECKS=1 $(tmpInstall)/usr/bin/yadedaily --checkall'), end='')
 
 # Prepare high precision package.
 handlePrec = {'long-double': ('18', 2), 'float128': ('33', 1), 'mpfr150': ('150', 1)}

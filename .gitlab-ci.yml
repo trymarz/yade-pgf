@@ -1215,6 +1215,7 @@ pages:
     - master
   script:
     - export PYTHONUNBUFFERED=1
+    - apt-get update && apt-get install -y debhelper-compat
     - cd $CI_PROJECT_DIR/deb/yadedaily$PREC_NAME
     # see comments in make_template, but here give smaller JOBSNUM because this runs on master only, so the cores can be better utilized on merge_request
     - export JOBSNUM=$(case $CI_RUNNER_DESCRIPTION in

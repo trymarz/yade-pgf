@@ -9,8 +9,8 @@ Vcs-Browser: http://anonscm.debian.org/gitweb/?p=debian-science/packages/yade.gi
 X-Python-Version: current
 Build-Depends:
  cmake,
- debhelper (>= 9),
  dh-python,
+ debhelper (>= 12~),
  freeglut3-dev,
  help2man,
  libboost-all-dev,

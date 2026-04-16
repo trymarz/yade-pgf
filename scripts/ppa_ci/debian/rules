@@ -42,6 +42,8 @@ override_dh_auto_install-arch:
 	$(tmpInstall)/usr/bin/yadedaily --checkall
 	#Delete all pyc files
 	find . -name '*.pyc' -print0 | xargs -0 rm -f
+	# Remove unpackaged logo file
+	rm -f $(tmpInstall)/usr/share/doc/yadedaily/img/yade-logo-note.png
 	dh_numpy3
 
 override_dh_installchangelogs:
@@ -69,3 +71,4 @@ override_dh_auto_clean:
 	dh_auto_clean
 	rm -rf $(BUILDDIR)
 
+override_dh_dwz:
