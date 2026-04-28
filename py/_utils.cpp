@@ -924,7 +924,7 @@ try {
 	py::def("TetrahedronCentralInertiaTensor", TetrahedronCentralInertiaTensor, "TODO");
 	py::def("TetrahedronWithLocalAxesPrincipal", TetrahedronWithLocalAxesPrincipal, "TODO");
 	py::def("momentum", Shop::momentum, "Returns total linear momentum of the simulation");
-	py::def("angularMomentum", Shop::angularMomentum, (py::args("origin") = Vector3r(Vector3r::Zero())), "Returns total angularMomentum of the simulation, about input point *origin*");
+	py::def("angularMomentum", Shop::angularMomentum, (py::args("origin") = Vector3r(Vector3r::Zero())), "Returns total angular momentum of the simulation, about input point *origin*");
 	py::def("getSpheresVolume2D",
 	        Shop__getSpheresVolume2D,
 	        (py::arg("mask") = -1),

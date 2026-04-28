@@ -273,6 +273,7 @@ def sphere(center, radius, dynamic=None, fixed=False, wire=False, color=None, hi
 			* callable: will be called without arguments; returned Material value will be used (Material factory object, if you like)
 	:param int mask: :yref:`Body.mask` for the body
 	:param wire: display as wire sphere?
+	:param color: :yref:`rendering color<Shape.color>` choice. A random color is assigned in the absence of an explicit user choice
 	:param highlight: highlight this body in the viewer?
 	:param Vector3-or-None: body's color, as normalized RGB; random color will be assigned if ``None``.
 	
@@ -488,7 +489,8 @@ def levelSetBody(
         axesAABE=Vector3.Zero,
         dynamic=True,
         material=-1,
-        starLike=False
+        starLike=False,
+        color=Vector3(1,1,1)
 ):
 	"""Creates a :yref:`LevelSet` shaped body through various workflows: one can choose to define the discrete distance field from pre-defined shapes (through *shape* and related arguments), or to mimick a :yref:`Clump` instance (*clump* argument, for comparison purposes), or directly assign the discrete distance field on some grid (*distField* and *grid* arguments). Surface nodes can also be either ray traced (see *nSurfNodes*, *nodesPath* and *nodesTol*) or directly assigned (see *surfNodes*)
 
@@ -513,6 +515,7 @@ def levelSetBody(
 	:param bool dynamic: passed to :yref:`Body.dynamic`
 	:param Material material: passed to :yref:`Body.material`
 	:param bool starLike: passed to :yref:`LevelSet.starLike` when the function is also passed *grid* and *distField* (otherwise, :yref:`LevelSet.starLike` is automatically set)
+	:param color: :yref:`rendering color<Shape.color>` choice
 	:return: a corresponding body instance"""
 	try:
 		ls = LevelSet()  # simpler test than testing 'LS_DEM' in features since features is not readily accessible here
@@ -560,6 +563,7 @@ def levelSetBody(
 	_commonBodySetup(
 	        b, b.shape.getVolume(), inertia, material, pos=center, dynamic=dynamic
 	)  # will assign state.mass,inertia,pos,refPos,blockedDOFs, but NOT state.ori (see below)
+	b.shape.color = color
 	iMean = inertia.mean()
 	if abs(inertia[0] - iMean) / iMean < 5.e-4 and abs(inertia[1] - iMean) / iMean < 5.e-4 and abs(inertia[2] - iMean) / iMean < 5.e-4:
 		b.aspherical = False

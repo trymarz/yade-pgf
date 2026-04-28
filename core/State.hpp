@@ -56,7 +56,7 @@ public:
 		((Vector3r,vel,Vector3r::Zero(),,"Current linear velocity."))
 		((Real,mass,0,,"Mass of this body"))
 		((Vector3r,angVel,Vector3r::Zero(),,"Current angular velocity"))
-		((Vector3r,angMom,Vector3r::Zero(),,"Current angular momentum"))
+		((Vector3r,angMom,Vector3r::Zero(),,"Current angular momentum (about body center)"))
 		((Vector3r,inertia,Vector3r::Zero(),,"Inertia of associated body, in local coordinate system."))
 		((Vector3r,refPos,Vector3r::Zero(),,"Reference position"))
 		((Quaternionr,refOri,Quaternionr::Identity(),,"Reference orientation"))

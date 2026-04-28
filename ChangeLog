@@ -15,6 +15,7 @@ Code Formatting & Organization
 Documentation & Comments
 ************************
   Discourage using pip and conda (!1155)
+  Doc polishing throughout angular momentum quantities, color argument in sphere and GlobalStiffnessTimeStepper formulation doc (!1168)
 
 Examples
 ********
