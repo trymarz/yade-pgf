@@ -8,6 +8,10 @@ GUI_TESTS_PATH=scripts/checks-and-tests/gui
 CREATE_NEW_SCREENSHOTS=screenshots
 REFERENCE_SCREENSHOTS=data/checks-and-tests/gui/screenshots
 
+# As suggested in https://github.com/ipython/ipython/issues/14710 setting SOURCE_DATE_EPOCH should guarantee
+# that the ipython tips are no longer random, and the tip is always the same. (I used date +%s to get this number)
+export SOURCE_DATE_EPOCH=1777811637
+
 # You can test this locally using this script, just change YADE_EXECUTABLE into something that works for you:
 #
 #YADE_EXECUTABLE=./examples/yade

@@ -47,6 +47,7 @@ PotentialParticles / Blocks
 OpenMPI / OpenMP threads
 ************************
   Temporarily drop support for Open MPI 5.0.9, until it is fixed. (!1160)
+  Temporarily drop support for Open MPI 5.0.10, until it is fixed. (!1169)
 
 OpenFoam coupling
 *****************
@@ -55,6 +56,7 @@ Packaging & Build Improvements
 ******************************
   Add CI job for building Debian packages for Ubuntu resolute 26.04 (!1154)
   Fix Ubuntu 26.04 packaging, drop debhelper depenendency (!1161)
+  Fix screenshots. (!1169)
 
 
 Small Enhancements

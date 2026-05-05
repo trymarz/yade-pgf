@@ -58,6 +58,8 @@ def acceptOMPIVersion():  # filter out specific distros for MPI checks
 	if yade.libVersions.getAllVersionsCpp()['mpi'][1] == 'ompi:5.0.9':
 		# See: https://gitlab.com/yade-dev/trunk/-/issues/397
 		return False  # Open MPI 5.0.9 does not work.
+	if yade.libVersions.getAllVersionsCpp()['mpi'][1] == 'ompi:5.0.10':
+		return False  # Open MPI 5.0.10 does not work.
 	return True
 
 
