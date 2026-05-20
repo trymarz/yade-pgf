@@ -1311,6 +1311,20 @@ Info provider
 
 This functionality is used by the batch system (described below) to be informed about individual simulation progress and estimated times. If you want to access this information yourself, you can study :ysrc:`core/main/yade-batch.in` for details.
 
+.. _mcpbridge:
+
+MCP bridge
+----------
+The MCP bridge allows AI agent clients to control Yade simulations via the `Model Context Protocol <https://modelcontextprotocol.io/>`_, using a WebSocket connection that carries JSON messages. It exposes a small set of structured operations for executing code and managing long-running simulation tasks.
+
+The bridge is distributed as a separate package; see the `yade-mcp project <https://github.com/yusong652/yade-mcp>`_ for installation. Once the package is importable from Yade's embedded Python, the bridge is started from the Yade prompt::
+
+	Yade [1]: import yade_mcp_bridge
+	Yade [2]: yade_mcp_bridge.start()
+	YADE MCP Bridge on ws://localhost:9002, log: <cwd>/.yade-mcp/bridge.log
+
+The bridge runs in the same Python namespace as the interactive console, so ``O``, ``O.bodies`` and the rest of the simulation state are shared between the agent and the user. A separate ``yade-mcp`` MCP server process mediates between the agent client and this WebSocket.
+
 Batch queuing and execution (yade-batch)
 ========================================
 
