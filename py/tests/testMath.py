@@ -674,6 +674,10 @@ class SimpleTests(unittest.TestCase):
 				if ((func in ["complex tan real", "complex tanh imag"]) and (boostVer < (1, 76, 0))):
 					# for older boost there's nothing we can do. We have a large error: 1e38 ULP
 					pass
+				elif ((func == "fmod") and (boostVer <= (1, 90, 0)) and (boostVer >= (1, 86, 0))):
+					# that's a known bug: https://github.com/boostorg/multiprecision/issues/764
+					print("Ignoring fmod error, see https://github.com/boostorg/multiprecision/issues/764")
+					pass
 				else:
 					ulp = testULP[func][bits][1]
 					if (ulp > tolerateErrorULP):

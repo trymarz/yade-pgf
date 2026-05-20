@@ -312,7 +312,7 @@ As a more precise alternative to the above ``DISABLE_*`` options, other ``cmake`
 	* ENABLE_MULTI_REAL_HP: allow using twice, quadruple or higher precisions of ``Real`` as ``RealHP<2>``, ``RealHP<4>`` or ``RealHP<N>`` in computationally demanding sections of ``C++`` code. See :ref:`high precision documentation<highPrecisionReal>` for additional details (ON by default).
 	* ENABLE_OPENMP: enable OpenMP-parallelizing of Yade execution (ON by default)
 	* ENABLE_PARTIALSAT : enable the partially saturated clay engine :yref:`PartialSatClayEngine`, under construction (ON by default)
-	* ENABLE_PFVFLOW: enable PFV :yref:`FlowEngine` (ON by default)
+	* ENABLE_PFVFLOW: enable PFV :yref:`FlowEngine`, with package requirements as per ENABLE_LINSOLV (ON by default)
 	* ENABLE_POTENTIAL_BLOCKS: enable :yref:`PotentialBlock` shape description thanks for instance to the `COIN-OR <https://github.com/coin-or/Clp>`_ Linear Programming Solver, requires ``coinor-clp coinor-libclp-dev libopenblas-dev`` (ON by default)
 	* ENABLE_POTENTIAL_PARTICLES: enable :yref:`PotentialParticle` shape description, requires ``libopenblas-dev`` (ON by default)
 	* ENABLE_PROFILING: enable profiling, e.g., shows some more metrics, which can define bottlenecks of the code (OFF by default)

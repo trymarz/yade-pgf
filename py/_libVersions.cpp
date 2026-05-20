@@ -1,3 +1,8 @@
+#if defined(LINSOLV) || defined(YADE_POTENTIAL_PARTICLES) || defined(YADE_POTENTIAL_BLOCKS) || defined(FLOW_ENGINE)
+// openblas is missing an #ifndef for #define __STDC_WANT_IEC_60559_TYPES_EXT__ , so we need to include it first.
+#include <openblas_config.h>
+#endif
+
 #include <lib/base/Logging.hpp>
 #include <lib/pyutil/doc_opts.hpp>
 #include <core/Omega.hpp>
@@ -229,7 +234,7 @@ py::list suitesparseVer() { return {}; }
 #if defined(LINSOLV) || defined(YADE_POTENTIAL_PARTICLES) || defined(YADE_POTENTIAL_BLOCKS) || defined(FLOW_ENGINE)
 // 15. openblas
 // if this include does not work then add relevant path specific to your system into file cMake/FindOpenBlas.cmake
-#include <openblas_config.h>
+//#include <openblas_config.h> // temporarily comment out until they fix in OpenBLAS the missing #ifndef. So it has to be included at the top.
 py::list openblasVer()
 {
 	py::list ret;
