@@ -302,7 +302,7 @@ make_archlinux:
   <<: *artifacts_definition
   before_script:
   # would be good to enable useful errors back later for Archlinux, but right now there are lots of false positives.
-    - export EXTRA_CMAKE_ARGS="-DENABLE_VTK=OFF -DENABLE_USEFUL_ERRORS=OFF $EXTRA_CMAKE_ARGS"
+    - export EXTRA_CMAKE_ARGS="-DENABLE_VTK=OFF $EXTRA_CMAKE_ARGS"
     - echo $EXTRA_CMAKE_ARGS
   image: registry.gitlab.com/yade-dev/docker-yade:archlinux-current
 # allow_failure: true

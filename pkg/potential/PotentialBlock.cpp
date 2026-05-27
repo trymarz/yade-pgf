@@ -431,7 +431,12 @@ void PotentialBlock::calculateInertia(Vector3r& centroid, Real& Ixx, Real& Iyy, 
 {
 	Vector3r              pointInside(0, 0, 0), vertex, planeNormal, oriNormal(0, 0, 1), crossProd, rotatedCoord;
 	Vector3r              pt1, pt2, pt3, baseOnPolygon, oriBaseOnPolygon, centroidPyramid, centroidTetra, tempVert1, tempVert2, tempVert3, tempVert4;
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpragmas"
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+// silence the warning that areaPyramid and volumePyramid are only written to, but never read from, and therefore useless.
 	Real                  totalVolume = 0.0, /*plane,*/ det, area, height, vol, areaPyramid, volumePyramid, heightTetra, tempArea, areaTri, tetraVol;
+#pragma GCC diagnostic pop
 	Real                  detJ, x1, x2, x3, x4, y1, y2, y3, y4, z1, z2, z3, z4;
 	Quaternionr           Qp;
 	unsigned int          h, kk, m, counter;

@@ -58,6 +58,7 @@ Packaging & Build Improvements
   Add CI job for building Debian packages for Ubuntu resolute 26.04 (!1154)
   Fix Ubuntu 26.04 packaging, drop debhelper depenendency (!1161)
   Fix screenshots. (!1169)
+  Restore useful warnings about the code for Archlinux build with g++ 16.1.1 (!1172)
 
 
 Small Enhancements

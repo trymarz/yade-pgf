@@ -102,7 +102,12 @@ namespace CGT {
 		if (noCache && T[!currentTes].Max_id() <= 0) return;
 		RTriangulation&     Tri = lastSolution().Triangulation();
 		Point               posAvFacet;
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpragmas"
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+		// silence the warning that numCells is only written to, but never read from, and therefore useless.
 		int                 numCells = 0;
+#pragma GCC diagnostic pop
 		Real                facetFlowRate = 0;
 		FiniteCellsIterator cellEnd = Tri.finite_cells_end();
 		for (FiniteCellsIterator cell = Tri.finite_cells_begin(); cell != cellEnd; cell++) {
@@ -302,7 +307,12 @@ namespace CGT {
 	template <class Tesselation> Real FlowBoundingSphere<Tesselation>::averagePressure()
 	{
 		RTriangulation& Tri = lastSolution().Triangulation();
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpragmas"
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+		// silence the warning that P is only written to, but never read from, and therefore useless.
 		Real            P = 0.f, Ppond = 0.f, Vpond = 0.f;
+#pragma GCC diagnostic pop
 		int             n = 0;
 		for (FiniteCellsIterator cell = Tri.finite_cells_begin(); cell != Tri.finite_cells_end(); cell++) {
 			P += cell->info().p();
@@ -1076,7 +1086,13 @@ namespace CGT {
 		reApplyBoundaryConditions();
 		RTriangulation& Tri = T[currentTes].Triangulation();
 		int             j = 0;
-		Real            m, n, dp_max, p_max, sum_p, p_moy, dp, sum_dp;
+		Real            m, n, dp_max, p_max, sum_p, p_moy, dp;
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpragmas"
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+		// silence the warning that sum_dp is only written to, but never read from, and therefore useless.
+		Real            sum_dp;
+#pragma GCC diagnostic pop
 		Real            compFlowFactor = 0;
 		vector<Real>    previousP;
 		previousP.resize(Tri.number_of_finite_cells());

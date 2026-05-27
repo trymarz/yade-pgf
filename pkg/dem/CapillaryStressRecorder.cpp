@@ -99,7 +99,12 @@ void CapillaryStressRecorder::action()
 	Real V = (triaxialCompressionEngine->height) * (triaxialCompressionEngine->width) * (triaxialCompressionEngine->depth);
 
 	/// Solid volume
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpragmas"
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+// silence the warning that SR is only written to, but never read from, and therefore useless.
 	Real Vs = 0, Rbody = 0, SR = 0;
+#pragma GCC diagnostic pop
 
 	for (const auto& b : *bodies) {
 		if (b->shape->getClassIndex() != Sphere::getClassIndexStatic()) continue;

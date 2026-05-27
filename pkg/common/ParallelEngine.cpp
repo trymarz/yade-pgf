@@ -23,7 +23,14 @@ void ParallelEngine::action()
 	const bool TimingInfo_enabled = TimingInfo::enabled;
 #ifdef YADE_OPENMP
 	//nested parallel regions are disabled by default on some platforms, we enable them since some of the subengine may be also parallel
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpragmas"
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+// silence the warning that omp_set_nested(1) is deprecated
 	omp_set_nested(1);
+#pragma GCC diagnostic pop
+
 #pragma omp parallel for num_threads(ompThreads)
 
 #endif

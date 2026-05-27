@@ -296,7 +296,12 @@ void InsertionSortCollider::action()
 		}
 
 		// Handle erased bodies
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpragmas"
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+// silence the warning that countNoBound is only written to, but never read from, and therefore useless.
 		int countNoBound = 0;
+#pragma GCC diagnostic pop
 		if (nErased > 0) {
 			for (const auto& id : erased)
 				if (3 * (id + 1) <= (int)minima.size())

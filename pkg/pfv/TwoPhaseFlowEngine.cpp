@@ -2564,8 +2564,12 @@ void TwoPhaseFlowEngine::updateDeformationFluxTPF()
 {
 	RTriangulation&     tri = solver->T[solver->currentTes].Triangulation();
 	FiniteCellsIterator cellEnd = tri.finite_cells_end();
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpragmas"
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+// silence the warning that summ, summBC, summMC, SolidVolume are only written to, but never read from, and therefore useless.
 	Real                dv = 0.0, summ = 0.0, summBC = 0.0, summMC = 0.0, SolidVolume = 0.0, dvSwelling = 0.0;
-
+#pragma GCC diagnostic pop
 	if (!imposeDeformationFluxTPFSwitch) {
 		setPositionsBuffer(true);
 		updateVolumes(*solver);

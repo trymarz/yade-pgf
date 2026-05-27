@@ -437,7 +437,12 @@ void FoamCoupling::verifyParticleDetection()
 	if (unFoundSharedIds.size() > 0) {
 		for (const auto& idPair : sharedIdsMapIndx) {
 			const auto& bodyId     = idPair.first;
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpragmas"
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+// silence the warning that foundCount is only written to, but never read from, and therefore useless.
 			int         foundCount = 0;
+#pragma GCC diagnostic pop
 			//const int mpSz = idPair.second.size();
 			bool found = false;
 			for (const auto& fdIndx : idPair.second) {

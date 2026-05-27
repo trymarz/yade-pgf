@@ -565,7 +565,12 @@ Vector3r Ig2_PP_PP_ScGeom::getNormal(const shared_ptr<Shape>& cm1, const State& 
 	////////////////////////////// assembling potential planes particle 1//////////////////////////////
 	int          planeNo = s1->a.size();
 	vector<Real> p;
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpragmas"
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+		// silence the warning that pSum2 is only written to, but never read from, and therefore useless.
 	Real         pSum2 = 0.0, plane;
+#pragma GCC diagnostic pop
 	for (int i = 0; i < planeNo; i++) {
 		plane = s1->a[i] * x + s1->b[i] * y + s1->c[i] * z - s1->d[i];
 		if (plane < pow(10, -15)) { plane = 0.0; }
@@ -679,7 +684,12 @@ bool Ig2_PP_PP_ScGeom::customSolve(
 	PotentialParticle* s1 = static_cast<PotentialParticle*>(cm1.get());
 	PotentialParticle* s2 = static_cast<PotentialParticle*>(cm2.get());
 	Vector3r           xGlobal(0.0, 0.0, 0.0);
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpragmas"
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+		// silence the warning that iter is only written to, but never read from, and therefore useless.
 	int                iter      = 0;
+#pragma GCC diagnostic pop
 	int                totalIter = 0;
 
 	/* Parameters for particles A and B */

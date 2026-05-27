@@ -481,7 +481,12 @@ namespace CGT {
 	{
 		RTriangulation& Tri = T[currentTes].Triangulation();
 		int             j = 0;
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpragmas"
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+// silence the warning that sum_p and sum_dp are only written to, but never read from, and therefore useless.
 		Real            m, n, dp_max, p_max, sum_p, dp, sum_dp;
+#pragma GCC diagnostic pop
 		Real            compFlowFactor = 0;
 		vector<Real>    previousP;
 		previousP.resize(Tri.number_of_finite_cells());
@@ -495,7 +500,12 @@ namespace CGT {
 		t_sum_p.resize(num_threads);
 		FiniteCellsIterator cellEnd = Tri.finite_cells_end();
 		do {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpragmas"
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+// silence the warning that cell2 is only written to, but never read from, and therefore useless.
 			int cell2 = 0;
+#pragma GCC diagnostic pop
 			dp_max = 0;
 			p_max = 0;
 			sum_p = 0;
@@ -558,7 +568,12 @@ namespace CGT {
 		} while ((dp_max / p_max) > tolerance && j < 40000 /*&& ( dp_max > tolerance )*/ /* &&*/ /*( j<50 )*/);
 
 		int  cel = 0;
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpragmas"
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+// silence the warning that Pav is only written to, but never read from, and therefore useless.
 		Real Pav = 0;
+#pragma GCC diagnostic pop
 		for (FiniteCellsIterator cell = Tri.finite_cells_begin(); cell != cellEnd; cell++) {
 			cel++;
 			Pav += cell->info().shiftedP();

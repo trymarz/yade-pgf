@@ -631,7 +631,12 @@ namespace CGT {
 		n_persistent = 0;
 		n_new = 0;
 		n_lost = 0;
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpragmas"
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+// silence the warning that lost_in_state0 is only written to, but never read from, and therefore useless.
 		long lost_in_state0 = 0;
+#pragma GCC diagnostic pop
 
 		for (int i = 0; i < Nc0; ++i) {
 			TS0->contacts[i]->visited = false;

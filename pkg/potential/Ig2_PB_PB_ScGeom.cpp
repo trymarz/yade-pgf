@@ -304,6 +304,10 @@ bool Ig2_PB_PB_ScGeom::go(
 					/* Real JRC1=0.0, JRC2=0.0, JSC1=0.0, JSC2=0.0, sigmaC1=0.0, sigmaC2=0.0, asperity1=0.0, asperity2=0.0; */
 					/* Real lambda01=0.0, lambda02=0.0, heatCapacity1=0.0, heatCapacity2=0.0, hwater1 = 0.0, hwater2 = 0.0; */
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpragmas"
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+		// silence the warning that f1 and f2 are only written to, but never read from, and therefore useless.
 					Real f1 = evaluatePhys(
 					        cm1,
 					        state1,
@@ -328,6 +332,7 @@ bool Ig2_PB_PB_ScGeom::go(
 					        /* lambda02, heatCapacity2, hwater2, */ intactRock2,
 					        noActive2,
 					        jointType2);
+#pragma GCC diagnostic pop
 
 					f1 += 0;
 					f2 += 0; //FIXME: These two statements are added to mute compiler warnings for unused parameters f1, f2. To be amended soon, by changing the type of evaluatePhys to "void", instead of "Real"
@@ -1575,7 +1580,12 @@ Vector3r Ig2_PB_PB_ScGeom::getNormal(const shared_ptr<Shape>& cm1, const State& 
 	////////////////////////////// assembling potential planes particle 1//////////////////////////////
 	int          planeNo = s1->a.size();
 	vector<Real> p;
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpragmas"
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+		// silence the warning that pSum2 is only written to, but never read from, and therefore useless.
 	Real         pSum2           = 0.0, plane;
+#pragma GCC diagnostic pop
 	bool         isSphere        = true;
 	int          minNo           = 0;
 	Real         closestDistance = pow(10, 12);
