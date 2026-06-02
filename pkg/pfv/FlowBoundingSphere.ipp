@@ -102,12 +102,6 @@ namespace CGT {
 		if (noCache && T[!currentTes].Max_id() <= 0) return;
 		RTriangulation&     Tri = lastSolution().Triangulation();
 		Point               posAvFacet;
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wpragmas"
-#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
-		// silence the warning that numCells is only written to, but never read from, and therefore useless.
-		int                 numCells = 0;
-#pragma GCC diagnostic pop
 		Real                facetFlowRate = 0;
 		FiniteCellsIterator cellEnd = Tri.finite_cells_end();
 		for (FiniteCellsIterator cell = Tri.finite_cells_begin(); cell != cellEnd; cell++) {
@@ -307,12 +301,7 @@ namespace CGT {
 	template <class Tesselation> Real FlowBoundingSphere<Tesselation>::averagePressure()
 	{
 		RTriangulation& Tri = lastSolution().Triangulation();
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wpragmas"
-#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
-		// silence the warning that P is only written to, but never read from, and therefore useless.
-		Real            P = 0.f, Ppond = 0.f, Vpond = 0.f;
-#pragma GCC diagnostic pop
+		Real            Ppond = 0.f, Vpond = 0.f;
 		int             n = 0;
 		for (FiniteCellsIterator cell = Tri.finite_cells_begin(); cell != Tri.finite_cells_end(); cell++) {
 			P += cell->info().p();
@@ -320,7 +309,6 @@ namespace CGT {
 			Ppond += cell->info().p() * math::abs(cell->info().volume());
 			Vpond += math::abs(cell->info().volume());
 		}
-		P /= n;
 		Ppond /= Vpond;
 		return Ppond;
 	}
@@ -644,10 +632,11 @@ namespace CGT {
 					if (radius < 0) NEG++;
 					else
 						POS++;
-					if (radius == 0) { cout << "INS-INS PROBLEM!!!!!!!" << endl; }
 					Real fluidArea = 0;
-					if (distance != 0) {
-						if (minPermLength > 0 && distanceCorrection) distance = max(minPermLength * radius, distance);
+					if (distance != 0 && radius != 0) {
+						if (minPermLength > 0 && distanceCorrection) {
+							distance = max(minPermLength * radius, distance);
+						}
 						const CVector& Surfk = cell->info().facetSurfaces[j];
 						Real           area = sqrt(Surfk.squared_length());
 						const CVector& crossSections = cell->info().facetSphereCrossSections[j];
@@ -686,7 +675,6 @@ namespace CGT {
 							     << W[1]->info().id() << " " << W[2]->info().id() << " " << p1 << " " << p2 << " test " << endl;
 						}
 					} else {
-						cout << "infinite K1!" << endl;
 						k = infiniteK;
 						cell->info().kNorm()[j] = infiniteK;
 					} //Will be corrected in the next loop
@@ -903,6 +891,7 @@ namespace CGT {
 		if (Tri.is_infinite(cell->neighbor(j))) return 0;
 		Real Vpore = this->volumePoreVoronoiFraction(cell, j);
 		Real Ssolid = this->surfaceSolidThroat(cell, j, slipBoundary, /*reuse the same facet data*/ true);
+		if (Ssolid == 0) return 0; // coincident points
 
 		//handle symmetry (tested ok)
 		if (slipBoundary && facetNFictious > 0) {
@@ -1087,12 +1076,6 @@ namespace CGT {
 		RTriangulation& Tri = T[currentTes].Triangulation();
 		int             j = 0;
 		Real            m, n, dp_max, p_max, sum_p, p_moy, dp;
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wpragmas"
-#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
-		// silence the warning that sum_dp is only written to, but never read from, and therefore useless.
-		Real            sum_dp;
-#pragma GCC diagnostic pop
 		Real            compFlowFactor = 0;
 		vector<Real>    previousP;
 		previousP.resize(Tri.number_of_finite_cells());
