@@ -53,6 +53,10 @@ OpenMPI / OpenMP threads
 OpenFoam coupling
 *****************
 
+PFV coupling
+************
+  handle the case of coincident cell centers (e.g. in cubic arrays)  (!1174)
+
 Packaging & Build Improvements
 ******************************
   Add CI job for building Debian packages for Ubuntu resolute 26.04 (!1154)
