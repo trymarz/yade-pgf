@@ -107,6 +107,7 @@ namespace CGT {
 		for (FiniteCellsIterator cell = Tri.finite_cells_begin(); cell != cellEnd; cell++) {
 			if (cell->info().isGhost or cell->info().isAlpha) continue;
 			cell->info().averageVelocity() = CGAL::NULL_VECTOR;
+			numCells++;
 			Real totFlowRate = 0; //used to acount for influxes in elements where pressure is imposed
 			for (int i = 0; i < 4; i++)
 				if (!Tri.is_infinite(cell->neighbor(i))) {
@@ -301,7 +302,10 @@ namespace CGT {
 	{
 		RTriangulation& Tri = lastSolution().Triangulation();
 		Real            Ppond = 0.f, Vpond = 0.f;
+		int             n = 0;
 		for (FiniteCellsIterator cell = Tri.finite_cells_begin(); cell != Tri.finite_cells_end(); cell++) {
+			P += cell->info().p();
+			n++;
 			Ppond += cell->info().p() * math::abs(cell->info().volume());
 			Vpond += math::abs(cell->info().volume());
 		}
@@ -1106,6 +1110,7 @@ namespace CGT {
 				p_max = 0;
 				p_moy = 0;
 				sum_p = 0;
+				sum_dp = 0;
 #ifdef GS_OPEN_MP
 				cell2 = numCells;
 				for (int ii = 0; ii < num_threads; ii++)
@@ -1118,7 +1123,7 @@ namespace CGT {
 					t_sum_dp[ii] = 0;
 				int       kk = 0;
 				const int numCells2 = numCells;
-#pragma omp parallel for private(dp, m, n, kk) shared(tolerance, t_sum_dp, t_dp_max, sum_p, cells_its, j, Tri, relax) schedule(dynamic, 1000)
+#pragma omp parallel for private(dp, m, n, kk) shared(tolerance, t_sum_dp, t_dp_max, sum_p, sum_dp, cells_its, j, Tri, relax) schedule(dynamic, 1000)
 				for (kk = 0; kk < numCells2; kk++) {
 					const FiniteCellsIterator& cell = cells_its[kk];
 					{
@@ -1184,6 +1189,7 @@ namespace CGT {
 						dp_max = max(dp_max, math::abs(dp));
 						p_max = max(p_max, math::abs(cell->info().p()));
 						sum_p += math::abs(cell->info().p());
+						sum_dp += math::abs(dp);
 #endif
 					}
 				}
