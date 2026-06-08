@@ -13,10 +13,9 @@ where he even contributed some expert advice to the hackathon.
 
 .. _fig-yade-hackathon:
 .. figure:: https://gitlab.com/yade-dev/yade-data/-/raw/main/static/figs/hackathon.jpg
-	:scale: 100 %
 	:align: center
 
-	From left to right, Vasileios Angelidakis, Anton Gladky, Katia Boschi, Jerome Duriez, Robert Caulk, Bruno Chareyre, Janek Kozicki, Vaclav Smilauer (not pictured Klaus Theoni)
+	From left to right, Vasileios Angelidakis, Anton Gladky, Katia Boschi, Jérôme Duriez, Robert Caulk, Bruno Chareyre, Janek Kozicki, Vaclav Smilauer (not pictured Klaus Theoni)
 
 Main topics of discussion included:
 
@@ -30,7 +29,7 @@ Main topics of discussion included:
 * Present the latest work, based on Yade and newer features added in the source code recently.
 * Drop google-analytics code from the website. `Issue <https://gitlab.com/yade-dev/trunk/-/issues/280>`_\ , `MR <https://gitlab.com/yade-dev/trunk/-/merge_requests/873>`_.
 * Create a Yade short-course section on the website and include all content associated with a recent short-course. `MR <https://gitlab.com/yade-dev/trunk/-/merge_requests/871>`_
-* Discuss a future paper in Computer Physics Communications.
+* Discuss `a future paper in Computer Physics Communications <https://www.sciencedirect.com/science/article/pii/S0010465524002169>`_.
 * Explore technical and non-technical discussions.
 
 In contrast to their traditional means of communication via week-long email and issue tracking exchanges, the Yade developers found that this 
