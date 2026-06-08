@@ -63,7 +63,7 @@ Packaging & Build Improvements
   Fix Ubuntu 26.04 packaging, drop debhelper depenendency (!1161)
   Fix screenshots. (!1169)
   Restore useful warnings about the code for Archlinux build with g++ 16.1.1 (!1172)
-
+  Drop python3-pyqt5.qtwebkit dependency for forky/resolute (package no longer available) (!1176)
 
 Small Enhancements
 ******************
@@ -5545,7 +5545,7 @@ Bruno Chareyre (68):
       -remove excess verbosity
       - add thread number attribute to change the number of thread of interactionLoop dynamicaly during simulations. Also usefull combined with parallel engine (for fine grain tuning of thread number in each subprocess)
       1. Add thread number to parallel engine, can be changed dynamicaly. Uncouples the number of threads in parallel engines and in slaves.     2. Enable nested parallel regions (disabled on many systems by default) else the parallel engine is doing no good
-      1. Replace one loop on cells by an optimized vector<Cell> iterator     2. Clean an horrible block of code (not only ugly, it was also slow)
+      2. Replace one loop on cells by an optimized vector<Cell> iterator     2. Clean an horrible block of code (not only ugly, it was also slow)
       - introduce a position buffer for faster updates of volumes
       Use retriangulation conditions more consistently. The solvers are not swapped before a given fraction of the permutation interval now, to reduce overheads.
       small change in the initialization logic, now defining the two position buffers if "first"

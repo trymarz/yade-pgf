@@ -63,10 +63,16 @@ with fileinput.FileInput(dirpathyade + '/debian/rules', inplace=True) as file:
 	for line in file:
 		print(line.replace("VERSIONYADEREPLACE", versiondebian), end='')
 
+# In forky and resolute, we need to skip MPI checks
 if args.dist in ('forky', 'resolute'):
 	with fileinput.FileInput(dirpathyade + '/debian/rules', inplace=True) as file:
 		for line in file:
 			print(line.replace('\t$(tmpInstall)/usr/bin/yadedaily --checkall', '\tYADE_SKIP_MPI_CHECKS=1 $(tmpInstall)/usr/bin/yadedaily --checkall'), end='')
+	# And python3-pyqt5.qtwebkit is not available in forky/resolute
+	with fileinput.FileInput(dirpathyade + '/debian/control', inplace=True) as file:
+		for line in file:
+			if 'python3-pyqt5.qtwebkit' not in line:
+				print(line, end='')
 
 # Prepare high precision package.
 handlePrec = {'long-double': ('18', 2), 'float128': ('33', 1), 'mpfr150': ('150', 1)}
