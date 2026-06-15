@@ -240,11 +240,13 @@ variables:
 make_20_04:
   <<: *make_definition
   <<: *artifacts_definition
+  <<: *skip_WIP_and_Draft
   image: registry.gitlab.com/yade-dev/docker-yade:ubuntu20.04
 
 make_22_04:
   <<: *make_definition
   <<: *artifacts_definition
+  <<: *skip_WIP_and_Draft
   artifacts:
     paths:
       - install
@@ -275,11 +277,13 @@ make_26_04:
 make_bullseye:
   <<: *make_definition
   <<: *artifacts_definition
+  <<: *skip_WIP_and_Draft
   image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye
 
 make_bookworm:
   <<: *make_definition
   <<: *artifacts_definition
+  <<: *skip_WIP_and_Draft
   image: registry.gitlab.com/yade-dev/docker-yade:debian-bookworm
 
 make_trixie:
@@ -300,6 +304,7 @@ make_forky:
 make_archlinux:
   <<: *make_definition
   <<: *artifacts_definition
+  <<: *skip_WIP_and_Draft
   before_script:
   # would be good to enable useful errors back later for Archlinux, but right now there are lots of false positives.
     - export EXTRA_CMAKE_ARGS="-DENABLE_VTK=OFF $EXTRA_CMAKE_ARGS"
@@ -459,7 +464,7 @@ make_unity:
 make_opposite:
   <<: *make_definition
   <<: *artifacts_definition
-  <<: *skip_WIP
+  <<: *skip_WIP_and_Draft
   before_script:
     - export EXTRA_CMAKE_ARGS="-DENABLE_LOGGER=OFF -DENABLE_MASK_ARBITRARY=ON -DENABLE_COMPLEX_MP=OFF -DENABLE_OPENMP=OFF -DENABLE_LIQMIGRATION=ON -DENABLE_PROFILING=ON -DENABLE_SPH=ON -DENABLE_DEFORM=ON $EXTRA_CMAKE_ARGS"
     - echo $EXTRA_CMAKE_ARGS
@@ -468,7 +473,7 @@ make_opposite:
 make_suse15:
   <<: *make_definition
   <<: *artifacts_definition
-  <<: *skip_WIP
+  <<: *skip_WIP_and_Draft
   before_script:
     - export CXXFLAGS="-Wno-int-in-bool-context -Wno-comment $CXXFLAGS"
     - echo $CXXFLAGS
@@ -487,7 +492,7 @@ make_18_04_nogui:
 make_clang:
   <<: *make_definition
   <<: *artifacts_definition
-  <<: *skip_WIP
+  <<: *skip_WIP_and_Draft
   before_script:
     - export CC="/usr/bin/clang"
     - export CXX="/usr/bin/clang++"
@@ -509,6 +514,7 @@ mkHP_float:
 mkHP_long_double:
   <<: *make_definition
   <<: *artifacts_definition
+  <<: *skip_WIP_and_Draft
   before_script:
     - export EXTRA_CMAKE_ARGS="-DREAL_DECIMAL_PLACES=18 $EXTRA_CMAKE_ARGS"
     - echo $EXTRA_CMAKE_ARGS
@@ -589,6 +595,7 @@ make_SSE:
 
 test_20_04:
   <<: *test_definition
+  <<: *skip_WIP_and_Draft
   image: registry.gitlab.com/yade-dev/docker-yade:ubuntu20.04
   dependencies:
     - make_20_04
@@ -596,6 +603,7 @@ test_20_04:
 
 test_22_04:
   <<: *test_definition
+  <<: *skip_WIP_and_Draft
   image: registry.gitlab.com/yade-dev/docker-yade:ubuntu22.04
   dependencies:
     - make_22_04
@@ -617,6 +625,7 @@ test_26_04:
 
 test_bullseye:
   <<: *test_definition
+  <<: *skip_WIP_and_Draft
   image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye
   dependencies:
     - make_bullseye
@@ -624,6 +633,7 @@ test_bullseye:
 
 test_bookworm:
   <<: *test_definition
+  <<: *skip_WIP_and_Draft
   image: registry.gitlab.com/yade-dev/docker-yade:debian-bookworm
   dependencies:
     - make_bookworm
@@ -645,6 +655,7 @@ test_forky:
 
 test_archlinux:
   <<: *test_definition
+  <<: *skip_WIP_and_Draft
   image: registry.gitlab.com/yade-dev/docker-yade:archlinux-current
 # allow_failure: true
   dependencies:
@@ -711,7 +722,7 @@ test_minimal:
 
 test_opposite:
   <<: *test_definition
-  <<: *skip_WIP
+  <<: *skip_WIP_and_Draft
   image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye
   dependencies:
     - make_opposite
@@ -720,7 +731,7 @@ test_opposite:
 test_suse15:
   <<: *test_definition
   <<: *skip_GUI_TEST
-  <<: *skip_WIP
+  <<: *skip_WIP_and_Draft
   image: registry.gitlab.com/yade-dev/docker-yade:suse15
   dependencies:
     - make_suse15
@@ -737,7 +748,7 @@ test_18_04_nogui:
 
 test_clang:
   <<: *test_definition
-  <<: *skip_WIP
+  <<: *skip_WIP_and_Draft
   image: registry.gitlab.com/yade-dev/docker-yade:debian-forky
   dependencies:
     - make_clang
@@ -747,6 +758,7 @@ test_clang:
 
 tstHP_long_double:
   <<: *test_definition
+  <<: *skip_WIP_and_Draft
   image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye
   dependencies:
     - mkHP_long_double
@@ -795,7 +807,7 @@ test_SSE:
 test_22_foam2312:
   <<: *platforms_definition
   <<: *gitlab_runner_retry_definition
-  <<: *skip_WIP
+  <<: *skip_WIP_and_Draft
   stage: test
   image: registry.gitlab.com/yade-dev/docker-yade:ubuntu22.04_foam2312
   dependencies:
@@ -812,7 +824,7 @@ test_22_foam2312:
 test_22_foam2306:
   <<: *platforms_definition
   <<: *gitlab_runner_retry_definition
-  <<: *skip_WIP
+  <<: *skip_WIP_and_Draft
   stage: test
   image: registry.gitlab.com/yade-dev/docker-yade:ubuntu22.04_foam2312
   dependencies:
@@ -832,7 +844,7 @@ test_22_foam2306:
 test_22_foam2212:
   <<: *platforms_definition
   <<: *gitlab_runner_retry_definition
-  <<: *skip_WIP
+  <<: *skip_WIP_and_Draft
   stage: test
   image: registry.gitlab.com/yade-dev/docker-yade:ubuntu22.04_foam2312
   dependencies:
@@ -854,7 +866,7 @@ test_22_foam2212:
 test_22_foam2112:
   <<: *platforms_definition
   <<: *gitlab_runner_retry_definition
-  <<: *skip_WIP
+  <<: *skip_WIP_and_Draft
   stage: test
   image: registry.gitlab.com/yade-dev/docker-yade:ubuntu22.04_foam2312
   dependencies:
@@ -876,7 +888,7 @@ test_22_foam2112:
 test_22_foam2006:
   <<: *platforms_definition
   <<: *gitlab_runner_retry_definition
-  <<: *skip_WIP
+  <<: *skip_WIP_and_Draft
   stage: test
   image: registry.gitlab.com/yade-dev/docker-yade:ubuntu22.04_foam2312
   dependencies:
@@ -898,7 +910,7 @@ test_22_foam2006:
 test_22_foam11:
   <<: *platforms_definition
   <<: *gitlab_runner_retry_definition
-  <<: *skip_WIP
+  <<: *skip_WIP_and_Draft
   stage: test
   image: registry.gitlab.com/yade-dev/docker-yade:ubuntu22.04_foam2312
   dependencies:
@@ -922,7 +934,7 @@ test_22_foam11:
 test_22_foam10:
   <<: *platforms_definition
   <<: *gitlab_runner_retry_definition
-  <<: *skip_WIP
+  <<: *skip_WIP_and_Draft
   stage: test
   image: registry.gitlab.com/yade-dev/docker-yade:ubuntu22.04_foam2312
   dependencies:
@@ -980,6 +992,7 @@ test_22_foam10:
 
 check_20_04:
   <<: *check_definition
+  <<: *skip_WIP_and_Draft
   image: registry.gitlab.com/yade-dev/docker-yade:ubuntu20.04
   dependencies:
     - make_20_04
@@ -987,6 +1000,7 @@ check_20_04:
 
 check_22_04:
   <<: *check_definition
+  <<: *skip_WIP_and_Draft
   image: registry.gitlab.com/yade-dev/docker-yade:ubuntu22.04
   dependencies:
     - make_22_04
@@ -1008,6 +1022,7 @@ check_26_04:
 
 check_bullseye:
   <<: *check_definition
+  <<: *skip_WIP_and_Draft
   image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye
   dependencies:
     - make_bullseye
@@ -1015,6 +1030,7 @@ check_bullseye:
 
 check_bookworm:
   <<: *check_definition
+  <<: *skip_WIP_and_Draft
   image: registry.gitlab.com/yade-dev/docker-yade:debian-bookworm
   dependencies:
     - make_bookworm
@@ -1036,6 +1052,7 @@ check_forky:
 
 check_archlinux:
   <<: *check_definition
+  <<: *skip_WIP_and_Draft
   image: registry.gitlab.com/yade-dev/docker-yade:archlinux-current
 # allow_failure: true
   dependencies:
@@ -1101,7 +1118,7 @@ check_minimal:
 
 check_opposite:
   <<: *check_definition
-  <<: *skip_WIP
+  <<: *skip_WIP_and_Draft
   image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye
   dependencies:
     - make_opposite
@@ -1109,7 +1126,7 @@ check_opposite:
 
 check_suse15:
   <<: *check_definition
-  <<: *skip_WIP
+  <<: *skip_WIP_and_Draft
   image: registry.gitlab.com/yade-dev/docker-yade:suse15
   dependencies:
     - make_suse15
@@ -1117,7 +1134,7 @@ check_suse15:
 
 check_clang:
   <<: *check_definition
-  <<: *skip_WIP
+  <<: *skip_WIP_and_Draft
   image: registry.gitlab.com/yade-dev/docker-yade:debian-forky
   dependencies:
     - make_clang
@@ -1127,6 +1144,7 @@ check_clang:
 
 ckHP_long_double:
   <<: *check_definition
+  <<: *skip_WIP_and_Draft
   image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye
   dependencies:
     - mkHP_long_double

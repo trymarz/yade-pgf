@@ -66,6 +66,7 @@ Packaging & Build Improvements
   Fix screenshots. (!1169)
   Restore useful warnings about the code for Archlinux build with g++ 16.1.1 (!1172)
   Drop python3-pyqt5.qtwebkit dependency for forky/resolute (package no longer available) (!1176)
+  Set Draft to use a lot less CI pipeline jobs, remember to do a full run before merging! (!1180)
 
 Small Enhancements
 ******************
