@@ -6,6 +6,8 @@
 *  GNU General Public License v2 or later. See file LICENSE for details. *
 *************************************************************************/
 #pragma once
+#include <clocale>
+#include <string>
 #include <core/Body.hpp>
 #include <core/BodyContainer.hpp>
 #include <pkg/common/Facet.hpp>
@@ -111,6 +113,11 @@ template <class OutV, class OutE, class OutF, class OutN> bool STLReader::open_a
 	fp = fopen(filename, "r");
 	if (fp == NULL) return false;
 
+	/* Ensure STL decimal parsing is locale-independent (STL uses '.'). */
+	std::string oldLocale;
+	if (const char* loc = std::setlocale(LC_NUMERIC, nullptr)) oldLocale = loc;
+	std::setlocale(LC_NUMERIC, "C");
+
 	/* Skip the first line of the file */
 	while (getc(fp) != '\n')
 		;
@@ -165,6 +172,7 @@ template <class OutV, class OutE, class OutF, class OutN> bool STLReader::open_a
 		egs.insert(minmax(vid[1], vid[2]));
 		egs.insert(minmax(vid[2], vid[0]));
 	}
+	if (!oldLocale.empty()) std::setlocale(LC_NUMERIC, oldLocale.c_str());
 	fclose(fp);
 
 	for (vector<Vrtx>::iterator it = vcs.begin(), end = vcs.end(); it != end; ++it) {
