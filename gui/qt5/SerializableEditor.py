@@ -1,9 +1,5 @@
 # encoding: utf-8
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5 import QtGui
-from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import *
+from yade.qt.qt_compat import *
 
 import re, itertools
 import logging
@@ -985,7 +981,7 @@ class SeqSerializableComboBox(QFrame):
 
 	def newSlot(self):
 		dialog = NewSerializableDialog(self, self.serType.__name__)
-		if not dialog.exec_():
+		if not qt_exec(dialog):
 			return  # cancelled
 		ser = dialog.result()
 		ix = self.combo.currentIndex()
@@ -1144,7 +1140,7 @@ class SeqFundamentalEditor(QFrame):
 			actUp.setEnabled(False)
 		if field:
 			field.setStyleSheet('QWidget { background: green }')
-		act = menu.exec_(self.mapToGlobal(event.pos()))
+		act = qt_exec(menu, self.mapToGlobal(event.pos()))
 		if field:
 			field.setStyleSheet('QWidget { background: none }')
 		if not act:

@@ -1,7 +1,6 @@
 # encoding: utf-8
 
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
+from yade.qt.qt_compat import *
 from yade import *
 from yade.qt.SerializableEditor import *
 import yade.qt

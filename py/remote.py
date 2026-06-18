@@ -154,6 +154,8 @@ def _runInBackground(func):
 			from PyQt4.QtCore import QThread
 		elif (gui == 'qt5'):
 			from PyQt5.QtCore import QThread
+		elif (gui == 'qt6'):
+			from PyQt6.QtCore import QThread
 
 		class WorkerThread(QThread):
 

@@ -274,7 +274,8 @@ In the above, note the ``cmake -DOPTION1=VALUE1 -DOPTION2=VALUE2`` syntax which 
 	* runtimePREFIX: used for packaging, when install directory is not the same as runtime directory (/usr/local by default)
 	* SUFFIX: suffix, added after binary-names, see also ``NOSUFFIX`` option (version number by default)
 	* SUITESPARSEPATH: define this variable with the path to a custom suitesparse install
-	* USE_QT5: use QT5 for GUI. It is actually the only choice when GUI is requested through ``ENABLE_GUI`` option below, since libQGLViewer of version 2.6.3 and higher are compiled against Qt5 on Debian/Ubuntu operating systems (ON by default)
+	* USE_QT5: use Qt5 for GUI (ON by default)
+	* USE_QT6: use Qt6 for GUI. When enabled it overrides ``USE_QT5`` and requires Qt6, PyQt6 development tools, and a Qt6 build of libQGLViewer (OFF by default)
 	* VECTORIZE: enables vectorization and alignment in Eigen3 library, experimental (OFF by default)
 	* YADE_VERSION: explicitly set version number (is defined from git-directory by default)
 
@@ -286,7 +287,7 @@ As a more precise alternative to the above ``DISABLE_*`` options, other ``cmake`
 	* ENABLE_FEMLIKE: enable FEM-like meshed solids (ON by default)
 	* ENABLE_GL2PS: enable GL2PS-option (ON by default)
 	* ENABLE_GTS: enable GTS-option (ON by default)
-	* ENABLE_GUI: enable a Qt5 GUI. Requires ``python-pyqt5 pyqt5-dev-tools`` (ON by default)
+	* ENABLE_GUI: enable a Qt GUI. Defaults to Qt5 and can be switched to Qt6 with ``USE_QT6`` (ON by default)
 	* ENABLE_LBMFLOW: enable LBM computations, e.g. the use of :yref:`HydrodynamicsLawLBM` (ON by default)
 	* ENABLE_LS_DEM: enable a :yref:`LevelSet` shape description (ON by default)
 	* ENABLE_LINSOLV: enable the use of optimized algebra libraries `SuiteSparse <http://www.suitesparse.com>`_ (sparse algebra, requires eigen>=3.1), `OpenBLAS <http://www.openblas.net/>`_ (optimized and parallelized alternative to the standard blas+lapack) and `Metis <http://glaros.dtc.umn.edu/gkhome/metis/metis/overview/>`_ (matrix preconditioning) for the optional fluid coupling :yref:`FlowEngine`, see ``ENABLE_PFVFLOW`` below. Requires ``libopenblas-dev libsuitesparse-dev libmetis-dev`` packages (ON by default)
@@ -520,5 +521,4 @@ Yubuntu
 If you are not running a Linux system there is a way to create an Ubuntu `live-usb <http://en.wikipedia.org/wiki/Live_USB>`_ on any usb mass-storage device (minimum size 10GB). It is a way to boot the computer on a linux system with Yadedaily pre-installed without affecting the original system. More informations about this alternative are available `here <http://people.3sr-grenoble.fr/users/bchareyre/pubs/yubuntu/>`_ (see the README file first). Note that the images there date back from 2018 and use ubuntu16.04, for newer versions of yade see below.
 
 Alternatively, images of a linux virtual machine can be downloaded `here (ubuntu20.04) <https://yade-dem.org/publi/virtual/>`_ , or for older (ubuntu16.04) versions `here <http://people.3sr-grenoble.fr/users/bchareyre/pubs/yubuntu/>`_. They should run on any system with a virtualization software (tested with VirtualBox and VMWare).
-
 

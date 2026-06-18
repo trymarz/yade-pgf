@@ -50,7 +50,7 @@ void GLViewer::mouseMovesCamera()
 	setMouseBinding(Qt::SHIFT + Qt::MiddleButton, FRAME, TRANSLATE);
 	setMouseBinding(Qt::SHIFT + Qt::RightButton, FRAME, ROTATE);
 
-	setMouseBinding(Qt::LeftButton + Qt::RightButton, CAMERA, ZOOM);
+	setMouseBinding(Qt::LeftButton | Qt::RightButton, CAMERA, ZOOM);
 	setMouseBinding(Qt::MiddleButton, CAMERA, ZOOM);
 	setMouseBinding(Qt::LeftButton, CAMERA, ROTATE);
 	setMouseBinding(Qt::RightButton, CAMERA, TRANSLATE);
@@ -60,7 +60,7 @@ void GLViewer::mouseMovesCamera()
 
 void GLViewer::mouseMovesManipulatedFrame(qglviewer::Constraint* c)
 {
-	setMouseBinding(Qt::LeftButton + Qt::RightButton, FRAME, ZOOM);
+	setMouseBinding(Qt::LeftButton | Qt::RightButton, FRAME, ZOOM);
 	setMouseBinding(Qt::MiddleButton, FRAME, ZOOM);
 	setMouseBinding(Qt::LeftButton, FRAME, ROTATE);
 	setMouseBinding(Qt::RightButton, FRAME, TRANSLATE);

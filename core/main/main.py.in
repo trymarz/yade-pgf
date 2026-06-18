@@ -307,7 +307,7 @@ def userSession(gui='none',qapp=None):
 					print("\nThere is no data to plot (yet), see https://yade-dem.org/doc/user.html#plotting-variables\n")
 
 		# If IPython > 5 one need to initialize graphic gui
-		if ((gui == "qt5" or gui == "qt4")and yade.runtime.ipython_version>=500):
+		if ((gui == "qt6" or gui == "qt5" or gui == "qt4")and yade.runtime.ipython_version>=500):
 			ipshell.enable_gui(gui)
 
 	# start non-blocking qt4 app here; need to ask on the mailing list on how to make it functional
@@ -353,6 +353,7 @@ def userSession(gui='none',qapp=None):
 gui=None
 yade.runtime.hasDisplay=False # this is the default initialized in the module, anyway
 if 'QT5' in features: gui='qt5'
+if 'QT6' in features: gui='qt6'
 if opts.nogui or opts.mpi_mode: gui=None
 if gui:
 	import Xlib.display
@@ -372,7 +373,7 @@ if gui:
 # run remote access things, before actually starting the user session (not while imported by other python application)
 if __name__ == "__main__" and not opts.mpi_mode:
 	from yade import remote
-	if (gui=='qt4' or gui=='qt5'):
+	if (gui=='qt4' or gui=='qt5' or gui=='qt6'):
 		yade.remote.useQThread=True
 		yade.remote.gui=gui
 	yade.remote.runServers()
@@ -394,6 +395,13 @@ elif gui=='qt5':
 	from PyQt5 import QtGui
 	from PyQt5.QtCore import *
 	from PyQt5.QtWidgets import *
+	import yade.qt
+	qapp=QApplication(sys.argv)
+	userSession(gui=gui,qapp=qapp)
+elif gui=='qt6':
+	import PyQt6
+	from PyQt6.QtCore import *
+	from PyQt6.QtWidgets import *
 	import yade.qt
 	qapp=QApplication(sys.argv)
 	userSession(gui=gui,qapp=qapp)

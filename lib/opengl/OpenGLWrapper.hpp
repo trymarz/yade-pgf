@@ -7,7 +7,7 @@
 
 #pragma once
 
-#if ((not defined(YADE_OPENGL)) or (not defined(YADE_QT5)))
+#if ((not defined(YADE_OPENGL)) or (not defined(YADE_QT)))
 #error "This build doesn't support OpenGL. Therefore, this header must not be used."
 #endif
 

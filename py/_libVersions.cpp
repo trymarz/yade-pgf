@@ -93,7 +93,7 @@ py::list boostVer()
 // 3. qt
 // https://doc.qt.io/qt-5/qtglobal.html#QT_VERSION_STR
 // https://doc.qt.io/archives/qt-4.8/qtglobal.html#QT_VERSION_STR
-#if defined(YADE_QT4) || defined(YADE_QT5)
+#if defined(YADE_QT)
 #include <QtGlobal>
 py::list qtVer()
 {

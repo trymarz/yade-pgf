@@ -2,41 +2,27 @@
 
 import yade.runtime
 if not yade.runtime.hasDisplay:
-	msg = "Connecting to DISPLAY at Yade startup failed, unable to activate the qt5 interface."
+	msg = "Connecting to DISPLAY at Yade startup failed, unable to activate the Qt interface."
 	import os
 	if 'YADE_BATCH' in os.environ:
 		msg += "\nDo not import qt when running in batch mode."
 	raise ImportError(msg)
 
-from PyQt5.QtGui import *
-from PyQt5 import QtCore
-from PyQt5 import QtGui
-from PyQt5.QtCore import *
-from PyQt5.QtWidgets import *
+from yade.qt.qt_compat import *
+from yade.qt import qt_compat as _qt_compat
 
-USE_QT_WEB_ENGINE = False
-_WEB_BACKEND_AVAILABLE = True
-try:
-	from PyQt5 import QtWebKit, QtWebKitWidgets  # legacy backend
-except Exception:
-	try:
-		from PyQt5 import QtWebEngineWidgets  # modern backend (needs separate package: python3-pyqt5.qtwebengine or PyQtWebEngine)
-		USE_QT_WEB_ENGINE = True
-		QtWebKit = None  # type: ignore
-		QtWebKitWidgets = None  # type: ignore
-	except Exception as _qt_web_import_err:
-		# Final graceful fallback: no in-app web view available
-		QtWebEngineWidgets = None  # type: ignore
-		QtWebKit = None  # type: ignore
-		QtWebKitWidgets = None  # type: ignore
-		_WEB_BACKEND_AVAILABLE = False
-		import warnings
-		warnings.warn(
-		        "Neither QtWebKit nor QtWebEngine backends are available. Help/documentation windows will open in the external browser.\n"
-		        "Install one of: 'python3-pyqt5.qtwebengine' (Debian/Ubuntu), or via pip: 'pip install PyQt5 PyQtWebEngine'. Original error: %s" %
-		        _qt_web_import_err,
-		        RuntimeWarning,
-		)
+USE_QT_WEB_ENGINE = _qt_compat.USE_QT_WEB_ENGINE
+_WEB_BACKEND_AVAILABLE = _qt_compat.WEB_BACKEND_AVAILABLE
+QtWebEngineWidgets = _qt_compat.QtWebEngineWidgets
+QtWebKit = _qt_compat.QtWebKit
+QtWebKitWidgets = _qt_compat.QtWebKitWidgets
+if not _WEB_BACKEND_AVAILABLE:
+	import warnings
+	warnings.warn(
+	        "Neither QtWebKit nor QtWebEngine backends are available. Help/documentation windows will open in the external browser.\n"
+	        "Install the matching PyQt WebEngine package for your Qt version. Original error: %s" % _qt_compat.WEB_IMPORT_ERROR,
+	        RuntimeWarning,
+	)
 
 from yade.qt.ui_controller import Ui_Controller
 

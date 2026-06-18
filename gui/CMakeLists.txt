@@ -1,60 +1,57 @@
-IF(${ENABLE_GUI})
+IF(ENABLE_GUI)
   INCLUDE_DIRECTORIES(${QGLVIEWER_INCLUDE_DIR})
-  IF(USE_QT5)
-    SET(CMAKE_AUTOMOC ON)
-    SET(_GLViewer_SOURCE_FILES qt5/GLViewer.cpp;qt5/_GLViewer.cpp;qt5/OpenGLManager.cpp;qt5/GLViewerDisplay.cpp;qt5/GLViewerMouse.cpp)
-    ADD_LIBRARY(_GLViewer SHARED ${_GLViewer_SOURCE_FILES})
-    SET_TARGET_PROPERTIES(_GLViewer PROPERTIES PREFIX "")
-    TARGET_LINK_LIBRARIES(_GLViewer Qt5::Widgets Qt5::Xml Qt5::OpenGL
-                                    ${FREEGLUT_LIBRARY} ${OPENGL_LIBRARY}
-                                    ${QGLVIEWER_LIBRARIES}
-                                    ${Boost_LIBRARIES} ${PYTHON_LIBRARIES})
-    IF(GL2PS_FOUND AND ENABLE_GL2PS)
-      TARGET_LINK_LIBRARIES(_GLViewer ${GL2PS_LIBRARIES})
-    ENDIF(GL2PS_FOUND AND ENABLE_GL2PS)
-    INSTALL(TARGETS _GLViewer DESTINATION ${YADE_PY_PATH}/yade/qt)
-    
-    FILE(GLOB filesPYQT "${CMAKE_CURRENT_SOURCE_DIR}/qt5/*.py")
-    INSTALL(FILES ${filesPYQT} DESTINATION ${YADE_PY_PATH}/yade/qt)
-    
+  SET(CMAKE_AUTOMOC ON)
+  SET(_GLViewer_SOURCE_FILES qt5/GLViewer.cpp;qt5/_GLViewer.cpp;qt5/OpenGLManager.cpp;qt5/GLViewerDisplay.cpp;qt5/GLViewerMouse.cpp)
+  ADD_LIBRARY(_GLViewer SHARED ${_GLViewer_SOURCE_FILES})
+  SET_TARGET_PROPERTIES(_GLViewer PROPERTIES PREFIX "")
+  TARGET_LINK_LIBRARIES(_GLViewer ${YADE_QT_TARGETS}
+                                  ${FREEGLUT_LIBRARY} ${OPENGL_LIBRARY}
+                                  ${QGLVIEWER_LIBRARIES}
+                                  ${Boost_LIBRARIES} ${PYTHON_LIBRARIES})
+  IF(GL2PS_FOUND AND ENABLE_GL2PS)
+    TARGET_LINK_LIBRARIES(_GLViewer ${GL2PS_LIBRARIES})
+  ENDIF(GL2PS_FOUND AND ENABLE_GL2PS)
+  INSTALL(TARGETS _GLViewer DESTINATION ${YADE_PY_PATH}/yade/qt)
+
+  FILE(GLOB filesPYQT "${CMAKE_CURRENT_SOURCE_DIR}/qt5/*.py")
+  INSTALL(FILES ${filesPYQT} DESTINATION ${YADE_PY_PATH}/yade/qt)
+
+  IF(YADE_PYRCC_EXECUTABLE)
     EXECUTE_PROCESS(
-          COMMAND "pyrcc5" "-o" "${CMAKE_BINARY_DIR}/img_rc.py" "img.qrc"
+          COMMAND "${YADE_PYRCC_EXECUTABLE}" "-o" "${CMAKE_BINARY_DIR}/img_rc.py" "img.qrc"
           WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/qt5
           RESULT_VARIABLE rv
           )
-    
+    IF(NOT rv EQUAL 0)
+      MESSAGE(FATAL_ERROR "${YADE_PYRCC_EXECUTABLE} failed while generating img_rc.py")
+    ENDIF(NOT rv EQUAL 0)
+  ELSE(YADE_PYRCC_EXECUTABLE)
     EXECUTE_PROCESS(
-          COMMAND "pyuic5" "--from-imports" "-o" "${CMAKE_BINARY_DIR}/ui_controller.py" "controller.ui"
+          COMMAND "${YADE_RCC_EXECUTABLE}" "-g" "python" "-o" "${CMAKE_BINARY_DIR}/img_rc.py" "img.qrc"
           WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/qt5
           RESULT_VARIABLE rv
           )
-    INSTALL(FILES ${CMAKE_BINARY_DIR}/img_rc.py ${CMAKE_BINARY_DIR}/ui_controller.py  DESTINATION ${YADE_PY_PATH}/yade/qt)
-    TARGET_LINK_LIBRARIES(_GLViewer Qt5::Widgets Qt5::Xml Qt5::OpenGL
-                                    ${FREEGLUT_LIBRARY} ${OPENGL_LIBRARY}
-                                    ${QGLVIEWER_LIBRARIES}
-                                    ${Boost_LIBRARIES} ${PYTHON_LIBRARIES})
-    IF(GL2PS_FOUND AND ENABLE_GL2PS)
-      TARGET_LINK_LIBRARIES(_GLViewer ${GL2PS_LIBRARIES})
-    ENDIF(GL2PS_FOUND AND ENABLE_GL2PS)
-    INSTALL(TARGETS _GLViewer DESTINATION ${YADE_PY_PATH}/yade/qt)
-    
-    FILE(GLOB filesPYQT "${CMAKE_CURRENT_SOURCE_DIR}/qt5/*.py")
-    INSTALL(FILES ${filesPYQT} DESTINATION ${YADE_PY_PATH}/yade/qt)
-    
-    EXECUTE_PROCESS(
-          COMMAND "pyrcc5" "-o" "${CMAKE_BINARY_DIR}/img_rc.py" "img.qrc"
-          WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/qt5
-          RESULT_VARIABLE rv
-          )
-    
-    EXECUTE_PROCESS(
-          COMMAND "pyuic5"  "--from-imports" "-o" "${CMAKE_BINARY_DIR}/ui_controller.py" "controller.ui"
-          WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/qt5
-          RESULT_VARIABLE rv
-          )
-    INSTALL(FILES ${CMAKE_BINARY_DIR}/img_rc.py ${CMAKE_BINARY_DIR}/ui_controller.py  DESTINATION ${YADE_PY_PATH}/yade/qt)
-  ELSE(USE_QT5)
-    MESSAGE(FATAL_ERROR "QT4 is no longer supported")
-  ENDIF(USE_QT5)
+    IF(NOT rv EQUAL 0)
+      MESSAGE(FATAL_ERROR "${YADE_RCC_EXECUTABLE} failed while generating img_rc.py")
+    ENDIF(NOT rv EQUAL 0)
+    FILE(READ "${CMAKE_BINARY_DIR}/img_rc.py" YADE_IMG_RC)
+    STRING(REPLACE "from PySide6 import QtCore" "from PyQt6 import QtCore" YADE_IMG_RC "${YADE_IMG_RC}")
+    STRING(REPLACE "from PySide2 import QtCore" "from PyQt5 import QtCore" YADE_IMG_RC "${YADE_IMG_RC}")
+    FILE(WRITE "${CMAKE_BINARY_DIR}/img_rc.py" "${YADE_IMG_RC}")
+  ENDIF(YADE_PYRCC_EXECUTABLE)
+
+  EXECUTE_PROCESS(
+        COMMAND "${YADE_PYUIC_EXECUTABLE}" ${YADE_PYUIC_ARGS} "-o" "${CMAKE_BINARY_DIR}/ui_controller.py" "controller.ui"
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/qt5
+        RESULT_VARIABLE rv
+        )
+  IF(NOT rv EQUAL 0)
+    MESSAGE(FATAL_ERROR "${YADE_PYUIC_EXECUTABLE} failed while generating ui_controller.py")
+  ENDIF(NOT rv EQUAL 0)
+  IF(YADE_QT_VERSION_MAJOR EQUAL 6)
+    FILE(APPEND "${CMAKE_BINARY_DIR}/ui_controller.py" "\nfrom . import img_rc\n")
+  ENDIF(YADE_QT_VERSION_MAJOR EQUAL 6)
+
+  INSTALL(FILES ${CMAKE_BINARY_DIR}/img_rc.py ${CMAKE_BINARY_DIR}/ui_controller.py  DESTINATION ${YADE_PY_PATH}/yade/qt)
   SET_PROPERTY(SOURCE ${CMAKE_SOURCE_DIR}/gui/qt5/_GLViewer.cpp PROPERTY SKIP_UNITY_BUILD_INCLUSION ON)
-ENDIF(${ENABLE_GUI})
+ENDIF(ENABLE_GUI)
