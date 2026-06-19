@@ -293,7 +293,7 @@ make_archlinux:
   image: registry.gitlab.com/yade-dev/docker-yade:archlinux-current
 # allow_failure: true
 
-mk_testing_arm64:
+make_testing_arm64:
   <<: *make_definition
   <<: *artifacts_definition
   <<: *skip_WIP_and_Draft
@@ -600,13 +600,13 @@ test_archlinux:
     - make_archlinux
   needs: ["make_archlinux"]
 
-tst_testing_arm64:
+test_testing_arm64:
   <<: *test_definition
   <<: *skip_WIP_and_Draft
   image: registry.gitlab.com/yade-dev/docker-yade:debian-testing-arm64
   dependencies:
-    - mk_testing_arm64
-  needs: ["mk_testing_arm64"]
+    - make_testing_arm64
+  needs: ["make_testing_arm64"]
   tags:
     - qemu
   timeout: 55 minutes
@@ -951,13 +951,13 @@ check_archlinux:
     - make_archlinux
   needs: ["make_archlinux"]
 
-ck_testing_arm64:
+check_testing_arm64:
   <<: *check_definition
   <<: *skip_WIP_and_Draft
   image: registry.gitlab.com/yade-dev/docker-yade:debian-testing-arm64
   dependencies:
-    - mk_testing_arm64
-  needs: ["mk_testing_arm64"]
+    - make_testing_arm64
+  needs: ["make_testing_arm64"]
   tags:
     - qemu
   timeout: 3 hours
