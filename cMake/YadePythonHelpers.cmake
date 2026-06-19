@@ -162,7 +162,11 @@ FUNCTION(FIND_PYTHON_PACKAGES)
 	# END find Boost for py_version
 
 	# Find Python modules and set the version variable in the parent scope which is CMakeLists.txt
-	FOREACH(module IN ITEMS IPython numpy matplotlib pygraphviz Xlib sphinx tkinter)
+	SET(YADE_PYTHON_MODULES IPython numpy matplotlib pygraphviz sphinx tkinter)
+	IF(ENABLE_GUI)
+		LIST(APPEND YADE_PYTHON_MODULES Xlib)
+	ENDIF()
+	FOREACH(module IN LISTS YADE_PYTHON_MODULES)
 		IF(${module} MATCHES "tkinter" AND ${PYTHON_VERSION_MAJOR} EQUAL 2)
 			SET(module "Tkinter")
 		ENDIF()
