@@ -287,7 +287,7 @@ make_debian_14_forky:
 make_archlinux:
   <<: *make_definition
   <<: *artifacts_definition
-  <<: *skip_WIP_and_Draft
+  <<: *skip_WIP
   before_script:
   # would be good to enable useful errors back later for Archlinux, but right now there are lots of false positives.
     - export EXTRA_CMAKE_ARGS="-DENABLE_VTK=OFF $EXTRA_CMAKE_ARGS"
@@ -600,7 +600,7 @@ test_debian_14_forky:
 
 test_archlinux:
   <<: *test_definition
-  <<: *skip_WIP_and_Draft
+  <<: *skip_WIP
   image: registry.gitlab.com/yade-dev/docker-yade:archlinux-current
 # allow_failure: true
   dependencies:
@@ -952,7 +952,7 @@ check_debian_14_forky:
 
 check_archlinux:
   <<: *check_definition
-  <<: *skip_WIP_and_Draft
+  <<: *skip_WIP
   image: registry.gitlab.com/yade-dev/docker-yade:archlinux-current
 # allow_failure: true
   dependencies:
