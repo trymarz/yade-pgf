@@ -27,7 +27,7 @@ void ParallelEngine::action()
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpragmas"
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-// silence the warning that omp_set_nested(1) is deprecated
+	// silence the warning that omp_set_nested(1) is deprecated
 	omp_set_nested(1);
 #pragma GCC diagnostic pop
 

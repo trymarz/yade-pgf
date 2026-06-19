@@ -425,7 +425,9 @@ Real Shop::getVoxelPorosity(const shared_ptr<Scene>& _scene, int _resolution, Ve
 
 vector<boost::tuple<Vector3r, Real, int>> Shop::loadSpheresFromFile(const string& fname, Vector3r& minXYZ, Vector3r& maxXYZ, Vector3r* cellSize)
 {
-	if (!boost::filesystem::exists(fname)) { throw std::invalid_argument(string("File with spheres `") + fname + "' doesn't exist."); }
+	if (!boost::filesystem::exists(fname)) {
+		throw std::invalid_argument(string("File with spheres `") + fname + "' doesn't exist.");
+	}
 	vector<boost::tuple<Vector3r, Real, int>> spheres;
 	std::ifstream                             sphereFile(fname.c_str());
 	if (!sphereFile.good()) throw std::runtime_error("File with spheres `" + fname + "' couldn't be opened.");

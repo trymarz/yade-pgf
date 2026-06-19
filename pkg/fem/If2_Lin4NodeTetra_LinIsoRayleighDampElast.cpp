@@ -13,7 +13,7 @@
 namespace yade { // Cannot have #include directive inside.
 
 YADE_PLUGIN((If2_Lin4NodeTetra_LinIsoRayleighDampElast));
-If2_Lin4NodeTetra_LinIsoRayleighDampElast::~If2_Lin4NodeTetra_LinIsoRayleighDampElast() {};
+If2_Lin4NodeTetra_LinIsoRayleighDampElast::~If2_Lin4NodeTetra_LinIsoRayleighDampElast() { };
 
 
 /********************************************************************

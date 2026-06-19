@@ -791,7 +791,9 @@ YADE_PLUGIN((Ig2_Wall_PFacet_ScGeom));
 void Bo1_PFacet_Aabb::go(const shared_ptr<Shape>& cm, shared_ptr<Bound>& bv, const Se3r& /*se3*/, const Body* /*b*/)
 {
 	PFacet* Pfacet = YADE_CAST<PFacet*>(cm.get());
-	if (!bv) { bv = shared_ptr<Bound>(new Aabb); }
+	if (!bv) {
+		bv = shared_ptr<Bound>(new Aabb);
+	}
 	Aabb*    aabb = static_cast<Aabb*>(bv.get());
 	Vector3r O    = Pfacet->node1->state->pos;
 	Vector3r O2   = Pfacet->node2->state->pos;

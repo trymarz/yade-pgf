@@ -12,7 +12,9 @@ void Ip2_MortarMat_MortarMat_MortarPhys::go(
         const shared_ptr<Material>& material1, const shared_ptr<Material>& material2, const shared_ptr<Interaction>& interaction)
 {
 	if (interaction->phys) return;
-	if (scene->iter >= cohesiveThresholdIter) { LOG_ERROR("MortarMat not implemented for non-cohesive contacts"); }
+	if (scene->iter >= cohesiveThresholdIter) {
+		LOG_ERROR("MortarMat not implemented for non-cohesive contacts");
+	}
 	shared_ptr<MortarPhys> phys(new MortarPhys());
 	interaction->phys           = phys;
 	MortarMat*             mat1 = YADE_CAST<MortarMat*>(material1.get());
@@ -57,7 +59,7 @@ void Ip2_MortarMat_MortarMat_MortarPhys::go(
 
 CREATE_LOGGER(MortarPhys);
 
-MortarPhys::~MortarPhys() {};
+MortarPhys::~MortarPhys() { };
 
 bool MortarPhys::failureCondition(Real sigmaN2, Real sigmaT2)
 // declaration of ‘sigmaT’ shadows a member of ‘yade::MortarPhys’ [-Werror=shadow]
@@ -99,7 +101,9 @@ bool Law2_ScGeom_MortarPhys_Lourenco::go(shared_ptr<IGeom>& iGeom, shared_ptr<IP
 	sigmaN = -normalForce.dot(geom->normal) / crossSection;
 	sigmaT = -shearForce / crossSection;
 
-	if (!phys->neverDamage && phys->failureCondition(sigmaN, sigmaT.norm())) { return false; }
+	if (!phys->neverDamage && phys->failureCondition(sigmaN, sigmaT.norm())) {
+		return false;
+	}
 
 	State* s1 = b1->state.get();
 	State* s2 = b2->state.get();

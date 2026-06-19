@@ -29,7 +29,7 @@ public:
 		Sph(const Vector3r& _c, Real _r, int _clumpId = -1)
 		        : c(_c)
 		        , r(_r)
-		        , clumpId(_clumpId) {};
+		        , clumpId(_clumpId) { };
 		boost::python::tuple asTuple() const;
 		boost::python::tuple asTupleNoClump() const;
 	};
@@ -40,7 +40,7 @@ public:
 	SpherePack()
 	        : cellSize(Vector3r::Zero())
 	        , appliedPsdScaling(1.)
-	        , isPeriodic(0) {};
+	        , isPeriodic(0) { };
 	SpherePack(const boost::python::list& l)
 	        : cellSize(Vector3r::Zero())
 	{

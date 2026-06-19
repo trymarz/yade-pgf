@@ -153,7 +153,9 @@ py::tuple Shop::normalShearStressTensors(bool compressionPositive, bool splitNor
 {
 	//*** Stress tensor split into shear and normal contribution ***/
 	Scene* scene = Omega::instance().getScene().get();
-	if (!scene->isPeriodic) { throw runtime_error("Can't compute stress of periodic cell in aperiodic simulation."); }
+	if (!scene->isPeriodic) {
+		throw runtime_error("Can't compute stress of periodic cell in aperiodic simulation.");
+	}
 	Matrix3r sigN(Matrix3r::Zero()), sigT(Matrix3r::Zero());
 	//const Matrix3r& cellHsize(scene->cell->Hsize);   //Disabled because of warning.
 	FOREACH(const shared_ptr<Interaction>& I, *scene->interactions)
@@ -228,7 +230,7 @@ py::tuple Shop::normalShearStressTensors(bool compressionPositive, bool splitNor
 	/// tensile forces are taken as positive!
 	if (splitNormalTensor) {
 		return py::make_tuple(sigNStrong, sigNWeak);
-	}                                  // return strong-weak or tensile-compressive parts of the stress tensor (only normal part)
+	} // return strong-weak or tensile-compressive parts of the stress tensor (only normal part)
 	return py::make_tuple(sigN, sigT); // return normal and shear components
 }
 
@@ -297,8 +299,9 @@ void Shop::fabricTensor(
 	fabricWeak   = Matrix3r::Zero();
 	int nStrong(0), nWeak(0); // number of strong and weak contacts respectively
 	if (!splitTensor & !math::isnan(thresholdForce)) {
-		LOG_WARN("The bool splitTensor should be set to True if you specified a threshold value for the contact force, otherwise the function will "
-		         "return only the fabric tensor and not the two separate contributions.");
+		LOG_WARN(
+		        "The bool splitTensor should be set to True if you specified a threshold value for the contact force, otherwise the function will "
+		        "return only the fabric tensor and not the two separate contributions.");
 	}
 	FOREACH(const shared_ptr<Interaction>& I, *scene->interactions)
 	{
@@ -364,8 +367,9 @@ Matrix3r Shop::getStress(Real volume)
 	Real   volumeNonPeri = 0;
 	if (volume == 0 && !scene->isPeriodic) {
 		const auto extrema = Shop::aabbExtrema();
-		LOG_ONCE_WARN("getStress used with default volume tend to underestimate the stress due to overlaps on the boundaries, passing actual volume "
-		              "could be more safe.")
+		LOG_ONCE_WARN(
+		        "getStress used with default volume tend to underestimate the stress due to overlaps on the boundaries, passing actual volume "
+		        "could be more safe.")
 		volumeNonPeri = (extrema.second[0] - extrema.first[0]) * (extrema.second[1] - extrema.first[1]) * (extrema.second[2] - extrema.first[2]);
 	}
 	if (volume == 0) volume = scene->isPeriodic ? scene->cell->hSize.determinant() : volumeNonPeri;
@@ -495,7 +499,9 @@ py::tuple Shop::getStressProfile(Real volume, int nCell, Real dz, Real zRef, vec
 			//inside the cell is taken into account
 			//If the whole vector is in the cell, add the whole contribution to the cell
 			if (Np1 == Np2) {
-				if ((Np1 >= 0) && (Np1 < nCell)) { stressTensorProfile[Np1] += 1 / volume * fContact * branch.transpose(); }
+				if ((Np1 >= 0) && (Np1 < nCell)) {
+					stressTensorProfile[Np1] += 1 / volume * fContact * branch.transpose();
+				}
 			}
 			//Otherwise, find out the cell crossed by the branch vector and assign it the contribution from this part.
 			else {
@@ -579,7 +585,9 @@ py::tuple Shop::getStressProfile_contact(Real volume, int nCell, Real dz, Real z
 			//inside the cell is taken into account
 			//If the whole vector is in the cell, add the whole contribution to the cell
 			if (Np1 == Np2) {
-				if ((Np1 >= 0) && (Np1 < nCell)) { stressTensorProfile[Np1] += 1 / volume * fContact * branch.transpose(); }
+				if ((Np1 >= 0) && (Np1 < nCell)) {
+					stressTensorProfile[Np1] += 1 / volume * fContact * branch.transpose();
+				}
 			}
 			//Otherwise, find out the cell crossed by the branch vector and assign it the contribution from this part.
 			else {
@@ -805,8 +813,12 @@ py::tuple Shop::getSlicedProfiles(
 	vector<Real>     phiAverage(nCell, 0.0);
 
 	//  Check for incorrect dirP or dirS
-	if (dirP == dirS) { throw std::invalid_argument("dirP must not be equal to dirS"); }
-	if (dirP < 0 || dirP > 2 || dirS < 0 || dirS > 2) { throw std::invalid_argument("dirP and dirS must be equal to 0, 1, or 2"); }
+	if (dirP == dirS) {
+		throw std::invalid_argument("dirP must not be equal to dirS");
+	}
+	if (dirP < 0 || dirP > 2 || dirS < 0 || dirS > 2) {
+		throw std::invalid_argument("dirP and dirS must be equal to 0, 1, or 2");
+	}
 
 	// Loop over the particles
 	for (const auto& b : *Omega::instance().getScene()->bodies) {
@@ -954,7 +966,9 @@ void Shop::calm(const shared_ptr<Scene>& _scene, int mask)
 py::list Shop::getBodyIdsContacts(Body::id_t bodyID)
 {
 	py::list ret;
-	if (bodyID < 0) { throw std::logic_error("BodyID should be a positive value!"); }
+	if (bodyID < 0) {
+		throw std::logic_error("BodyID should be a positive value!");
+	}
 
 	const auto scene = Omega::instance().getScene();
 	const auto b     = Body::byId(bodyID, scene);
@@ -1194,11 +1208,11 @@ py::tuple Shop::getStressAndTangent(Real volume, bool symmetry)
 		        += kN * (n[0] * branch[1] * n[0] * branch[1] + n[0] * branch[1] * n[1] * branch[0] * 2 + n[1] * branch[0] * n[1] * branch[0]) * 0.25
 		        + kT * (t[0] * branch[1] * t[0] * branch[1] + t[0] * branch[1] * t[1] * branch[0] * 2 + t[1] * branch[0] * t[1] * branch[0]) * 0.25;
 	}
-	if (symmetry){ // Populate the lower half of the stiffness tensor as well
+	if (symmetry) { // Populate the lower half of the stiffness tensor as well
 		for (int i = 0; i < 6; ++i) {
-   		 	for (int j = i + 1; j < 6; ++j) {
-        		tangent(j, i) = tangent(i, j);
-    		}
+			for (int j = i + 1; j < 6; ++j) {
+				tangent(j, i) = tangent(i, j);
+			}
 		}
 	}
 	stress /= volume;

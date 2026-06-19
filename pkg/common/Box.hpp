@@ -19,7 +19,7 @@ public:
 	{
 	}
 	Real getVolume() override { return 8. * extents.prod(); };
-	virtual ~Box() {};
+	virtual ~Box() { };
 	// clang-format off
 	YADE_CLASS_BASE_DOC_ATTRS_CTOR_PY(Box,Shape,"Box (cuboid) particle geometry. (Avoid using in new code, prefer :yref:`Facet` instead.)",
 		((Vector3r,extents,,,"Half-size of the cuboid")),

@@ -44,7 +44,7 @@ class IGeomFunctor : public Functor2D<
 public:
 	virtual ~IGeomFunctor();
 	// called before every step once, from InteractionLoop (used to set Scene::flags & Scene::LOCAL_COORDS)
-	virtual void preStep() {};
+	virtual void preStep() { };
 	// clang-format off
 	YADE_CLASS_BASE_DOC(IGeomFunctor,Functor,"Functor for creating/updating :yref:`Interaction::geom` objects.");
 	// clang-format on
@@ -137,8 +137,9 @@ class IGeomDispatcher : public Dispatcher2D<
 public:
 	void                    action() override;
 	shared_ptr<Interaction> explicitAction(const shared_ptr<Body>& b1, const shared_ptr<Body>& b2, bool force);
-	YADE_DISPATCHER2D_FUNCTOR_DOC_ATTRS_CTOR_PY(IGeomDispatcher, IGeomFunctor, /* doc is optional*/, /*attrs*/, /*ctor*/ alreadyWarnedNoCollider = false;,
-	                                            /*py*/);
+	YADE_DISPATCHER2D_FUNCTOR_DOC_ATTRS_CTOR_PY(
+	        IGeomDispatcher, IGeomFunctor, /* doc is optional*/, /*attrs*/, /*ctor*/ alreadyWarnedNoCollider = false;,
+	        /*py*/);
 	DECLARE_LOGGER;
 };
 REGISTER_SERIALIZABLE(IGeomDispatcher);

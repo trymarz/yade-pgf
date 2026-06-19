@@ -121,7 +121,9 @@ void KinemCNSEngine::action()
 		computeDY(KnC);
 		letMove(shearSpeed * dt, deltaH);
 		gamma += shearSpeed * dt;
-		if (temoin == 0) { temoin = 1; }
+		if (temoin == 0) {
+			temoin = 1;
+		}
 	} else if (temoin < 2) {
 		stopMovement();
 		it_stop = scene->iter;

@@ -20,10 +20,10 @@
 
 namespace yade {
 
-template <typename T> void preLoad(T&) {};
-template <typename T> void postLoad(T&) {};
-template <typename T> void preSave(T&) {};
-template <typename T> void postSave(T&) {};
+template <typename T> void preLoad(T&) { };
+template <typename T> void postLoad(T&) { };
+template <typename T> void preSave(T&) { };
+template <typename T> void postSave(T&) { };
 
 
 // attribute flags
@@ -58,25 +58,18 @@ namespace Attr {
 // about how this works
 
 // by default, do not return reference; return value instead
-template <typename T> struct py_wrap_ref : public boost::false_type {
-};
+template <typename T> struct py_wrap_ref : public boost::false_type { };
 // specialize for types that should be returned as references
-template <> struct py_wrap_ref<Vector3r> : public boost::true_type {
-};
-template <> struct py_wrap_ref<Vector3i> : public boost::true_type {
-};
-template <> struct py_wrap_ref<Vector2r> : public boost::true_type {
-};
-template <> struct py_wrap_ref<Vector2i> : public boost::true_type {
-};
-template <> struct py_wrap_ref<Quaternionr> : public boost::true_type {
-};
-template <> struct py_wrap_ref<Matrix3r> : public boost::true_type {
-};
+template <> struct py_wrap_ref<Vector3r> : public boost::true_type { };
+template <> struct py_wrap_ref<Vector3i> : public boost::true_type { };
+template <> struct py_wrap_ref<Vector2r> : public boost::true_type { };
+template <> struct py_wrap_ref<Vector2i> : public boost::true_type { };
+template <> struct py_wrap_ref<Quaternionr> : public boost::true_type { };
+template <> struct py_wrap_ref<Matrix3r> : public boost::true_type { };
 
 // ADL only works within the same namespace
 // this duplicate is for classes that are not in yade:: namespace (yet)
-template <class C, typename T, T C::*A> void make_setter_postLoad(C& instance, const T& val)
+template <class C, typename T, T C::* A> void make_setter_postLoad(C& instance, const T& val)
 {
 	instance.*A = val;
 	instance.callPostLoad();
@@ -155,10 +148,11 @@ template <class C, typename T, T C::*A> void make_setter_postLoad(C& instance, c
 #endif
 
 #define _PYATTR_DEPREC_DEF(x, thisClass, z)                                                                                                                    \
-	.add_property(BOOST_PP_STRINGIZE(_DEPREC_OLDNAME(z)),                                                                                                  \
-	                                 &thisClass::BOOST_PP_CAT(_getDeprec_, _DEPREC_OLDNAME(z)),                                                            \
-	                                 &thisClass::BOOST_PP_CAT(_setDeprec_, _DEPREC_OLDNAME(z)),                                                            \
-	                                 "|ydeprecated| alias for :yref:`" BOOST_PP_STRINGIZE(_DEPREC_NEWNAME(z)) "<" BOOST_PP_STRINGIZE(thisClass) "." BOOST_PP_STRINGIZE(             \
+	.add_property(                                                                                                                                         \
+	        BOOST_PP_STRINGIZE(_DEPREC_OLDNAME(z)),                                                                                                        \
+	                           &thisClass::BOOST_PP_CAT(_getDeprec_, _DEPREC_OLDNAME(z)),                                                                  \
+	                           &thisClass::BOOST_PP_CAT(_setDeprec_, _DEPREC_OLDNAME(z)),                                                                  \
+	                           "|ydeprecated| alias for :yref:`" BOOST_PP_STRINGIZE(_DEPREC_NEWNAME(z)) "<" BOOST_PP_STRINGIZE(thisClass) "." BOOST_PP_STRINGIZE(             \
 	                _DEPREC_NEWNAME(z)) ">` (" _DEPREC_COMMENT(z) ")")
 #define _PYHASKEY_ATTR_DEPREC(x, thisClass, z)                                                                                                                 \
 	if (key == BOOST_PP_STRINGIZE(_DEPREC_OLDNAME(z))) return true;
@@ -198,7 +192,9 @@ template <class C, typename T, T C::*A> void make_setter_postLoad(C& instance, c
 #define _PYDICT_ATTR(x, y, z)                                                                                                                                  \
 	if (!(_ATTR_FLG(z) & yade::Attr::hidden)) ret[_ATTR_NAM_STR(z)] = ::boost::python::object(_ATTR_NAM(z));
 #define _REGISTER_BOOST_ATTRIBUTES_REPEAT(x, y, z)                                                                                                             \
-	if ((_ATTR_FLG(z) & yade::Attr::noSave) == 0) { ar& BOOST_SERIALIZATION_NVP(_ATTR_NAM(z)); }
+	if ((_ATTR_FLG(z) & yade::Attr::noSave) == 0) {                                                                                                        \
+		ar& BOOST_SERIALIZATION_NVP(_ATTR_NAM(z));                                                                                                     \
+	}
 #define _REGISTER_BOOST_ATTRIBUTES(baseClass, attrs)                                                                                                           \
 	friend class boost::serialization::access;                                                                                                             \
                                                                                                                                                                \
@@ -217,7 +213,7 @@ private:                                                                        
 	}
 
 #define _REGISTER_ATTRIBUTES_DEPREC(thisClass, baseClass, attrs, deprec)                                                                                                                                                                                                   \
-	_REGISTER_BOOST_ATTRIBUTES(baseClass, attrs) public : void pySetAttr(const std::string& key, const ::boost::python::object& value) override                                                                                                                        \
+_REGISTER_BOOST_ATTRIBUTES(baseClass, attrs) public : void pySetAttr(const std::string& key, const ::boost::python::object& value) override                                                                                                                                \
 	{                                                                                                                                                                                                                                                                  \
 		BOOST_PP_SEQ_FOR_EACH(_PYSET_ATTR, ~, attrs);                                                                                                                                                                                                              \
 		BOOST_PP_SEQ_FOR_EACH(_PYSET_ATTR_DEPREC, thisClass, deprec);                                                                                                                                                                                              \
@@ -242,14 +238,15 @@ private:                                                                        
 // print warning about deprecated attribute; thisClass is type name, not string
 #define _DEPREC_WARN(thisClass, deprec)                                                                                                                        \
 	std::cerr << "WARN: " << getClassName() << "."                                                                                                         \
-	          << BOOST_PP_STRINGIZE(_DEPREC_OLDNAME(deprec))                                                                                               \
+	          << BOOST_PP_STRINGIZE(_DEPREC_OLDNAME(deprec))                                                                                                                        \
 	                                << " is deprecated, use "                                                                                              \
 	                                << BOOST_PP_STRINGIZE(thisClass) << "." << BOOST_PP_STRINGIZE(_DEPREC_NEWNAME(deprec)) << " instead. ";                \
 	if (_DEPREC_COMMENT(deprec)) {                                                                                                                         \
 		if (std::string(_DEPREC_COMMENT(deprec))[0] == '!') {                                                                                          \
 			std::cerr << endl;                                                                                                                     \
-			throw std::invalid_argument(BOOST_PP_STRINGIZE(thisClass) "." BOOST_PP_STRINGIZE(                                                      \
-			        _DEPREC_OLDNAME(deprec)) " is deprecated; throwing exception requested. Reason: " _DEPREC_COMMENT(deprec));                                    \
+			throw std::invalid_argument(                                                                                                           \
+			        BOOST_PP_STRINGIZE(thisClass) "." BOOST_PP_STRINGIZE(                                                      \
+			        _DEPREC_OLDNAME(deprec)) " is deprecated; throwing exception requested. Reason: " _DEPREC_COMMENT(deprec));                            \
 		} else                                                                                                                                         \
 			std::cerr << "(" << _DEPREC_COMMENT(deprec) << ")";                                                                                    \
 	}                                                                                                                                                      \
@@ -372,12 +369,8 @@ private:                                                                        
 #define YADE_CLASS_BASE_DOC_ATTRS_DEPREC_INIT_CTOR_PY(thisClass, baseClass, docString, attrDecls, deprec, inits, ctor, extras)                                 \
 public:                                                                                                                                                        \
 	BOOST_PP_SEQ_FOR_EACH(_ATTR_DECL, ~, attrDecls) /* attribute declarations */                                                                           \
-	thisClass() BOOST_PP_IF(BOOST_PP_SEQ_SIZE(inits attrDecls),                                                                                            \
-	                        :, )                                                                                                                           \
-	        BOOST_PP_SEQ_FOR_EACH_I(                                                                                                                       \
-	                _ATTR_MAKE_INITIALIZER,                                                                                                                \
-	                BOOST_PP_DEC(BOOST_PP_SEQ_SIZE(inits attrDecls)),                                                                                      \
-	                inits BOOST_PP_SEQ_FOR_EACH(_ATTR_MAKE_INIT_TUPLE, ~, attrDecls))                                                                      \
+	thisClass() BOOST_PP_IF(BOOST_PP_SEQ_SIZE(inits attrDecls), :, ) BOOST_PP_SEQ_FOR_EACH_I(                                                              \
+	        _ATTR_MAKE_INITIALIZER, BOOST_PP_DEC(BOOST_PP_SEQ_SIZE(inits attrDecls)), inits BOOST_PP_SEQ_FOR_EACH(_ATTR_MAKE_INIT_TUPLE, ~, attrDecls))    \
 	{                                                                                                                                                      \
 		ctor;                                                                                                                                          \
 	} /* ctor, with initialization of defaults */                                                                                                          \
@@ -387,12 +380,8 @@ public:                                                                         
 #define YADE_CLASS_PYCLASS_BASE_DOC_ATTRS_DEPREC_INIT_CTOR_PY(thisClass, pyClassName, baseClass, docString, attrDecls, deprec, inits, ctor, extras)            \
 public:                                                                                                                                                        \
 	BOOST_PP_SEQ_FOR_EACH(_ATTR_DECL, ~, attrDecls) /* attribute declarations */                                                                           \
-	thisClass() BOOST_PP_IF(BOOST_PP_SEQ_SIZE(inits attrDecls),                                                                                            \
-	                        :, )                                                                                                                           \
-	        BOOST_PP_SEQ_FOR_EACH_I(                                                                                                                       \
-	                _ATTR_MAKE_INITIALIZER,                                                                                                                \
-	                BOOST_PP_DEC(BOOST_PP_SEQ_SIZE(inits attrDecls)),                                                                                      \
-	                inits BOOST_PP_SEQ_FOR_EACH(_ATTR_MAKE_INIT_TUPLE, ~, attrDecls))                                                                      \
+	thisClass() BOOST_PP_IF(BOOST_PP_SEQ_SIZE(inits attrDecls), :, ) BOOST_PP_SEQ_FOR_EACH_I(                                                              \
+	        _ATTR_MAKE_INITIALIZER, BOOST_PP_DEC(BOOST_PP_SEQ_SIZE(inits attrDecls)), inits BOOST_PP_SEQ_FOR_EACH(_ATTR_MAKE_INIT_TUPLE, ~, attrDecls))    \
 	{                                                                                                                                                      \
 		ctor;                                                                                                                                          \
 	} /* ctor, with initialization of defaults */                                                                                                          \
@@ -428,13 +417,13 @@ public:                                                                         
 
 class Serializable : public Factorable {
 public:
-	template <class ArchiveT> void serialize(ArchiveT& /*ar*/, unsigned int /*version*/) {};
+	template <class ArchiveT> void serialize(ArchiveT& /*ar*/, unsigned int /*version*/) { };
 	// lovely cast members like in eigen :-)
 	template <class DerivedT> const DerivedT& cast() const { return *static_cast<DerivedT*>(this); }
 	template <class DerivedT> DerivedT&       cast() { return *static_cast<DerivedT*>(this); }
 
-	Serializable() {};
-	virtual ~Serializable() {};
+	Serializable() { };
+	virtual ~Serializable() { };
 	// comparison of strong equality of 2 objects (by their address)
 	bool operator==(const Serializable& other) { return this == &other; }
 	bool operator!=(const Serializable& other) { return this != &other; }

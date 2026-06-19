@@ -29,7 +29,9 @@ bool logFilterLevels(
 	}
 	if (name) {
 		auto it = Logging::instance().getClassLogLevels().find(name.get());
-		if ((it != itEnd) and (it->second >= 0)) { return level <= it->second; }
+		if ((it != itEnd) and (it->second >= 0)) {
+			return level <= it->second;
+		}
 	}
 	// this is triggered for LOG_NOFILTER macros. I comment this out, because they are legal now. Although I could
 	// slg.add_attribute("NameTag", boost::log::attributes::constant< std::string >("NoFilter"));
@@ -65,8 +67,9 @@ void Logging::updateFormatter()
 {
 	boost::log::formatter fmt = boost::log::expressions::stream
 	        << "<" << severity << "> "
-	        << boost::log::expressions::if_(boost::log::expressions::has_attr(
-	                   class_name_tag))[boost::log::expressions::stream << colorNameTag() << class_name_tag << colorEnd()]
+	        << boost::log::expressions::if_(
+	                                    boost::log::expressions::has_attr(
+	                                            class_name_tag))[boost::log::expressions::stream << colorNameTag() << class_name_tag << colorEnd()]
 	        << boost::log::expressions::smessage;
 	sink->set_formatter(fmt);
 }
@@ -80,7 +83,9 @@ void Logging::updateFormatter()
 void Logging::setOutputStream(const std::string& name, bool reset)
 {
 	LOG_INFO("setting new stream to '" << name << "'");
-	if (name.empty()) { throw std::runtime_error("Cannot use empty stream name."); }
+	if (name.empty()) {
+		throw std::runtime_error("Cannot use empty stream name.");
+	}
 	lastOutputStream = name;
 	if (reset) {
 		sink->locked_backend()->remove_stream(streamClog);
@@ -117,7 +122,9 @@ void Logging::readConfigFile(const std::string& fname)
 		if (f.is_open()) {
 			std::string line;
 			while (getline(f, line)) {
-				if (line.empty() or line[0] == '#') { continue; }
+				if (line.empty() or line[0] == '#') {
+					continue;
+				}
 				std::stringstream ss(line);
 				std::string       option = "";
 				ss >> line;
@@ -159,7 +166,9 @@ void Logging::saveConfigFile(const std::string& fname)
 		f << "output " << lastOutputStream << "\n";
 		f << "Default " << getDefaultLogLevel() << "\n";
 		for (const auto& a : classLogLevels) {
-			if ((a.second != -1) and (a.first != "Default")) { f << a.first << " " << a.second << "\n"; }
+			if ((a.second != -1) and (a.first != "Default")) {
+				f << a.first << " " << a.second << "\n";
+			}
 		}
 	} else {
 		throw std::runtime_error("Cannot open file to save logging config.");
@@ -181,8 +190,9 @@ void Logging::setNamedLogLevel(const std::string& name, short int level)
 	LOG_INFO("setting \"" << name << "\" log level to " << level)
 	if (level < (short int)(SeverityLevel::eNOFILTER) or level > (short int)(SeverityLevel::eTRACE)) {
 		LOG_ERROR("Cannot use level = " << level << ", if this is from loading config file, then comment out this line with '#'")
-		throw std::runtime_error("The level must be >= NOFILTER (0) and <= TRACE (6), other values are not meaningful. To unset level to \"Default\" "
-		                         "level use function unsetLevel(…).");
+		throw std::runtime_error(
+		        "The level must be >= NOFILTER (0) and <= TRACE (6), other values are not meaningful. To unset level to \"Default\" "
+		        "level use function unsetLevel(…).");
 	}
 	if (level > maxLogLevel) {
 		// apparently the macros LOG_* are compiled away. So use std::cerr to make sure that the message is printed.

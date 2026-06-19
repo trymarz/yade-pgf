@@ -258,13 +258,17 @@ void OpenGLRenderer::renderAllInteractionsWire()
 	const std::lock_guard<std::mutex> lock(scene->interactions->drawloopmutex);
 	for (const auto& i : *scene->interactions) {
 		// geometry must exist              , sometimes a body can get deleted
-		if ((not i->functorCache.geomExists)) { continue; }
+		if ((not i->functorCache.geomExists)) {
+			continue;
+		}
 		const boost::shared_ptr<const Body> b1 = Body::byId(i->getId1(), scene);
 		const boost::shared_ptr<const Body> b2 = Body::byId(i->getId2(), scene);
 		// If the Body gets deleted after the two lines above, then we hold the last instance of it. And it will be deleted when this part of the loop ends
 		// using `const` makes this threadsafe, because shared_ptr holds a threadsafe atomic count of instances, while const means that we are not writing there.
 		// Only reading the soon-to-be-deleted (in next 50 miliseconds) body position.
-		if ((not b1) or (not b2)) { continue; }
+		if ((not b1) or (not b2)) {
+			continue;
+		}
 		glColor3v(i->isReal() ? Vector3r(0, 1, 0) : Vector3r(.5, 0, 1));
 		Vector3r        p1   = b1->state->pos;
 		const Vector3r& size = scene->cell->getSize();
@@ -290,7 +294,9 @@ void OpenGLRenderer::renderDOF_ID()
 		if (!b) continue;
 		if (b->shape && ((b->getGroupMask() & mask) || b->getGroupMask() == 0)) {
 			if (!id && b->state->blockedDOFs == 0) continue;
-			if (selId == b->getId()) { glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientColorSelected); }
+			if (selId == b->getId()) {
+				glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientColorSelected);
+			}
 			{ // write text
 				glColor3(1.0 - bgColor[0], 1.0 - bgColor[1], 1.0 - bgColor[2]);
 				unsigned    d    = b->state->blockedDOFs;
@@ -306,7 +312,9 @@ void OpenGLRenderer::renderDOF_ID()
 				glColor3v(h);
 				GLUtils::GLDrawText(str, bodyDisp[b->id].pos, h);
 			}
-			if (selId == b->getId()) { glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientColorUnselected); }
+			if (selId == b->getId()) {
+				glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientColorUnselected);
+			}
 		}
 	}
 }

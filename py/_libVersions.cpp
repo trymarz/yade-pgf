@@ -11,8 +11,7 @@
 #include <string>
 
 namespace forCtags {
-struct libVersions {
-}; // for ctags
+struct libVersions { }; // for ctags
 }
 
 namespace py = boost::python;
@@ -27,10 +26,14 @@ py::tuple extractNumbers(std::string verStr, std::string what)
 	int               found;
 	while (!ss.eof()) {
 		ss >> temp;
-		if (std::stringstream(temp) >> found) { verNum.push_back(found); }
+		if (std::stringstream(temp) >> found) {
+			verNum.push_back(found);
+		}
 		temp = "";
 	}
-	if (verNum.size() > 3) { LOG_WARN(what << ": more than 3 numbers extracted from " << verStr); }
+	if (verNum.size() > 3) {
+		LOG_WARN(what << ": more than 3 numbers extracted from " << verStr);
+	}
 	switch (verNum.size()) {
 		case 0: return py::make_tuple(0, 0, 0);
 		case 1: return py::make_tuple(verNum[0], 0, 0);
@@ -190,7 +193,7 @@ py::list sqliteVer()
 #pragma GCC diagnostic ignored "-Wsuggest-override"
 #include <vtkVersion.h>
 #pragma GCC diagnostic pop
-py::list               vtkVer()
+py::list vtkVer()
 {
 	py::list ret;
 	ret.append(py::make_tuple(VTK_MAJOR_VERSION, VTK_MINOR_VERSION, VTK_BUILD_VERSION));
@@ -337,7 +340,7 @@ py::list mpiVer() { return {}; }
 #include <ClpConfig.h>
 #include <CoinUtilsConfig.h>
 #pragma GCC diagnostic pop
-py::list               clpVer()
+py::list clpVer()
 {
 	py::list ret;
 	ret.append(py::make_tuple(CLP_VERSION_MAJOR, CLP_VERSION_MINOR, CLP_VERSION_RELEASE));

@@ -23,8 +23,7 @@ void crashHandler(int sig)
 #endif
 
 namespace forCtags {
-struct pyboot {
-}; // for ctags
+struct pyboot { }; // for ctags
 }
 
 /* Initialize yade, loading given plugins */

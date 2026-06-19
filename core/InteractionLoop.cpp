@@ -60,7 +60,9 @@ void InteractionLoop::action()
 
 	// cache transformed cell size
 	Matrix3r cellHsize = Matrix3r::Zero();
-	if (scene->isPeriodic) { cellHsize = scene->cell->hSize; }
+	if (scene->isPeriodic) {
+		cellHsize = scene->cell->hSize;
+	}
 
 	// force removal of interactions that were not encountered by the collider
 	// (only for some kinds of colliders; see comment for InteractionContainer::iterColliderLastRun)
@@ -102,7 +104,9 @@ void InteractionLoop::action()
 #endif
 
 		// Skip interaction with clumps
-		if (b1_->isClump() || b2_->isClump()) { continue; }
+		if (b1_->isClump() || b2_->isClump()) {
+			continue;
+		}
 
 		// we know there is no geometry functor already, take the short path
 		if (!I->functorCache.geomExists) {
@@ -129,7 +133,9 @@ void InteractionLoop::action()
 		// arguments for the geom functor are in the reverse order (dispatcher would normally call goReverse).
 		// we don't remember the fact that is reverse, so we swap bodies within the interaction
 		// and can call go in all cases
-		if (swap) { I->swapOrder(); }
+		if (swap) {
+			I->swapOrder();
+		}
 		// body pointers must be updated, in case we swapped
 		const shared_ptr<Body>& b1 = swap ? b2_ : b1_;
 		const shared_ptr<Body>& b2 = swap ? b1_ : b2_;
@@ -236,7 +242,9 @@ shared_ptr<Interaction> InteractionLoop::createExplicitInteraction(Body::id_t id
 				geomMeta = id->geomDispatcher.get();
 				physMeta = id->physDispatcher.get();
 			}
-			if (geomMeta && physMeta) { break; }
+			if (geomMeta && physMeta) {
+				break;
+			}
 		}
 		if (!geomMeta) throw runtime_error("No IGeomDispatcher in engines or inside InteractionLoop.");
 		if (!physMeta) throw runtime_error("No IPhysDispatcher in engines or inside InteractionLoop.");

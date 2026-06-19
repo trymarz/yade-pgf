@@ -94,7 +94,9 @@ bool Law2_ScGeom_JCFpmPhys_JointedCohesiveFrictionalPM::go(shared_ptr<IGeom>& ig
 
 		if (phys->momentCalculated && phys->momentMagnitude != 0) {
 			std::ofstream file(fileMoments.c_str(), !momentsFileExist ? std::ios::trunc : std::ios::app);
-			if (file.tellp() == 0) { file << "i p0 p1 p2 moment numInts eventNum time beginTime" << endl; }
+			if (file.tellp() == 0) {
+				file << "i p0 p1 p2 moment numInts eventNum time beginTime" << endl;
+			}
 			file << boost::lexical_cast<string>(scene->iter) << " " << boost::lexical_cast<string>(phys->momentCentroid[0]) << " "
 			     << boost::lexical_cast<string>(phys->momentCentroid[1]) << " " << boost::lexical_cast<string>(phys->momentCentroid[2]) << " "
 			     << boost::lexical_cast<string>(phys->momentMagnitude) << " " << boost::lexical_cast<string>(phys->clusterInts.size()) << " "
@@ -143,7 +145,9 @@ bool Law2_ScGeom_JCFpmPhys_JointedCohesiveFrictionalPM::go(shared_ptr<IGeom>& ig
 
 			if (recordCracks) {
 				std::ofstream file(fileCracks.c_str(), !cracksFileExist ? std::ios::trunc : std::ios::app);
-				if (file.tellp() == 0) { file << "iter time p0 p1 p2 type size norm0 norm1 norm2 nrg onJnt" << endl; }
+				if (file.tellp() == 0) {
+					file << "iter time p0 p1 p2 type size norm0 norm1 norm2 nrg onJnt" << endl;
+				}
 				Vector3r crackNormal = Vector3r::Zero();
 				if ((smoothJoint) && (phys->isOnJoint)) {
 					crackNormal = phys->jointNormal;
@@ -249,7 +253,9 @@ bool Law2_ScGeom_JCFpmPhys_JointedCohesiveFrictionalPM::go(shared_ptr<IGeom>& ig
 
 			if (recordCracks) {
 				std::ofstream file(fileCracks.c_str(), !cracksFileExist ? std::ios::trunc : std::ios::app);
-				if (file.tellp() == 0) { file << "iter time p0 p1 p2 type size norm0 norm1 norm2 nrg onJnt" << endl; }
+				if (file.tellp() == 0) {
+					file << "iter time p0 p1 p2 type size norm0 norm1 norm2 nrg onJnt" << endl;
+				}
 				Vector3r crackNormal = Vector3r::Zero();
 				if ((smoothJoint) && (phys->isOnJoint)) {
 					crackNormal = phys->jointNormal;

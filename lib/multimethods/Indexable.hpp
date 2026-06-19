@@ -42,7 +42,7 @@ protected:
 	virtual int& modifyClassIndex() { _THROW_NOT_OVERRIDDEN; };
 
 public:
-	Indexable() {};
+	Indexable() { };
 	virtual ~Indexable() = default;
 
 	/// Returns the id of the current class. This id is set by a multimethod manager
@@ -98,10 +98,11 @@ public:                                                                         
 	const int&        getClassIndex() const override { return getClassIndexStatic(); }                                                                     \
 	const int&        getBaseClassIndex(int) const override                                                                                                \
 	{                                                                                                                                                      \
-		throw std::logic_error("One of the following errors was detected:\n(1) Class " #SomeClass                                                      \
-		                       " called createIndex() in its ctor (but it shouldn't, being a top-level indexable; only use REGISTER_INDEX_COUNTER, "   \
-		                       "but not createIndex()).\n(2) Some DerivedClass deriving from " #SomeClass                                              \
-		                       " forgot to use REGISTER_CLASS_INDEX(DerivedClass," #SomeClass ").\nPlease fix that and come back again.");             \
+		throw std::logic_error(                                                                                                                        \
+		        "One of the following errors was detected:\n(1) Class " #SomeClass                                                                     \
+		        " called createIndex() in its ctor (but it shouldn't, being a top-level indexable; only use REGISTER_INDEX_COUNTER, "                  \
+		        "but not createIndex()).\n(2) Some DerivedClass deriving from " #SomeClass                                                             \
+		        " forgot to use REGISTER_CLASS_INDEX(DerivedClass," #SomeClass ").\nPlease fix that and come back again.");                            \
 	}                                                                                                                                                      \
                                                                                                                                                                \
 private:                                                                                                                                                       \
@@ -116,7 +117,9 @@ public:                                                                         
 	{                                                                                                                                                      \
 		SomeClass* Indexable##SomeClass = 0;                                                                                                           \
 		Indexable##SomeClass            = dynamic_cast<SomeClass*>(const_cast<SomeClass*>(this));                                                      \
-		if (Indexable##SomeClass) { assert(Indexable##SomeClass); }                                                                                    \
+		if (Indexable##SomeClass) {                                                                                                                    \
+			assert(Indexable##SomeClass);                                                                                                          \
+		}                                                                                                                                              \
 		return modifyMaxCurrentlyUsedIndexStatic(); /* returns const reference, so won't be modified actually */                                       \
 	}                                                                                                                                                      \
                                                                                                                                                                \
@@ -125,7 +128,9 @@ protected:                                                                      
 	{                                                                                                                                                      \
 		SomeClass* Indexable##SomeClass = 0;                                                                                                           \
 		Indexable##SomeClass            = dynamic_cast<SomeClass*>(this);                                                                              \
-		if (Indexable##SomeClass) { assert(Indexable##SomeClass); }                                                                                    \
+		if (Indexable##SomeClass) {                                                                                                                    \
+			assert(Indexable##SomeClass);                                                                                                          \
+		}                                                                                                                                              \
 		int& maxIndex = modifyMaxCurrentlyUsedIndexStatic();                                                                                           \
 		maxIndex++;                                                                                                                                    \
 	}

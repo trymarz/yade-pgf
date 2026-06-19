@@ -10,7 +10,7 @@ namespace yade { // Cannot have #include directive inside.
 /*! Create Polyhedra (collision geometry) from colliding Polyhedras. */
 class Ig2_Polyhedra_Polyhedra_PolyhedraGeom : public IGeomFunctor {
 public:
-	virtual ~Ig2_Polyhedra_Polyhedra_PolyhedraGeom() {};
+	virtual ~Ig2_Polyhedra_Polyhedra_PolyhedraGeom() { };
 	virtual bool
 	             go(const shared_ptr<Shape>&       shape1,
 	                const shared_ptr<Shape>&       shape2,
@@ -42,7 +42,7 @@ REGISTER_SERIALIZABLE(Ig2_Polyhedra_Polyhedra_PolyhedraGeom);
 /*! Create Polyhedra (collision geometry) from colliding Wall & Polyhedra. */
 class Ig2_Wall_Polyhedra_PolyhedraGeom : public IGeomFunctor {
 public:
-	virtual ~Ig2_Wall_Polyhedra_PolyhedraGeom() {};
+	virtual ~Ig2_Wall_Polyhedra_PolyhedraGeom() { };
 	virtual bool
 	go(const shared_ptr<Shape>&       shape1,
 	   const shared_ptr<Shape>&       shape2,
@@ -64,7 +64,7 @@ REGISTER_SERIALIZABLE(Ig2_Wall_Polyhedra_PolyhedraGeom);
 /*! Create Polyhedra (collision geometry) from colliding Facet & Polyhedra. */
 class Ig2_Facet_Polyhedra_PolyhedraGeom : public IGeomFunctor {
 public:
-	virtual ~Ig2_Facet_Polyhedra_PolyhedraGeom() {};
+	virtual ~Ig2_Facet_Polyhedra_PolyhedraGeom() { };
 	virtual bool
 	go(const shared_ptr<Shape>&       shape1,
 	   const shared_ptr<Shape>&       shape2,
@@ -87,7 +87,7 @@ REGISTER_SERIALIZABLE(Ig2_Facet_Polyhedra_PolyhedraGeom);
 class Ig2_Sphere_Polyhedra_ScGeom : public IGeomFunctor {
 public:
 	enum PointTriangleRelation { inside, edge, vertex, none };
-	virtual ~Ig2_Sphere_Polyhedra_ScGeom() {};
+	virtual ~Ig2_Sphere_Polyhedra_ScGeom() { };
 	virtual bool
 	go(const shared_ptr<Shape>&       shape1,
 	   const shared_ptr<Shape>&       shape2,
@@ -113,7 +113,7 @@ REGISTER_SERIALIZABLE(Ig2_Sphere_Polyhedra_ScGeom);
 /*! Plyhedra -> ScGeom. */
 class Ig2_Polyhedra_Polyhedra_ScGeom : public IGeomFunctor {
 public:
-	virtual ~Ig2_Polyhedra_Polyhedra_ScGeom() {};
+	virtual ~Ig2_Polyhedra_Polyhedra_ScGeom() { };
 	virtual bool
 	             go(const shared_ptr<Shape>&       shape1,
 	                const shared_ptr<Shape>&       shape2,
@@ -143,7 +143,7 @@ REGISTER_SERIALIZABLE(Ig2_Polyhedra_Polyhedra_ScGeom);
 
 class Ig2_Polyhedra_Polyhedra_PolyhedraGeomOrScGeom : public IGeomFunctor {
 public:
-	virtual ~Ig2_Polyhedra_Polyhedra_PolyhedraGeomOrScGeom() {};
+	virtual ~Ig2_Polyhedra_Polyhedra_PolyhedraGeomOrScGeom() { };
 	virtual bool
 	             go(const shared_ptr<Shape>&       shape1,
 	                const shared_ptr<Shape>&       shape2,

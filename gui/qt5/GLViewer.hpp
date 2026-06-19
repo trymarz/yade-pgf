@@ -177,7 +177,7 @@ private:
 
 public:
 	YadeCamera()
-	        : cuttingDistance(0) {};
+	        : cuttingDistance(0) { };
 #if QGLVIEWER_VERSION >= 0x020603
 	using QGLCompatDouble = qreal;
 #else

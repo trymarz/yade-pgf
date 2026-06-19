@@ -42,7 +42,7 @@ public:
 	}
 	std::vector<const double*> pt;
 	int                        id;
-	virtual ~meshpt() {};
+	virtual ~meshpt() { };
 };
 
 class kdNode {
@@ -56,19 +56,19 @@ public:
 	meshpt  p;
 	kdNode* left;
 	kdNode* right;
-	virtual ~kdNode() {};
+	virtual ~kdNode() { };
 };
 
 class cmpnode {
 public:
-	cmpnode() {};
+	cmpnode() { };
 	bool operator()(const std::pair<kdNode*, double>& n1, const std::pair<kdNode*, double>& n2) { return n1.second < n2.second; }
 };
 
 class cmpvec {
 public:
 	cmpvec(int axis)
-	        : a(axis) {};
+	        : a(axis) { };
 
 	bool operator()(const meshpt& p1, const meshpt& p2) { return *(p1.pt[a]) < *(p2.pt[a]); }
 	int  a;
@@ -111,14 +111,14 @@ public:
 		return value;
 	}
 
-	virtual ~pqueue() {};
+	virtual ~pqueue() { };
 };
 
 
 class meshTree {
 public:
 	meshTree(const volVectorField& mshC)
-	        : meshm(mshC) {};
+	        : meshm(mshC) { };
 	const volVectorField&                  meshm;
 	kdNode*                                root;
 	void                                   build_tree();
@@ -132,7 +132,7 @@ public:
 	kdNode*                                recursive_nearest_cell(kdNode*, const meshpt&, kdNode*, double&, int);
 	double                                 distance(const meshpt&, const meshpt&);
 	int                                    numlevels;
-	virtual ~meshTree() {};
+	virtual ~meshTree() { };
 	void traversTree();
 	void _traversTree(kdNode*);
 };

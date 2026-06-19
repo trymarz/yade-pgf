@@ -112,7 +112,7 @@ void Ip2_CpmMat_CpmMat_CpmPhys::go(const shared_ptr<Material>& pp1, const shared
 CREATE_LOGGER(CpmPhys);
 
 // !! at least one virtual function in the .cpp file
-CpmPhys::~CpmPhys() {};
+CpmPhys::~CpmPhys() { };
 
 long CpmPhys::cummBetaIter = 0, CpmPhys::cummBetaCount = 0;
 
@@ -204,7 +204,9 @@ Real CpmPhys::funcGInv(const Real& omega, const Real& epsCrackOnset, const Real&
 				dfg  = CpmPhys::funcGDKappa(ret, epsCrackOnset, epsFracture, neverDamage, damLaw);
 				decr = fg / dfg;
 				ret -= decr;
-				if (math::abs(decr / epsCrackOnset) < tol) { return ret; }
+				if (math::abs(decr / epsCrackOnset) < tol) {
+					return ret;
+				}
 			}
 			throw runtime_error("CpmPhys::funcGInv: no convergence\n");
 		} break;
@@ -215,14 +217,18 @@ Real CpmPhys::funcGInv(const Real& omega, const Real& epsCrackOnset, const Real&
 
 void CpmPhys::setDamage(Real dmg)
 {
-	if (neverDamage) { return; }
+	if (neverDamage) {
+		return;
+	}
 	omega  = dmg;
 	kappaD = CpmPhys::funcGInv(dmg, epsCrackOnset, epsFracture, neverDamage, damLaw);
 }
 
 void CpmPhys::setRelResidualStrength(Real r)
 {
-	if (neverDamage) { return; }
+	if (neverDamage) {
+		return;
+	}
 	if (r == 1.) {
 		relResidualStrength = r;
 		kappaD = omega = 0.;
@@ -577,7 +583,9 @@ void Gl1_CpmPhys::go(
 	}
 
 	Vector3r cp = boost::static_pointer_cast<GenericSpheresContact>(i->geom)->contactPoint;
-	if (scene2->isPeriodic) { cp = scene2->cell->wrapShearedPt(cp); }
+	if (scene2->isPeriodic) {
+		cp = scene2->cell->wrapShearedPt(cp);
+	}
 	if (epsT) {
 		Real     maxShear = (phys->undamagedCohesion - phys->sigmaN * phys->tanFrictionAngle) / phys->G;
 		Real     relShear = phys->epsT.norm() / maxShear;

@@ -27,7 +27,7 @@ public:
 		ct          = 0.;
 		return;
 	};
-	virtual ~LBMlink() {};
+	virtual ~LBMlink() { };
 
 	// clang-format off
     YADE_CLASS_BASE_DOC_ATTRS_CTOR(LBMlink,Serializable,

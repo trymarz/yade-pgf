@@ -125,7 +125,9 @@ void Omega::stop()
 /* WARNING: even a single simulation step is run asynchronously; the call will return before the iteration is finished. */
 void Omega::step()
 {
-	if (simulationLoop) { simulationLoop->spawnSingleAction(); }
+	if (simulationLoop) {
+		simulationLoop->spawnSingleAction();
+	}
 }
 
 void Omega::run()
@@ -134,12 +136,16 @@ void Omega::run()
 		LOG_ERROR("No Omega::simulationLoop? Creating one (please report bug).");
 		createSimulationLoop();
 	}
-	if (simulationLoop && !simulationLoop->looping()) { simulationLoop->start(); }
+	if (simulationLoop && !simulationLoop->looping()) {
+		simulationLoop->start();
+	}
 }
 
 void Omega::pause()
 {
-	if (simulationLoop && simulationLoop->looping()) { simulationLoop->stop(); }
+	if (simulationLoop && simulationLoop->looping()) {
+		simulationLoop->stop();
+	}
 }
 
 bool Omega::isRunning()

@@ -21,7 +21,9 @@ namespace ymport {
 		PolyMesh::PolyMesh(const std::string& baseDirPath, bool patchAsWall, bool emptyAsWall)
 		        : m_baseDirPath(baseDirPath)
 		{
-			if (boost::filesystem::is_directory(m_baseDirPath) == false) { error("Not a directory."); }
+			if (boost::filesystem::is_directory(m_baseDirPath) == false) {
+				error("Not a directory.");
+			}
 
 			// NOTE: Support for .gz files?
 			m_pointsParser = std::make_unique<PointsParser>(m_baseDirPath + "/points");
@@ -30,7 +32,9 @@ namespace ymport {
 
 			m_points = m_pointsParser->points();
 
-			if (m_points.size() == 0) { error("No points were found."); }
+			if (m_points.size() == 0) {
+				error("No points were found.");
+			}
 
 			m_facesParser = std::make_unique<FacesParser>(m_baseDirPath + "/faces", m_points.size());
 
@@ -38,7 +42,9 @@ namespace ymport {
 
 			m_faces = m_facesParser->faces();
 
-			if (m_faces.size() == 0) { error("No faces were found."); }
+			if (m_faces.size() == 0) {
+				error("No faces were found.");
+			}
 
 			m_boundaryParser = std::make_unique<BoundaryParser>(m_baseDirPath + "/boundary");
 
@@ -46,7 +52,9 @@ namespace ymport {
 
 			m_boundaries = m_boundaryParser->boundaries();
 
-			if (m_boundaries.size() == 0) { error("No boundaries were found."); }
+			if (m_boundaries.size() == 0) {
+				error("No boundaries were found.");
+			}
 
 			buildFacets(patchAsWall, emptyAsWall);
 		}
@@ -54,9 +62,13 @@ namespace ymport {
 		void PolyMesh::buildFacets(bool patchAsWall, bool emptyAsWall)
 		{
 			for (auto& b : m_boundaries) {
-				if (b.type == BoundaryParser::Boundary::Type::PATCH && patchAsWall == false) { continue; }
+				if (b.type == BoundaryParser::Boundary::Type::PATCH && patchAsWall == false) {
+					continue;
+				}
 
-				if (b.type == BoundaryParser::Boundary::Type::EMPTY && emptyAsWall == false) { continue; }
+				if (b.type == BoundaryParser::Boundary::Type::EMPTY && emptyAsWall == false) {
+					continue;
+				}
 
 				std::vector<FacesParser::Face> faces(b.nFaces);
 				for (int i = 0; i < b.nFaces; ++i) {

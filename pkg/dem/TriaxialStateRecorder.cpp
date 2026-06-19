@@ -22,7 +22,7 @@
 namespace yade { // Cannot have #include directive inside.
 
 CREATE_LOGGER(TriaxialStateRecorder);
-TriaxialStateRecorder::~TriaxialStateRecorder() {};
+TriaxialStateRecorder::~TriaxialStateRecorder() { };
 
 void TriaxialStateRecorder::action()
 {

@@ -110,8 +110,9 @@ void GeneralIntegratorInsertionSortCollider::action()
 			minR = min(s->radius, minR);
 		}
 		if (math::isinf(minR))
-			LOG_ERROR("verletDist is set to 0 because no spheres were found. It will result in suboptimal performances, consider setting a "
-			          "positive verletDist in your script.");
+			LOG_ERROR(
+			        "verletDist is set to 0 because no spheres were found. It will result in suboptimal performances, consider setting a "
+			        "positive verletDist in your script.");
 		// if no spheres, disable stride
 		verletDist = math::isinf(minR) ? 0 : math::abs(verletDist) * minR;
 	}
@@ -139,7 +140,9 @@ void GeneralIntegratorInsertionSortCollider::action()
 				integrator = YADE_PTR_DYN_CAST<Integrator>(e);
 				if (integrator) break;
 			}
-			if (!integrator) { throw runtime_error("InsertionSortCollider.verletDist>0, but unable to locate any Integrator within O.engines."); }
+			if (!integrator) {
+				throw runtime_error("InsertionSortCollider.verletDist>0, but unable to locate any Integrator within O.engines.");
+			}
 		}
 	}
 	ISC_CHECKPOINT("init");
@@ -178,7 +181,9 @@ void GeneralIntegratorInsertionSortCollider::action()
 				BBj[i].flags.hasBB = false; /* for vanished body, keep the coordinate as-is, to minimize inversions. */
 			}
 			// if initializing periodic, shift coords & record the period into BBj[i].period
-			if (doInitSort && periodic) { BBj[i].coord = cellWrap(BBj[i].coord, 0, BBj.cellDim, BBj[i].period); }
+			if (doInitSort && periodic) {
+				BBj[i].coord = cellWrap(BBj[i].coord, 0, BBj.cellDim, BBj[i].period);
+			}
 		}
 	}
 	// for each body, copy its minima and maxima, for quick checks of overlaps later

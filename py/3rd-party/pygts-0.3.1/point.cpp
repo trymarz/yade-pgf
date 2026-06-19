@@ -69,7 +69,9 @@ static PyObject* set(PygtsPoint* self, PyObject* args)
 	SELF_CHECK
 
 	/* Parse the args */
-	if (!PyArg_ParseTuple(args, "|ddd", &x, &y, &z)) { return NULL; }
+	if (!PyArg_ParseTuple(args, "|ddd", &x, &y, &z)) {
+		return NULL;
+	}
 
 	gts_point_set(PYGTS_POINT_AS_GTS_POINT(self), x, y, z);
 
@@ -96,7 +98,9 @@ static PyObject* is_in_rectangle(PygtsPoint* self, PyObject* args)
 	SELF_CHECK
 
 	/* Parse the args */
-	if (!PyArg_ParseTuple(args, "OO", &o1_, &o2_)) { return NULL; }
+	if (!PyArg_ParseTuple(args, "OO", &o1_, &o2_)) {
+		return NULL;
+	}
 
 	/* Convert to PygtsObjects */
 	if (!(pygts_point_check(o1_) && pygts_point_check(o2_))) {
@@ -141,7 +145,9 @@ static PyObject* distance(PygtsPoint* self, PyObject* args)
 	SELF_CHECK
 
 	/* Parse the args */
-	if (!PyArg_ParseTuple(args, "O", &o_)) { return NULL; }
+	if (!PyArg_ParseTuple(args, "O", &o_)) {
+		return NULL;
+	}
 
 	/* Convert to PygtsObjects */
 	if (pygts_point_check(o_)) {
@@ -181,7 +187,9 @@ static PyObject* distance2(PygtsPoint* self, PyObject* args)
 	SELF_CHECK
 
 	/* Parse the args */
-	if (!PyArg_ParseTuple(args, "O", &o_)) { return NULL; }
+	if (!PyArg_ParseTuple(args, "O", &o_)) {
+		return NULL;
+	}
 
 	/* Convert to PygtsObjects */
 	if (pygts_point_check(o_)) {
@@ -219,7 +227,9 @@ static PyObject* orientation_3d(PygtsPoint* self, PyObject* args)
 	SELF_CHECK
 
 	/* Parse the args */
-	if (!PyArg_ParseTuple(args, "OOO", &p1_, &p2_, &p3_)) { return NULL; }
+	if (!PyArg_ParseTuple(args, "OOO", &p1_, &p2_, &p3_)) {
+		return NULL;
+	}
 
 	/* Convert to PygtsObjects */
 	if (!pygts_point_check(p1_)) {
@@ -253,7 +263,9 @@ static PyObject* orientation_3d_sos(PygtsPoint* self, PyObject* args)
 	SELF_CHECK
 
 	/* Parse the args */
-	if (!PyArg_ParseTuple(args, "OOO", &p1_, &p2_, &p3_)) { return NULL; }
+	if (!PyArg_ParseTuple(args, "OOO", &p1_, &p2_, &p3_)) {
+		return NULL;
+	}
 
 	/* Convert to PygtsObjects */
 	if (!pygts_point_check(p1_)) {
@@ -289,7 +301,9 @@ static PyObject* is_in_circle(PygtsPoint* self, PyObject* args)
 	SELF_CHECK
 
 	/* Parse the args */
-	if (!PyArg_ParseTuple(args, "O|OO", &o1_, &o2_, &o3_)) { return NULL; }
+	if (!PyArg_ParseTuple(args, "O|OO", &o1_, &o2_, &o3_)) {
+		return NULL;
+	}
 	if ((o2_ == NULL && o3_ != NULL) || (o2_ != NULL && o3_ == NULL)) {
 		PyErr_SetString(PyExc_TypeError, "expected three Points or one Triangle");
 		return NULL;
@@ -341,7 +355,9 @@ static PyObject* is_in(PygtsPoint* self, PyObject* args)
 	SELF_CHECK
 
 	/* Parse the args */
-	if (!PyArg_ParseTuple(args, "O", &t_)) { return NULL; }
+	if (!PyArg_ParseTuple(args, "O", &t_)) {
+		return NULL;
+	}
 
 	/* Convert to PygtsObjects */
 	if (!pygts_triangle_check(t_)) {
@@ -364,7 +380,9 @@ static PyObject* is_inside(PygtsPoint* self, PyObject* args)
 	SELF_CHECK
 
 	/* Parse the args */
-	if (!PyArg_ParseTuple(args, "O", &s_)) { return NULL; }
+	if (!PyArg_ParseTuple(args, "O", &s_)) {
+		return NULL;
+	}
 
 	/* Convert to PygtsObjects */
 	if (!pygts_surface_check(s_)) {
@@ -382,7 +400,9 @@ static PyObject* is_inside(PygtsPoint* self, PyObject* args)
 	/* Determing is_open parameter; note the meaning is different from the 
    * error check above.
    */
-	if (gts_surface_volume(PYGTS_SURFACE_AS_GTS_SURFACE(s)) < 0.) { is_open = TRUE; }
+	if (gts_surface_volume(PYGTS_SURFACE_AS_GTS_SURFACE(s)) < 0.) {
+		is_open = TRUE;
+	}
 
 	/* Construct the tree */
 	if ((tree = gts_bb_tree_surface(PYGTS_SURFACE_AS_GTS_SURFACE(s))) == NULL) {
@@ -415,7 +435,9 @@ static PyObject* closest(PygtsPoint* self, PyObject* args)
 	SELF_CHECK
 
 	/* Parse the args */
-	if (!PyArg_ParseTuple(args, "OO", &o1_, &o2_)) { return NULL; }
+	if (!PyArg_ParseTuple(args, "OO", &o1_, &o2_)) {
+		return NULL;
+	}
 
 	/* Convert to PygtsObjects */
 	if (pygts_segment_check(o1_)) {
@@ -474,7 +496,9 @@ static PyObject* rotate(PygtsPoint* self, PyObject* args, PyObject* keywds)
 	SELF_CHECK
 
 	/* Parse the args */
-	if (!PyArg_ParseTupleAndKeywords(args, keywds, "|dddd", kwlist, &dx, &dy, &dz, &a)) { return NULL; }
+	if (!PyArg_ParseTupleAndKeywords(args, keywds, "|dddd", kwlist, &dx, &dy, &dz, &a)) {
+		return NULL;
+	}
 
 	if (pygts_point_rotate(PYGTS_POINT_AS_GTS_POINT(self), dx, dy, dz, a) == -1) return NULL;
 
@@ -511,7 +535,9 @@ static PyObject* scale(PygtsPoint* self, PyObject* args, PyObject* keywds)
 	SELF_CHECK
 
 	/* Parse the args */
-	if (!PyArg_ParseTupleAndKeywords(args, keywds, "|ddd", kwlist, &dx, &dy, &dz)) { return NULL; }
+	if (!PyArg_ParseTupleAndKeywords(args, keywds, "|ddd", kwlist, &dx, &dy, &dz)) {
+		return NULL;
+	}
 
 	if (pygts_point_scale(PYGTS_POINT_AS_GTS_POINT(self), dx, dy, dz) == -1) return NULL;
 
@@ -548,7 +574,9 @@ static PyObject* translate(PygtsPoint* self, PyObject* args, PyObject* keywds)
 	SELF_CHECK
 
 	/* Parse the args */
-	if (!PyArg_ParseTupleAndKeywords(args, keywds, "|ddd", kwlist, &dx, &dy, &dz)) { return NULL; }
+	if (!PyArg_ParseTupleAndKeywords(args, keywds, "|ddd", kwlist, &dx, &dy, &dz)) {
+		return NULL;
+	}
 
 	if (pygts_point_translate(PYGTS_POINT_AS_GTS_POINT(self), dx, dy, dz) == -1) return NULL;
 
@@ -798,8 +826,12 @@ static PyObject* new_(PyTypeObject* type, PyObject* args, PyObject* kwds)
 	/* Parse the args */
 	if (kwds) {
 		o = PyDict_GetItemString(kwds, "alloc_gtsobj");
-		if (o == Py_False) { alloc_gtsobj = FALSE; }
-		if (o != NULL) { PyDict_DelItemString(kwds, "alloc_gtsobj"); }
+		if (o == Py_False) {
+			alloc_gtsobj = FALSE;
+		}
+		if (o != NULL) {
+			PyDict_DelItemString(kwds, "alloc_gtsobj");
+		}
 	}
 	if (kwds) {
 		Py_INCREF(Py_False);
@@ -835,13 +867,17 @@ static int init(PygtsPoint* self, PyObject* args, PyObject* kwds)
 	obj = PYGTS_OBJECT(self);
 
 	/* Parse the args */
-	if (!PyArg_ParseTupleAndKeywords(args, kwds, "|dddi", kwlist, &x, &y, &z, &a)) { return -1; }
+	if (!PyArg_ParseTupleAndKeywords(args, kwds, "|dddi", kwlist, &x, &y, &z, &a)) {
+		return -1;
+	}
 
 	/* Initialize */
 	gts_point_set(GTS_POINT(obj->gtsobj), x, y, z);
 
 	/* Chain up */
-	if ((ret = PygtsObjectType.tp_init((PyObject*)self, args, kwds)) != 0) { return ret; }
+	if ((ret = PygtsObjectType.tp_init((PyObject*)self, args, kwds)) != 0) {
+		return ret;
+	}
 
 	return 0;
 }
@@ -907,7 +943,7 @@ PyTypeObject PygtsPointType = {
 #if PY_MAJOR_VERSION >= 3
 	(richcmpfunc)rich_compare, /* tp_richcompare */
 #else
-	0,                /* tp_richcompare */
+	0, /* tp_richcompare */
 #endif
 	0,              /* tp_weaklistoffset */
 	0,              /* tp_iter */
@@ -936,7 +972,9 @@ gboolean pygts_point_check(PyObject* o)
 	PyObject* obj;
 
 	/* Check for a Point */
-	if (PyObject_TypeCheck(o, &PygtsPointType)) { check = TRUE; }
+	if (PyObject_TypeCheck(o, &PygtsPointType)) {
+		check = TRUE;
+	}
 
 	/* Convert list into tuple */
 	if (PyList_Check(o)) {
@@ -951,7 +989,9 @@ gboolean pygts_point_check(PyObject* o)
 			check = TRUE;
 			for (i = 0; i < N; i++) {
 				obj = PyTuple_GET_ITEM(o, i);
-				if (!PyFloat_Check(obj) && !PyLong_Check(obj)) { check = FALSE; }
+				if (!PyFloat_Check(obj) && !PyLong_Check(obj)) {
+					check = FALSE;
+				}
 			}
 		}
 	}
@@ -961,7 +1001,9 @@ gboolean pygts_point_check(PyObject* o)
 		return FALSE;
 	} else {
 #if PYGTS_DEBUG
-		if (PyObject_TypeCheck(o, &PygtsPointType)) { return pygts_point_is_ok(PYGTS_POINT(o)); }
+		if (PyObject_TypeCheck(o, &PygtsPointType)) {
+			return pygts_point_is_ok(PYGTS_POINT(o));
+		}
 #endif
 		return TRUE;
 	}
@@ -1055,7 +1097,9 @@ PygtsPoint* pygts_point_from_sequence(PyObject* tuple)
 	Py_DECREF(tuple);
 
 	/* Create the vertex */
-	if ((p = gts_point_new(gts_point_class(), x, y, z)) == NULL) { PyErr_SetString(PyExc_MemoryError, "could not create Point"); }
+	if ((p = gts_point_new(gts_point_class(), x, y, z)) == NULL) {
+		PyErr_SetString(PyExc_MemoryError, "could not create Point");
+	}
 	if ((point = pygts_point_new(p)) == NULL) {
 		gts_object_destroy(GTS_OBJECT(p));
 		return NULL;
@@ -1069,7 +1113,9 @@ int pygts_point_compare(GtsPoint* p1, GtsPoint* p2)
 {
 	double r1, r2;
 
-	if ((p1->x == p2->x) && (p1->y == p2->y) && (p1->z == p2->z)) { return 0; }
+	if ((p1->x == p2->x) && (p1->y == p2->y) && (p1->z == p2->z)) {
+		return 0;
+	}
 
 	/* Compare distances from origin */
 	r1 = sqrt(pow(p1->x, 2) + pow(p1->y, 2) + pow(p1->z, 2));

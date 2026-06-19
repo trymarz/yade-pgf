@@ -168,7 +168,7 @@ public:
 	Real GetWeiS0() const;
 	Real GetWeiV0() const;
 	Real GetP() const;
-	virtual ~PolyhedraMat() {};
+	virtual ~PolyhedraMat() { };
 	// clang-format off
 	YADE_CLASS_BASE_DOC_ATTRS_CTOR(PolyhedraMat,FrictMat,"Elastic material with Coulomb friction.",
 		((bool,IsSplitable,0,,"To be splitted ... or not"))
@@ -190,7 +190,7 @@ REGISTER_SERIALIZABLE(PolyhedraMat);
 //***************************************************************************
 class PolyhedraPhys : public FrictPhys {
 public:
-	virtual ~PolyhedraPhys() {};
+	virtual ~PolyhedraPhys() { };
 	// clang-format off
 	YADE_CLASS_BASE_DOC_ATTRS_CTOR(PolyhedraPhys,FrictPhys,"Simple elastic material with friction for volumetric constitutive laws",
 		/*attrs*/

@@ -162,7 +162,9 @@ void TriaxialCompressionEngine::action()
 
 
 	if (currentState == STATE_TRIAX_LOADING) {
-		if (scene->iter % 100 == 0) { LOG_INFO("Triax Compression started"); }
+		if (scene->iter % 100 == 0) {
+			LOG_INFO("Triax Compression started");
+		}
 		if (scene->iter % 100 == 0) LOG_DEBUG("Compression active.");
 		const Real& dt = scene->dt;
 

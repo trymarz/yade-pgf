@@ -108,7 +108,9 @@ void VTKRecorder::action()
 			recActive[REC_MATERIALID]  = true;
 			recActive[REC_FORCE]       = true;
 			recActive[REC_COORDNUMBER] = true;
-			if (scene->isPeriodic) { recActive[REC_PERICELL] = true; }
+			if (scene->isPeriodic) {
+				recActive[REC_PERICELL] = true;
+			}
 			recActive[REC_BSTRESS] = true;
 			// avoiding #ifdef YADE_LS_DEM recActive[REC_LS]=true; #endif for now to avoid problems if one uses recorders=["all"],multiblock=1
 		} else if (rec == "spheres") {
@@ -140,8 +142,9 @@ void VTKRecorder::action()
 		else if (rec == "materialId")
 			recActive[REC_MATERIALID] = true;
 		else if (rec == "stress") {
-			LOG_WARN("'stress' recorder deprecated as of July 2024 and replaced by the more meaningfull 'bstresses', you may need to adapt your "
-			         "post-processing workflow");
+			LOG_WARN(
+			        "'stress' recorder deprecated as of July 2024 and replaced by the more meaningfull 'bstresses', you may need to adapt your "
+			        "post-processing workflow");
 			recActive[REC_BSTRESS] = true;
 		} else if (rec == "force")
 			recActive[REC_FORCE] = true;
@@ -182,7 +185,9 @@ void VTKRecorder::action()
 			                                      "liquidcontrol, bstresses). Ignored.");
 	}
 #ifdef YADE_MPI
-	if (parallelMode) { recActive[REC_SUBDOMAIN] = true; }
+	if (parallelMode) {
+		recActive[REC_SUBDOMAIN] = true;
+	}
 #endif
 	// cpm needs interactions
 	if (recActive[REC_CPM]) recActive[REC_INTR] = true;
@@ -551,7 +556,9 @@ void VTKRecorder::action()
 	if (recActive[REC_INTR]) {
 		// holds information about cell distance between spatial and displayed position of each particle
 		vector<Vector3i> wrapCellDist;
-		if (scene->isPeriodic) { wrapCellDist.resize(scene->bodies->size()); }
+		if (scene->isPeriodic) {
+			wrapCellDist.resize(scene->bodies->size());
+		}
 		// save body positions, referenced by ids by vtkLine
 
 		// map to keep real body ids and their number in a vector (intrBodyPos)
@@ -676,7 +683,9 @@ void VTKRecorder::action()
 
 	//Additional Vector for storing body stresses
 	vector<Matrix3r> bStresses;
-	if (recActive[REC_BSTRESS]) { Shop::getStressLWForEachBody(bStresses); }
+	if (recActive[REC_BSTRESS]) {
+		Shop::getStressLWForEachBody(bStresses);
+	}
 
 	vector<Matrix3r> NCStresses, SCStresses, NLStresses, SLStresses, NPStresses;
 	if (recActive[REC_LUBRICATION]) {
@@ -797,7 +806,9 @@ void VTKRecorder::action()
 					jcfpmDamage->InsertNextValue(YADE_PTR_CAST<JCFpmState>(b->state)->damageIndex);
 				}
 
-				if (recActive[REC_COORDNUMBER]) { spheresCoordNumb->InsertNextValue(b->coordNumber()); }
+				if (recActive[REC_COORDNUMBER]) {
+					spheresCoordNumb->InsertNextValue(b->coordNumber());
+				}
 #ifdef YADE_SPH
 				if (recActive[REC_SPH]) {
 					spheresRhoSPH->InsertNextValue(b->state->rho);
@@ -857,7 +868,9 @@ void VTKRecorder::action()
 
 				if (recActive[REC_MATERIALID]) facetsMaterialId->InsertNextValue(b->material->id);
 				if (recActive[REC_MASK]) facetsMask->InsertNextValue(GET_MASK(b));
-				if (recActive[REC_COORDNUMBER]) { facetsCoordNumb->InsertNextValue(b->coordNumber()); }
+				if (recActive[REC_COORDNUMBER]) {
+					facetsCoordNumb->InsertNextValue(b->coordNumber());
+				}
 				continue;
 			}
 		}
@@ -999,7 +1012,9 @@ void VTKRecorder::action()
 #endif
 
 #ifdef YADE_DEFORM
-		if (recActive[REC_DEFORM]) { spheresUg->GetPointData()->AddArray(spheresRealRad); }
+		if (recActive[REC_DEFORM]) {
+			spheresUg->GetPointData()->AddArray(spheresRealRad);
+		}
 #endif
 
 #ifdef YADE_LIQMIGRATION
@@ -1434,7 +1449,9 @@ void VTKRecorder::action()
 #ifdef YADE_MPI
 	if (multiblock) {
 		if (recActive[REC_LS]) LOG_ERROR("Exporting LevelSet bodies (lsBodies in recorders) impossible with multiblock. Maybe multiblockLS ?");
-		if (parallelMode) { LOG_WARN("Multiblock feature in MPI case untested."); }
+		if (parallelMode) {
+			LOG_WARN("Multiblock feature in MPI case untested.");
+		}
 		vtkSmartPointer<vtkMultiBlockDataSet> multiblockDataset = vtkSmartPointer<vtkMultiBlockDataSet>::New();
 		int                                   i                 = 0;
 		if (recActive[REC_SPHERES]) multiblockDataset->SetBlock(i++, spheresUg);

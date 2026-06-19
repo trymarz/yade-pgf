@@ -54,7 +54,9 @@ TriaxialTest::~TriaxialTest() { }
 bool TriaxialTest::generate(string& message)
 {
 	message = "";
-	if (facetWalls && wallWalls) { LOG_WARN("Turning TriaxialTest::facetWalls off, since wallWalls were selected as well."); }
+	if (facetWalls && wallWalls) {
+		LOG_WARN("Turning TriaxialTest::facetWalls off, since wallWalls were selected as well.");
+	}
 
 	shared_ptr<Body> body;
 

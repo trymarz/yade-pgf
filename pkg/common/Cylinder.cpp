@@ -21,9 +21,8 @@ ChainedState::~ChainedState() { }
 // Ig2_Sphere_ChainedCylinder_CylScGeom::~Ig2_Sphere_ChainedCylinder_CylScGeom() {}
 // Ig2_ChainedCylinder_ChainedCylinder_ScGeom6D::~Ig2_ChainedCylinder_ChainedCylinder_ScGeom6D() {}
 
-YADE_PLUGIN((Cylinder)(ChainedCylinder)(ChainedState)(Ig2_Sphere_ChainedCylinder_CylScGeom)(Ig2_Sphere_ChainedCylinder_CylScGeom6D)(
-        Ig2_ChainedCylinder_ChainedCylinder_ScGeom6D)(Law2_CylScGeom6D_CohFrictPhys_CohesionMoment)(Law2_ChCylGeom6D_CohFrictPhys_CohesionMoment)(
-        Law2_CylScGeom_FrictPhys_CundallStrack)
+YADE_PLUGIN((
+        Cylinder)(ChainedCylinder)(ChainedState)(Ig2_Sphere_ChainedCylinder_CylScGeom)(Ig2_Sphere_ChainedCylinder_CylScGeom6D)(Ig2_ChainedCylinder_ChainedCylinder_ScGeom6D)(Law2_CylScGeom6D_CohFrictPhys_CohesionMoment)(Law2_ChCylGeom6D_CohFrictPhys_CohesionMoment)(Law2_CylScGeom_FrictPhys_CundallStrack)
 #ifdef YADE_OPENGL
                     (Gl1_Cylinder)(Gl1_ChainedCylinder)
 #endif
@@ -53,11 +52,13 @@ bool Ig2_Sphere_ChainedCylinder_CylScGeom::go(
 	bool                  isLast = (cylinderSt->chains[cylinderSt->chainNumber].size() == (cylinderSt->rank + 1));
 	bool                  isNew  = !c->geom;
 	shared_ptr<CylScGeom> scm;
-	if (!isNew) { scm = YADE_PTR_CAST<CylScGeom>(c->geom); }
+	if (!isNew) {
+		scm = YADE_PTR_CAST<CylScGeom>(c->geom);
+	}
 
-	bool     betweenTwoCylinders = false; //defines whether the sphere's center is moving between two cylinders who have an angle>180°
-	Vector3r segment, branch, direction;  //informations about the current cylinder
-	Real     length, dist;
+	bool                           betweenTwoCylinders = false; //defines whether the sphere's center is moving between two cylinders who have an angle>180°
+	Vector3r                       segment, branch, direction;  //informations about the current cylinder
+	Real                           length, dist;
 	shared_ptr<const ChainedState> statePrev;
 	Vector3r                       segmentPrev = Vector3r(0, 0, 0), directionPrev = Vector3r(0, 0, 0), branchPrev = Vector3r(0, 0, 0);
 	Real                           lengthPrev = 0, distPrev = 0;
@@ -112,7 +113,9 @@ bool Ig2_Sphere_ChainedCylinder_CylScGeom::go(
 	//Check sphere-cylinder distance
 	Vector3r projectedP = cylinderSt->pos + shift2 + direction * dist;
 	branch              = projectedP - sphereSt->pos;
-	if (isLast || (cylinderSt->rank == 0 && dist < 0)) { branch = cylinderSt->pos - sphereSt->pos; }
+	if (isLast || (cylinderSt->rank == 0 && dist < 0)) {
+		branch = cylinderSt->pos - sphereSt->pos;
+	}
 	if (branch.norm() > sphere->radius + cylinder->radius) {
 		if (isNew) return false;
 		else if (scm->isDuplicate) {
@@ -246,11 +249,13 @@ bool Ig2_Sphere_ChainedCylinder_CylScGeom6D::go(
 	bool                    isLast = (cylinderSt->chains[cylinderSt->chainNumber].size() == (cylinderSt->rank + 1));
 	bool                    isNew  = !c->geom;
 	shared_ptr<CylScGeom6D> scm;
-	if (!isNew) { scm = YADE_PTR_CAST<CylScGeom6D>(c->geom); }
+	if (!isNew) {
+		scm = YADE_PTR_CAST<CylScGeom6D>(c->geom);
+	}
 
-	bool     betweenTwoCylinders = false; //defines whether the sphere's center is moving between two cylinders who have an angle>180°
-	Vector3r segment, branch, direction;  //informations about the current cylinder
-	Real     length, dist;
+	bool                           betweenTwoCylinders = false; //defines whether the sphere's center is moving between two cylinders who have an angle>180°
+	Vector3r                       segment, branch, direction;  //informations about the current cylinder
+	Real                           length, dist;
 	shared_ptr<const ChainedState> statePrev;
 	Vector3r                       segmentPrev = Vector3r(0, 0, 0), directionPrev = Vector3r(0, 0, 0), branchPrev = Vector3r(0, 0, 0);
 	Real                           lengthPrev = 0, distPrev = 0;
@@ -304,7 +309,9 @@ bool Ig2_Sphere_ChainedCylinder_CylScGeom6D::go(
 	//Check sphere-cylinder distance
 	Vector3r projectedP = cylinderSt->pos + shift2 + direction * dist;
 	branch              = projectedP - sphereSt->pos;
-	if (isLast || (cylinderSt->rank == 0 && dist < 0)) { branch = cylinderSt->pos - sphereSt->pos; }
+	if (isLast || (cylinderSt->rank == 0 && dist < 0)) {
+		branch = cylinderSt->pos - sphereSt->pos;
+	}
 	if (branch.norm() > sphere->radius + cylinder->radius) {
 		if (isNew) return false;
 		else if (scm->isDuplicate) {
@@ -432,7 +439,9 @@ bool Ig2_ChainedCylinder_ChainedCylinder_ScGeom6D::go(
 	pChain2                 = YADE_CAST<const ChainedState*>(&state2);
 	unsigned int sizeChain1 = pChain1->chains[pChain1->chainNumber].size();
 	unsigned int sizeChain2 = pChain2->chains[pChain2->chainNumber].size();
-	if (!pChain1 || !pChain2) { cerr << "cast failed8567" << endl; }
+	if (!pChain1 || !pChain2) {
+		cerr << "cast failed8567" << endl;
+	}
 	const bool          revert  = ((int)pChain2->rank - (int)pChain1->rank == -1);
 	const ChainedState& bchain1 = revert ? *pChain2 : *YADE_CAST<const ChainedState*>(&state1);
 	const ChainedState& bchain2 = revert ? *pChain1 : *pChain2;
@@ -441,7 +450,9 @@ bool Ig2_ChainedCylinder_ChainedCylinder_ScGeom6D::go(
 	bool isNew  = !c->geom;
 	if (pChain2->chainNumber != pChain1->chainNumber) {
 		shared_ptr<ChCylGeom6D> scm;
-		if (isLast) { return false; }
+		if (isLast) {
+			return false;
+		}
 		shared_ptr<Body> cylinderNext1 = Body::byId(pChain1->chains[pChain1->chainNumber][pChain1->rank + 1], scene);
 		shared_ptr<Body> cylinderNext2 = Body::byId(pChain2->chains[pChain2->chainNumber][pChain2->rank + 1], scene);
 		//cout<<c->id1<<"  "<<c->id2<<endl;
@@ -729,7 +740,9 @@ void Gl1_Cylinder::drawCylinder(bool wireNonMember, Real radius, Real length, co
 void Bo1_Cylinder_Aabb::go(const shared_ptr<Shape>& cm, shared_ptr<Bound>& bv, const Se3r& se3, const Body* /*b*/)
 {
 	Cylinder* cylinder = static_cast<Cylinder*>(cm.get());
-	if (!bv) { bv = shared_ptr<Bound>(new Aabb); }
+	if (!bv) {
+		bv = shared_ptr<Bound>(new Aabb);
+	}
 	Aabb* aabb = static_cast<Aabb*>(bv.get());
 	if (!scene->isPeriodic) {
 		const Vector3r& O  = se3.position;
@@ -746,7 +759,9 @@ void Bo1_Cylinder_Aabb::go(const shared_ptr<Shape>& cm, shared_ptr<Bound>& bv, c
 void Bo1_ChainedCylinder_Aabb::go(const shared_ptr<Shape>& cm, shared_ptr<Bound>& bv, const Se3r& se3, const Body* /*b*/)
 {
 	ChainedCylinder* cylinder = static_cast<ChainedCylinder*>(cm.get());
-	if (!bv) { bv = shared_ptr<Bound>(new Aabb); }
+	if (!bv) {
+		bv = shared_ptr<Bound>(new Aabb);
+	}
 	Aabb* aabb = static_cast<Aabb*>(bv.get());
 	if (!scene->isPeriodic) {
 		const Vector3r& O  = se3.position;

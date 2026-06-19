@@ -35,7 +35,7 @@ using namespace ::yade::MathEigenTypes;
 CREATE_CPP_LOCAL_LOGGER("_minieigenHP.cpp")
 
 template <int N, bool> struct RegHelper {
-	static void work(const py::scope& /* topScope */) {};
+	static void work(const py::scope& /* topScope */) { };
 };
 
 template <int N> struct RegHelper<N, true> {

@@ -51,8 +51,7 @@
  */
 
 namespace forCtags {
-struct MathSpecialFunctions {
-}; // for ctags
+struct MathSpecialFunctions { }; // for ctags
 }
 
 /*************************************************************************/

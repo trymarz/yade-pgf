@@ -22,7 +22,9 @@ bool Law2_ScGeom_PotentialLubricationPhys::go(shared_ptr<IGeom>& iGeom, shared_p
 	Real a((geom->radius1 + geom->radius2) / 2.);
 
 	// End-of Interaction condition
-	if (-geom->penetrationDepth > MaxDist * a) { return false; }
+	if (-geom->penetrationDepth > MaxDist * a) {
+		return false;
+	}
 
 	// inititalization
 	if (phys->u == -1.) {

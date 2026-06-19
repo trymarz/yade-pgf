@@ -84,9 +84,8 @@ private:
 		        .staticmethod("Random")
 		        .add_static_property("Identity", &MatrixBaseVisitor::Identity);
 	}
-	template <typename Scalar, class PyClass, typename boost::enable_if<boost::is_integral<Scalar>, int>::type = 0> static void visit_if_float(PyClass&)
-	{ /* do nothing */
-	}
+	template <typename Scalar, class PyClass, typename boost::enable_if<boost::is_integral<Scalar>, int>::type = 0>
+	static void visit_if_float(PyClass&) { /* do nothing */ }
 	template <typename Scalar, class PyClass, typename boost::disable_if<boost::is_integral<Scalar>, int>::type = 0> static void visit_if_float(PyClass& cl)
 	{
 		// operations with other scalars (Scalar is the floating type, long is the python integer type)
@@ -133,10 +132,8 @@ private:
 		typedef void type;
 	};
 	template <typename... Ts> using void_type = typename make_void<Ts...>::type;
-	template <typename T, class = void> struct HasNegation : std::false_type {
-	};
-	template <typename T> struct HasNegation<T, void_type<decltype(std::declval<T>().operator-())>> : std::true_type {
-	};
+	template <typename T, class = void> struct HasNegation : std::false_type { };
+	template <typename T> struct HasNegation<T, void_type<decltype(std::declval<T>().operator-())>> : std::true_type { };
 	// in older versions of Eigen AlignedVector3 has no negation operator. Following detection if it's present means that it will be used if a newer version of Eigen is used.
 	template <typename MatrixBaseT2, typename boost::enable_if<HasNegation<MatrixBaseT2>, int>::type = 0> static MatrixBaseT __neg__(const MatrixBaseT& a)
 	{
@@ -581,9 +578,8 @@ private:
 		cl.def("__len__", &MatrixVisitor::__len__).staticmethod("__len__");
 	}
 
-	template <typename Scalar, class PyClass, typename boost::enable_if<boost::is_integral<Scalar>, int>::type = 0> static void visit_if_float(PyClass&)
-	{ /* do nothing */
-	}
+	template <typename Scalar, class PyClass, typename boost::enable_if<boost::is_integral<Scalar>, int>::type = 0>
+	static void visit_if_float(PyClass&) { /* do nothing */ }
 	template <typename Scalar, class PyClass, typename boost::disable_if<boost::is_integral<Scalar>, int>::type = 0> static void visit_if_float(PyClass& cl)
 	{
 		cl

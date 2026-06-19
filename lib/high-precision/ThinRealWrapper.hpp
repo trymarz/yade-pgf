@@ -218,7 +218,7 @@ namespace math {
 		}
 #else
 		// this one is optimized away
-		void check(const ThinRealWrapper&) const {};
+		void check(const ThinRealWrapper&) const { };
 #endif
 #endif
 

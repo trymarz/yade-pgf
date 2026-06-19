@@ -30,7 +30,7 @@ namespace yade { // Cannot have #include directive inside.
 
 class FrictMatCDM : public FrictMat {
 public:
-	virtual ~FrictMatCDM() {};
+	virtual ~FrictMatCDM() { };
 	YADE_CLASS_BASE_DOC_ATTRS_CTOR(
 	        FrictMatCDM,
 	        FrictMat,

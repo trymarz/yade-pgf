@@ -16,7 +16,7 @@ namespace yade { // Cannot have #include directive inside.
 
 class LBMbody : public Serializable {
 public:
-	virtual ~LBMbody() {};
+	virtual ~LBMbody() { };
 	//Real radius(){return ext[0];}
 	bool isBox()
 	{

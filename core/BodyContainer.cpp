@@ -42,7 +42,7 @@ Body::id_t BodyContainer::insertAtId(shared_ptr<Body> b, Body::id_t candidate)
 		checkedByCollider = false;
 		useRedirection    = true;
 		insertedBodies.push_back(candidate); /*realBodies.push_back(candidate); */
-	}                                            // if that special insertion is used, switch to algorithm optimized for non-full body container
+	} // if that special insertion is used, switch to algorithm optimized for non-full body container
 	if (unsigned(candidate) >= size()) {
 		body.resize(candidate + 1, nullptr);
 		scene->forces.addMaxId(candidate);
@@ -72,7 +72,7 @@ BodyContainer::iterator BodyContainer::end() { return iterator(body.end(), body.
 
 size_t BodyContainer::size() const { return body.size(); }
 
-shared_ptr<Body>& BodyContainer::operator[](unsigned int id) { return body[id]; }
+shared_ptr<Body>&       BodyContainer::operator[](unsigned int id) { return body[id]; }
 const shared_ptr<Body>& BodyContainer::operator[](unsigned int id) const { return body[id]; }
 
 bool BodyContainer::exists(Body::id_t id) const { return ((id >= 0) && ((size_t)id < body.size()) && ((bool)body[id])); }

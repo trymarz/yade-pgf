@@ -121,7 +121,7 @@ public:
 		std::vector<Vector3r> refineStep1 { std::vector<Vector3r>(8, Vector3r::Zero()) };
 		std::vector<Vector3r> refineStep2 { std::vector<Vector3r>(8, Vector3r::Zero()) };
 	};
-	static Vector3r          normalToPointOnEllipsoid(const Vector3r normal, const Vector3r prinAxesSq);
+	static Vector3r normalToPointOnEllipsoid(const Vector3r normal, const Vector3r prinAxesSq);
 	static overlapRegionData recursiveVolumeIntegration( // Move to ShopLS.*pp or keep here? Maybe nice to have all relevant functions in this file.
 	        const shared_ptr<LevelSet>&   lsShape1,
 	        const shared_ptr<LevelSet>&   lsShape2,

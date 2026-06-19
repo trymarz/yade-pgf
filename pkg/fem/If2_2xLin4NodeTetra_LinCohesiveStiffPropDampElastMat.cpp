@@ -13,7 +13,7 @@
 namespace yade { // Cannot have #include directive inside.
 
 YADE_PLUGIN((If2_2xLin4NodeTetra_LinCohesiveStiffPropDampElastMat));
-If2_2xLin4NodeTetra_LinCohesiveStiffPropDampElastMat::~If2_2xLin4NodeTetra_LinCohesiveStiffPropDampElastMat() {};
+If2_2xLin4NodeTetra_LinCohesiveStiffPropDampElastMat::~If2_2xLin4NodeTetra_LinCohesiveStiffPropDampElastMat() { };
 
 
 /********************************************************************

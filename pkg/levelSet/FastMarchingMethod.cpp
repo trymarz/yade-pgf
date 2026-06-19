@@ -71,8 +71,9 @@ void FastMarchingMethod::printNeighbValues(int i, int j, int k) const
 	string phiVal;
 	for (int neigh = 0; neigh < 6; neigh++) {
 		phiVal += " "
-		        + std::to_string(double(
-		                phiAtNgbr(neigh, i, j, k))); // no yade::math::to_string that would accommodate the precision-variable Real type at the moment
+		        + std::to_string(
+		                  double(phiAtNgbr(
+		                          neigh, i, j, k))); // no yade::math::to_string that would accommodate the precision-variable Real type at the moment
 	}
 	LOG_WARN(
 	        "While looking at " << i << " " << j << " " << k << ", we have:\n- " << int(gpStates[i - 1][j][k]) << " and " << int(gpStates[i + 1][j][k])
@@ -253,8 +254,8 @@ void FastMarchingMethod::updatePhi(int i, int j, int k, bool exterior)
 					phiField[i][j][k] = exterior
 					        ? *std::min_element(possiblePhi.begin(), possiblePhi.end())
 					        : *std::max_element(
-					                possiblePhi.begin(),
-					                possiblePhi.end()); // something simpler and faster than going through min_element ?
+					                  possiblePhi.begin(),
+					                  possiblePhi.end()); // something simpler and faster than going through min_element ?
 				} else { // no positive discriminant (and a empty possiblePhi) downgrading even further to 1D propagation
 					LOG_INFO("1D propagation downgraded twice from 3D at " << i << " " << j << " " << k);
 					phiField[i][j][k] = exterior ? math::min({ m0, m1, m2 }) + spac : math::max({ m0, m1, m2 }) - spac;

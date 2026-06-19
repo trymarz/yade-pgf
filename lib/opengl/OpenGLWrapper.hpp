@@ -21,12 +21,10 @@
 #include <type_traits>
 
 // https://stackoverflow.com/questions/7064039/how-to-prevent-non-specialized-template-instantiation/7064062
-template <typename T> struct dontCallThis : std::false_type {
-};
+template <typename T> struct dontCallThis : std::false_type { };
 
 namespace forCtags {
-struct OpenGLWrapper {
-}; // for ctags
+struct OpenGLWrapper { }; // for ctags
 }
 
 //namespace yade { // Does not work with ABI format of freeglut, possibly due to extern "C". OpenGLWrapper must be in top namespace.

@@ -27,8 +27,7 @@
 #include <string>
 
 namespace forCtags {
-struct RealIO {
-}; // for ctags
+struct RealIO { }; // for ctags
 }
 
 namespace yade {

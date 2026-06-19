@@ -204,7 +204,9 @@ void SizeRatio()
 	for (const auto& b : *rb->bodies) {
 		if (!b || !b->shape) continue;
 		shared_ptr<Polyhedra> p = YADE_PTR_DYN_CAST<Polyhedra>(b->shape);
-		if (p) { myfile << SizeOfPolyhedra(p) << endl; }
+		if (p) {
+			myfile << SizeOfPolyhedra(p) << endl;
+		}
 	}
 	myfile.close();
 }

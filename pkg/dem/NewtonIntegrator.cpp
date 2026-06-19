@@ -6,8 +6,8 @@
 *  GNU General Public License v2 or later. See file LICENSE for details. *
 *************************************************************************/
 
-#include <lib/base/Math.hpp>
 #include <lib/base/LoggingUtils.hpp> // LOG_WARN_ONCE
+#include <lib/base/Math.hpp>
 #include <lib/high-precision/Constants.hpp>
 #include <lib/serialization/EnumSupport.hpp>
 #include <core/Clump.hpp>
@@ -339,7 +339,9 @@ void NewtonIntegrator::leapfrogTranslate(State* state, const Real& dt)
 
 void NewtonIntegrator::leapfrogSphericalRotate(State* state, const Real& dt)
 {
-	if (scene->isPeriodic && homoDeform) { state->angVel += dSpin; }
+	if (scene->isPeriodic && homoDeform) {
+		state->angVel += dSpin;
+	}
 	Real angle2 = state->angVel.squaredNorm();
 	if (angle2 != 0) { //If we have an angular velocity, we make a rotation
 		Real        angle = sqrt(angle2);
@@ -378,7 +380,9 @@ void NewtonIntegrator::leapfrogAsphericalRotateOmelyan_1998(State* state, const 
 	Vector3r w = A * state->angVel;                         // local angular velocity at time n
 	if (densityScaling) {
 		w *= state->densityScaling;
-		LOG_WARN_ONCE("Using NewtonIntegrator density scaling together with Omelyan1998 time integration algorithm shall currently be considered as highly experimental");
+		LOG_WARN_ONCE(
+		        "Using NewtonIntegrator density scaling together with Omelyan1998 time integration algorithm shall currently be considered as highly "
+		        "experimental");
 	}
 	Vector3r       ww  = w;              // auxiliar vector
 	const Vector3r II  = state->inertia; // auxiliar Inertia tensor vector
@@ -420,16 +424,16 @@ void NewtonIntegrator::leapfrogAsphericalRotateCarlos_2023(State* state, const R
 {
 	//FIXME: where to increment angular velocity like this? Only done for spherical rotations at the moment
 	//if(scene->isPeriodic && homoDeform) {state->angVel+=dSpin;}
-	Matrix3r A = state->ori.conjugate().toRotationMatrix(); // rotation matrix from global to local r.f.
-	Vector3r w = A * state->angVel;                         // local angular velocity at time n
-	const Vector3r tau = A * M; // Torque in the local reference frame
+	Matrix3r       A   = state->ori.conjugate().toRotationMatrix(); // rotation matrix from global to local r.f.
+	Vector3r       w   = A * state->angVel;                         // local angular velocity at time n
+	const Vector3r tau = A * M;                                     // Torque in the local reference frame
 
 	// Calculate angular velocity at time n + 1/2, solve nonlinear system of equations.
 	const Vector3r K1 = dt * w_dot(w, tau, state->inertia);
 	const Vector3r K2 = dt * w_dot(w + K1, tau, state->inertia);
 	const Vector3r K3 = dt * w_dot(w + 0.25 * (K1 + K2), tau, state->inertia);
-	Vector3r w_increment( (K1 + K2 + 4.0 * K3) / 6.0); // increment in angular velocity as per Eq. (9) of delValle2023
-	if(densityScaling) w_increment *= state->densityScaling;
+	Vector3r       w_increment((K1 + K2 + 4.0 * K3) / 6.0); // increment in angular velocity as per Eq. (9) of delValle2023
+	if (densityScaling) w_increment *= state->densityScaling;
 	w += w_increment;
 
 	// Update orientation q(t + dt)
@@ -440,14 +444,15 @@ void NewtonIntegrator::leapfrogAsphericalRotateCarlos_2023(State* state, const R
 		state->ori       = state->ori * Quaternionr(cos(Theta), sin(Theta) * w[0] / w_Norm, sin(Theta) * w[1] / w_Norm, sin(Theta) * w[2] / w_Norm);
 	}
 
-	if (iter % normalizeEvery
-	    == 0) // Just as a safety measure. In theory this is not needed. The formulation preserves the norm
+	if (iter % normalizeEvery == 0) // Just as a safety measure. In theory this is not needed. The formulation preserves the norm
 		state->ori.normalize(); // This operation is expensive, we dont want to do it every time step.
 
 	// Update angular velocity
 	state->angMom = A.transpose() * w.cwiseProduct(state->inertia); // global angular momentum at time n + 1/2
-	if (densityScaling) state->angMom /= state->densityScaling;     // leapfrogAsphericalRotate keeps state->angMom unaffected by density scaling, let us do the same here (by reverting the artificial increase in w)
-	state->angVel = A.transpose() * w;                              // global angular velocity at time n + 1/2
+	if (densityScaling)
+		state->angMom
+		        /= state->densityScaling; // leapfrogAsphericalRotate keeps state->angMom unaffected by density scaling, let us do the same here (by reverting the artificial increase in w)
+	state->angVel = A.transpose() * w; // global angular velocity at time n + 1/2
 }
 
 Vector3r NewtonIntegrator::w_dot(const Vector3r w, const Vector3r M, const Vector3r II)
@@ -461,11 +466,13 @@ bool NewtonIntegrator::get_densityScaling() const
 	for (const auto& e : Omega::instance().getScene()->engines) {
 		GlobalStiffnessTimeStepper* ts = dynamic_cast<GlobalStiffnessTimeStepper*>(e.get());
 		if (ts && densityScaling != ts->densityScaling)
-			LOG_WARN("density scaling is not active in the timeStepper, it will have no effect unless a scaling is specified manually for some "
-			         "bodies");
+			LOG_WARN(
+			        "density scaling is not active in the timeStepper, it will have no effect unless a scaling is specified manually for some "
+			        "bodies");
 	}
-	LOG_WARN("GlobalStiffnessTimeStepper not present in O.engines, density scaling will have no effect unless a scaling is specified manually for some "
-	         "bodies");
+	LOG_WARN(
+	        "GlobalStiffnessTimeStepper not present in O.engines, density scaling will have no effect unless a scaling is specified manually for some "
+	        "bodies");
 	return densityScaling;
 	;
 }
@@ -477,13 +484,15 @@ void NewtonIntegrator::set_densityScaling(bool dsc)
 		if (ts) {
 			ts->densityScaling = dsc;
 			densityScaling     = dsc;
-			LOG_WARN("GlobalStiffnessTimeStepper found in O.engines and adjusted to match this setting. Revert in the timestepper if you don't "
-			         "want the scaling adjusted automatically.");
+			LOG_WARN(
+			        "GlobalStiffnessTimeStepper found in O.engines and adjusted to match this setting. Revert in the timestepper if you don't "
+			        "want the scaling adjusted automatically.");
 			return;
 		}
 	}
-	LOG_WARN("GlobalStiffnessTimeStepper not found in O.engines. Density scaling will have no effect unless a scaling is specified manually for some "
-	         "bodies");
+	LOG_WARN(
+	        "GlobalStiffnessTimeStepper not found in O.engines. Density scaling will have no effect unless a scaling is specified manually for some "
+	        "bodies");
 }
 
 

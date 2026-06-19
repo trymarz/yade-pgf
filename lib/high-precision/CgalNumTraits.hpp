@@ -43,7 +43,9 @@ public:
 	{
 // When CGAL detects IEEE bug, then long double needs special treatment:
 #ifdef CGAL_CFG_IEEE_754_BUG // and (YADE_REAL_BIT == 80)
-		if (std::is_same<::yade::RealHP<levelHP>, long double>::value) { return Is_valid<long double>()(static_cast<long double>(x)); }
+		if (std::is_same<::yade::RealHP<levelHP>, long double>::value) {
+			return Is_valid<long double>()(static_cast<long double>(x));
+		}
 #endif
 		return not ::yade::math::isnan(x);
 	}
@@ -135,12 +137,9 @@ public:
 
 // There are two ways to avoid this macro (hint: the best is to use C++20). See file lib/high-precision/RealHPEigenCgal.hpp for details.
 #define YADE_CGAL_SUPPORT_REAL_HP(levelHP)                                                                                                                     \
-	template <> struct Is_valid<::yade::RealHP<levelHP>> : public RealHP_Is_valid<levelHP> {                                                               \
-	};                                                                                                                                                     \
-	template <> struct Algebraic_structure_traits<::yade::RealHP<levelHP>> : public RealHP_Algebraic_structure_traits<levelHP> {                           \
-	};                                                                                                                                                     \
-	template <> struct Real_embeddable_traits<::yade::RealHP<levelHP>> : public RealHP_embeddable_traits<levelHP> {                                        \
-	};                                                                                                                                                     \
+	template <> struct Is_valid<::yade::RealHP<levelHP>> : public RealHP_Is_valid<levelHP> { };                                                            \
+	template <> struct Algebraic_structure_traits<::yade::RealHP<levelHP>> : public RealHP_Algebraic_structure_traits<levelHP> { };                        \
+	template <> struct Real_embeddable_traits<::yade::RealHP<levelHP>> : public RealHP_embeddable_traits<levelHP> { };                                     \
 	namespace internal {                                                                                                                                   \
 		template <> struct Exact_field_selector<::yade::RealHP<levelHP>> {                                                                             \
 			using Type = boost::multiprecision::mpq_rational;                                                                                      \

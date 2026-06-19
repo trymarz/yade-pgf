@@ -36,8 +36,7 @@
 #endif
 
 namespace forCtags {
-struct MathFunctions {
-}; // for ctags
+struct MathFunctions { }; // for ctags
 }
 
 // If cmake forgot to set YADE_IGNORE_IEEE_INFINITY_NAN along with -Ofast then set it here. It is to make sure that Infinity and NaN are supported only when available.

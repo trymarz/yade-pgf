@@ -292,8 +292,12 @@ static PyObject* new_(PyTypeObject* type, PyObject* args, PyObject* kwds)
 	/* Parse the args */
 	if (kwds) {
 		o = PyDict_GetItemString(kwds, "alloc_gtsobj");
-		if (o == Py_False) { alloc_gtsobj = FALSE; }
-		if (o != NULL) { PyDict_DelItemString(kwds, "alloc_gtsobj"); }
+		if (o == Py_False) {
+			alloc_gtsobj = FALSE;
+		}
+		if (o != NULL) {
+			PyDict_DelItemString(kwds, "alloc_gtsobj");
+		}
 	}
 	if (kwds) {
 		Py_INCREF(Py_False);
@@ -387,18 +391,30 @@ static PyObject* new_(PyTypeObject* type, PyObject* args, PyObject* kwds)
 		      || (s1->v1 == s3->v1 && s1->v2 == s2->v2 && s2->v1 == s3->v2) || (s1->v2 == s3->v2 && s1->v1 == s2->v2 && s2->v1 == s3->v1)
 		      || (s1->v2 == s3->v1 && s1->v1 == s2->v1 && s2->v2 == s3->v2) || (s1->v2 == s3->v1 && s1->v1 == s2->v2 && s2->v1 == s3->v2))) {
 			PyErr_SetString(PyExc_RuntimeError, "Edges in face must connect");
-			if (!g_hash_table_lookup(obj_table, GTS_OBJECT(e1))) { gts_object_destroy(GTS_OBJECT(e1)); }
-			if (!g_hash_table_lookup(obj_table, GTS_OBJECT(e1))) { gts_object_destroy(GTS_OBJECT(e2)); }
-			if (!g_hash_table_lookup(obj_table, GTS_OBJECT(e1))) { gts_object_destroy(GTS_OBJECT(e3)); }
+			if (!g_hash_table_lookup(obj_table, GTS_OBJECT(e1))) {
+				gts_object_destroy(GTS_OBJECT(e1));
+			}
+			if (!g_hash_table_lookup(obj_table, GTS_OBJECT(e1))) {
+				gts_object_destroy(GTS_OBJECT(e2));
+			}
+			if (!g_hash_table_lookup(obj_table, GTS_OBJECT(e1))) {
+				gts_object_destroy(GTS_OBJECT(e3));
+			}
 			return NULL;
 		}
 
 		/* Create the GtsFace */
 		if ((f = gts_face_new(gts_face_class(), e1, e2, e3)) == NULL) {
 			PyErr_SetString(PyExc_MemoryError, "could not create Face");
-			if (!g_hash_table_lookup(obj_table, GTS_OBJECT(e1))) { gts_object_destroy(GTS_OBJECT(e1)); }
-			if (!g_hash_table_lookup(obj_table, GTS_OBJECT(e1))) { gts_object_destroy(GTS_OBJECT(e2)); }
-			if (!g_hash_table_lookup(obj_table, GTS_OBJECT(e1))) { gts_object_destroy(GTS_OBJECT(e3)); }
+			if (!g_hash_table_lookup(obj_table, GTS_OBJECT(e1))) {
+				gts_object_destroy(GTS_OBJECT(e1));
+			}
+			if (!g_hash_table_lookup(obj_table, GTS_OBJECT(e1))) {
+				gts_object_destroy(GTS_OBJECT(e2));
+			}
+			if (!g_hash_table_lookup(obj_table, GTS_OBJECT(e1))) {
+				gts_object_destroy(GTS_OBJECT(e3));
+			}
 			return NULL;
 		}
 
@@ -406,7 +422,9 @@ static PyObject* new_(PyTypeObject* type, PyObject* args, PyObject* kwds)
 		t = gts_triangle_is_duplicate(GTS_TRIANGLE(f));
 		if (t != NULL) {
 			gts_object_destroy(GTS_OBJECT(f));
-			if (!GTS_IS_FACE(t)) { PyErr_SetString(PyExc_TypeError, "expected a Face (internal error)"); }
+			if (!GTS_IS_FACE(t)) {
+				PyErr_SetString(PyExc_TypeError, "expected a Face (internal error)");
+			}
 			f = GTS_FACE(t);
 		}
 
@@ -442,7 +460,9 @@ static int init(PygtsFace* self, PyObject* args, PyObject* kwds)
 	gint ret;
 
 	/* Chain up */
-	if ((ret = PygtsTriangleType.tp_init((PyObject*)self, args, kwds)) != 0) { return ret; }
+	if ((ret = PygtsTriangleType.tp_init((PyObject*)self, args, kwds)) != 0) {
+		return ret;
+	}
 
 	return 0;
 }

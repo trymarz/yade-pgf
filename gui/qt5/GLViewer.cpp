@@ -282,8 +282,12 @@ void GLViewer::keyPressEvent(QKeyEvent* e)
 			}
 		} else if (manipulatedClipPlane >= 0 && manipulatedClipPlane != planeId) {
 			const Quaternionr& o = renderer->clipPlaneSe3[planeId].orientation;
-			manipulatedFrame()->setOrientation(qglviewer::Quaternion(
-			        (static_cast<double>(o.x())), (static_cast<double>(o.y())), (static_cast<double>(o.z())), (static_cast<double>(o.w()))));
+			manipulatedFrame()->setOrientation(
+			        qglviewer::Quaternion(
+			                (static_cast<double>(o.x())),
+			                (static_cast<double>(o.y())),
+			                (static_cast<double>(o.z())),
+			                (static_cast<double>(o.w()))));
 			displayMessage("Copied orientation from plane #1");
 		}
 	} else if (e->key() == Qt::Key_7 || e->key() == Qt::Key_8 || e->key() == Qt::Key_9) {
@@ -513,7 +517,9 @@ void GLViewer::centerScene(const Real& suggestedRadius, const Vector3r& setGridO
 	}
 	LOG_INFO("Select with shift, press 'm' to move.");
 	Vector3r min, max;
-	if (not(rb->bound)) { rb->updateBound(); }
+	if (not(rb->bound)) {
+		rb->updateBound();
+	}
 
 	min         = rb->bound->min;
 	max         = rb->bound->max;
@@ -551,8 +557,11 @@ void GLViewer::centerScene(const Real& suggestedRadius, const Vector3r& setGridO
 	LOG_DEBUG("Scene center=" << center << ", halfSize=" << halfSize << ", radius=" << radius << ", suggestedRadius=" << suggestedRadius);
 	// set scene center after all these calculations. This is not grid origin. Grid origin is for drawing only.
 	if (suggestedCenter != Vector3r(0, 0, 0)) {
-		setSceneCenter(qglviewer::Vec(
-		        (static_cast<double>(suggestedCenter[0])), (static_cast<double>(suggestedCenter[1])), (static_cast<double>(suggestedCenter[2]))));
+		setSceneCenter(
+		        qglviewer::Vec(
+		                (static_cast<double>(suggestedCenter[0])),
+		                (static_cast<double>(suggestedCenter[1])),
+		                (static_cast<double>(suggestedCenter[2]))));
 	} else {
 		setSceneCenter(qglviewer::Vec((static_cast<double>(center[0])), (static_cast<double>(center[1])), (static_cast<double>(center[2]))));
 	}

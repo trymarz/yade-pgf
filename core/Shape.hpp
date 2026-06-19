@@ -23,7 +23,7 @@ class InternalForceFunctor;
 
 class Shape : public Serializable, public Indexable {
 public:
-	virtual ~Shape() {}; // vtable
+	virtual ~Shape() { }; // vtable
 #ifdef BV_FUNCTOR_CACHE
 	shared_ptr<BoundFunctor> boundFunctor;
 #endif

@@ -91,8 +91,9 @@ void PolyhedraSplitter::action()
 {
 	static bool first = true;
 	if (first) {
-		LOG_WARN("be careful, the PolyhedraSplitter returns different results depending on CGAL version! This will not produce reproducible "
-		         "calculations. For details see https://gitlab.com/yade-dev/trunk/issues/45");
+		LOG_WARN(
+		        "be careful, the PolyhedraSplitter returns different results depending on CGAL version! This will not produce reproducible "
+		        "calculations. For details see https://gitlab.com/yade-dev/trunk/issues/45");
 		first = false;
 	}
 
@@ -294,14 +295,18 @@ void SplitPolyMohrCoulomb::action()
 					if (P > 0) {
 						BodyBroken = isPolyhedraBroken(SigmaCD, -S3, V0, V, M, P);
 					} else {
-						if (S3 < -SigmaCD) { BodyBroken = true; }
+						if (S3 < -SigmaCD) {
+							BodyBroken = true;
+						}
 					}
 					SigmaV = -S3;
 				} else if (S1 > 0 and S3 > 0) {
 					if (P > 0) {
 						BodyBroken = isPolyhedraBroken(math::abs(SigmaCZ), S1, V0, V, M, P);
 					} else {
-						if (S1 > SigmaCZ) { BodyBroken = true; }
+						if (S1 > SigmaCZ) {
+							BodyBroken = true;
+						}
 					}
 					SigmaV = S1;
 				} else {
@@ -309,7 +314,9 @@ void SplitPolyMohrCoulomb::action()
 					if (P > 0) {
 						BodyBroken = isPolyhedraBroken(math::abs(SigmaCZ), math::abs(SigmaT), V0, V, M, P);
 					} else {
-						if (SigmaT >= SigmaCZ) { BodyBroken = true; }
+						if (SigmaT >= SigmaCZ) {
+							BodyBroken = true;
+						}
 					}
 					SigmaV = math::abs(SigmaT);
 				}

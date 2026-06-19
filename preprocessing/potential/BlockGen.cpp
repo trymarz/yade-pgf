@@ -182,16 +182,36 @@ bool BlockGen::generate(string& /*message*/)
 				joint[jointNo].centre     = jointCentre;
 				joint[jointNo].isBoundary = true;
 			}
-			if (count == 6) { joint[jointNo].phi_b = valueReal; }
-			if (count == 7) { joint[jointNo].phi_r = valueReal; }
-			if (count == 8) { joint[jointNo].JRC = valueReal; }
-			if (count == 9) { joint[jointNo].JCS = valueReal; }
-			if (count == 10) { joint[jointNo].asperity = valueReal; }
-			if (count == 11) { joint[jointNo].sigmaC = valueReal; }
-			if (count == 12) { joint[jointNo].cohesion = valueReal; }
-			if (count == 13) { joint[jointNo].tension = valueReal; }
-			if (count == 14) { joint[jointNo].lambda0 = valueReal; }
-			if (count == 15) { joint[jointNo].heatCapacity = valueReal; }
+			if (count == 6) {
+				joint[jointNo].phi_b = valueReal;
+			}
+			if (count == 7) {
+				joint[jointNo].phi_r = valueReal;
+			}
+			if (count == 8) {
+				joint[jointNo].JRC = valueReal;
+			}
+			if (count == 9) {
+				joint[jointNo].JCS = valueReal;
+			}
+			if (count == 10) {
+				joint[jointNo].asperity = valueReal;
+			}
+			if (count == 11) {
+				joint[jointNo].sigmaC = valueReal;
+			}
+			if (count == 12) {
+				joint[jointNo].cohesion = valueReal;
+			}
+			if (count == 13) {
+				joint[jointNo].tension = valueReal;
+			}
+			if (count == 14) {
+				joint[jointNo].lambda0 = valueReal;
+			}
+			if (count == 15) {
+				joint[jointNo].heatCapacity = valueReal;
+			}
 			if (count == 16) {
 				joint[jointNo].hwater       = valueReal;
 				joint[jointNo].throughGoing = true;
@@ -252,13 +272,27 @@ bool BlockGen::generate(string& /*message*/)
 				joint[jointNo].centre          = jointCentre;
 				joint[jointNo].sliceBoundaries = true;
 			}
-			if (count == 6) { joint[jointNo].phi_b = valueReal; }
-			if (count == 7) { joint[jointNo].phi_r = valueReal; }
-			if (count == 8) { joint[jointNo].JRC = valueReal; }
-			if (count == 9) { joint[jointNo].JCS = valueReal; }
-			if (count == 10) { joint[jointNo].asperity = valueReal; }
-			if (count == 11) { joint[jointNo].sigmaC = valueReal; }
-			if (count == 12) { joint[jointNo].cohesion = valueReal; }
+			if (count == 6) {
+				joint[jointNo].phi_b = valueReal;
+			}
+			if (count == 7) {
+				joint[jointNo].phi_r = valueReal;
+			}
+			if (count == 8) {
+				joint[jointNo].JRC = valueReal;
+			}
+			if (count == 9) {
+				joint[jointNo].JCS = valueReal;
+			}
+			if (count == 10) {
+				joint[jointNo].asperity = valueReal;
+			}
+			if (count == 11) {
+				joint[jointNo].sigmaC = valueReal;
+			}
+			if (count == 12) {
+				joint[jointNo].cohesion = valueReal;
+			}
 			if (count == 13) {
 				joint[jointNo].tension      = valueReal;
 				joint[jointNo].throughGoing = true;
@@ -310,13 +344,27 @@ bool BlockGen::generate(string& /*message*/)
 				planeNormal    = Vector3r(a / l, b / l, c / l); //save for later
 				                                                //std::cout<<"planeNormal1: "<<planeNormal<<endl;
 			}
-			if (count == 4) { phi_b = valueReal; }
-			if (count == 5) { phi_r = valueReal; }
-			if (count == 6) { JRC = valueReal; }
-			if (count == 7) { JCS = valueReal; }
-			if (count == 8) { asperity = valueReal; }
-			if (count == 9) { sigmaC = valueReal; }
-			if (count == 10) { cohesion = valueReal; }
+			if (count == 4) {
+				phi_b = valueReal;
+			}
+			if (count == 5) {
+				phi_r = valueReal;
+			}
+			if (count == 6) {
+				JRC = valueReal;
+			}
+			if (count == 7) {
+				JCS = valueReal;
+			}
+			if (count == 8) {
+				asperity = valueReal;
+			}
+			if (count == 9) {
+				sigmaC = valueReal;
+			}
+			if (count == 10) {
+				cohesion = valueReal;
+			}
 			if (count == 11) {
 				tension = valueReal;
 				joint.push_back(Discontinuity(firstBlockCentre));
@@ -397,7 +445,9 @@ bool BlockGen::generate(string& /*message*/)
 			//std::cout<<"count: "<<count<<", value: "<<value<<endl;
 			const char* valueChar = value.c_str();
 			Real        valueReal = atof(valueChar);
-			if (count == 1) { dip2 = valueReal; }
+			if (count == 1) {
+				dip2 = valueReal;
+			}
 			if (count == 2) {
 				dipdir2      = valueReal;
 				Real dipdirN = 0.0;
@@ -436,8 +486,12 @@ bool BlockGen::generate(string& /*message*/)
 				joint[i].d  = 0.0;
 				planeNormal = Vector3r(a / l, b / l, c / l);
 			}
-			if (count == 3) { jointCentre.x() = valueReal; }
-			if (count == 4) { jointCentre.y() = valueReal; }
+			if (count == 3) {
+				jointCentre.x() = valueReal;
+			}
+			if (count == 4) {
+				jointCentre.y() = valueReal;
+			}
 			if (count == 5) {
 				jointCentre.z()       = valueReal;
 				joint[jointNo].centre = jointCentre;
@@ -541,18 +595,38 @@ bool BlockGen::generate(string& /*message*/)
 				joint[jointNo].persistence_d.push_back(valueReal);
 				joint[jointNo].persistence_d.push_back(valueReal);
 			}
-			if (count == 8) { joint[jointNo].phi_b = valueReal; }
-			if (count == 9) { joint[jointNo].phi_r = valueReal; }
-			if (count == 10) { joint[jointNo].JRC = valueReal; }
-			if (count == 11) { joint[jointNo].JCS = valueReal; }
-			if (count == 12) { joint[jointNo].asperity = valueReal; }
-			if (count == 13) { joint[jointNo].sigmaC = valueReal; }
-			if (count == 14) { joint[jointNo].cohesion = valueReal; }
-			if (count == 15) { joint[jointNo].tension = valueReal; }
-			if (count == 16) { joint[jointNo].jointType = static_cast<int>(valueReal); }
+			if (count == 8) {
+				joint[jointNo].phi_b = valueReal;
+			}
+			if (count == 9) {
+				joint[jointNo].phi_r = valueReal;
+			}
+			if (count == 10) {
+				joint[jointNo].JRC = valueReal;
+			}
+			if (count == 11) {
+				joint[jointNo].JCS = valueReal;
+			}
+			if (count == 12) {
+				joint[jointNo].asperity = valueReal;
+			}
+			if (count == 13) {
+				joint[jointNo].sigmaC = valueReal;
+			}
+			if (count == 14) {
+				joint[jointNo].cohesion = valueReal;
+			}
+			if (count == 15) {
+				joint[jointNo].tension = valueReal;
+			}
+			if (count == 16) {
+				joint[jointNo].jointType = static_cast<int>(valueReal);
+			}
 			if (count == 17) {
 				count = 0; /* to include comments */
-				if (intactRockDegradation == true) { joint[jointNo].intactRock = true; }
+				if (intactRockDegradation == true) {
+					joint[jointNo].intactRock = true;
+				}
 			}
 		}
 	}
@@ -622,7 +696,9 @@ bool BlockGen::generate(string& /*message*/)
 				Qp.x() = crossProd.x();
 				Qp.y() = crossProd.y();
 				Qp.z() = crossProd.z();
-				if (crossProd.norm() < pow(10, -7)) { Qp = Quaternionr::Identity(); }
+				if (crossProd.norm() < pow(10, -7)) {
+					Qp = Quaternionr::Identity();
+				}
 				Qp.normalize();
 				rotatedPersistence = Qp * rotatedPersistence;
 				//std::cout<<"planeNormal : "<<planeNormal<<", rotatedPersistence: "<<rotatedPersistence<<endl;
@@ -635,13 +711,27 @@ bool BlockGen::generate(string& /*message*/)
 				joint[jointNo].persistence_d.push_back(valueReal);
 				joint[jointNo].persistence_d.push_back(valueReal);
 			}
-			if (count == 8) { joint[jointNo].phi_b = valueReal; }
-			if (count == 9) { joint[jointNo].phi_r = valueReal; }
-			if (count == 10) { joint[jointNo].JRC = valueReal; }
-			if (count == 11) { joint[jointNo].JCS = valueReal; }
-			if (count == 12) { joint[jointNo].asperity = valueReal; }
-			if (count == 13) { joint[jointNo].sigmaC = valueReal; }
-			if (count == 14) { joint[jointNo].cohesion = valueReal; }
+			if (count == 8) {
+				joint[jointNo].phi_b = valueReal;
+			}
+			if (count == 9) {
+				joint[jointNo].phi_r = valueReal;
+			}
+			if (count == 10) {
+				joint[jointNo].JRC = valueReal;
+			}
+			if (count == 11) {
+				joint[jointNo].JCS = valueReal;
+			}
+			if (count == 12) {
+				joint[jointNo].asperity = valueReal;
+			}
+			if (count == 13) {
+				joint[jointNo].sigmaC = valueReal;
+			}
+			if (count == 14) {
+				joint[jointNo].cohesion = valueReal;
+			}
 			if (count == 15) {
 				joint[jointNo].tension            = valueReal;
 				joint[jointNo].throughGoing       = true;
@@ -673,8 +763,12 @@ bool BlockGen::generate(string& /*message*/)
 			//std::cout<<"count: "<<count<<", value: "<<value<<endl;
 			const char* valueChar = value.c_str();
 			Real        valueReal = atof(valueChar);
-			if (count == 1) { planeNormal.x() = valueReal; }
-			if (count == 2) { planeNormal.y() = valueReal; }
+			if (count == 1) {
+				planeNormal.x() = valueReal;
+			}
+			if (count == 2) {
+				planeNormal.y() = valueReal;
+			}
 			if (count == 3) {
 				planeNormal.z() = valueReal;
 				planeNormal.normalize();
@@ -702,7 +796,9 @@ bool BlockGen::generate(string& /*message*/)
 				Qp.x() = crossProd.x();
 				Qp.y() = crossProd.y();
 				Qp.z() = crossProd.z();
-				if (crossProd.norm() < pow(10, -7)) { Qp = Quaternionr::Identity(); }
+				if (crossProd.norm() < pow(10, -7)) {
+					Qp = Quaternionr::Identity();
+				}
 				Qp.normalize();
 				rotatedPersistence = Qp * rotatedPersistence;
 				rotatedPersistence.normalize();
@@ -716,13 +812,27 @@ bool BlockGen::generate(string& /*message*/)
 				joint[jointNo].persistence_d.push_back(valueReal);
 				joint[jointNo].persistence_d.push_back(valueReal);
 			}
-			if (count == 7) { joint[jointNo].phi_b = valueReal; }
-			if (count == 8) { joint[jointNo].phi_r = valueReal; }
-			if (count == 9) { joint[jointNo].JRC = valueReal; }
-			if (count == 10) { joint[jointNo].JCS = valueReal; }
-			if (count == 11) { joint[jointNo].asperity = valueReal; }
-			if (count == 12) { joint[jointNo].sigmaC = valueReal; }
-			if (count == 13) { joint[jointNo].cohesion = valueReal; }
+			if (count == 7) {
+				joint[jointNo].phi_b = valueReal;
+			}
+			if (count == 8) {
+				joint[jointNo].phi_r = valueReal;
+			}
+			if (count == 9) {
+				joint[jointNo].JRC = valueReal;
+			}
+			if (count == 10) {
+				joint[jointNo].JCS = valueReal;
+			}
+			if (count == 11) {
+				joint[jointNo].asperity = valueReal;
+			}
+			if (count == 12) {
+				joint[jointNo].sigmaC = valueReal;
+			}
+			if (count == 13) {
+				joint[jointNo].cohesion = valueReal;
+			}
 			if (count == 14) {
 				joint[jointNo].tension            = valueReal;
 				joint[jointNo].throughGoing       = true;
@@ -790,8 +900,12 @@ bool BlockGen::generate(string& /*message*/)
 						std::cout << "joint[" << j << "] sliced successfully" << endl;
 					}
 
-					if (presentBlock.isBoundary == true && joint[j].sliceBoundaries == false) { continue; }
-					if (presentBlock.isBoundary == false && joint[j].sliceBoundaries == true) { continue; }
+					if (presentBlock.isBoundary == true && joint[j].sliceBoundaries == false) {
+						continue;
+					}
+					if (presentBlock.isBoundary == false && joint[j].sliceBoundaries == true) {
+						continue;
+					}
 
 					//Real fns = evaluateFNoSphere(presentBlock, vertexFrJoint);
 					//std::cout<<"fns: "<<fns<<endl;
@@ -996,8 +1110,12 @@ bool BlockGen::generate(string& /*message*/)
 						        startingPt,
 						        twoDimension); //Although we don't need the "radius" of the inscribed sphere here, we invoke "inscribedSphereCLP" in order to pass by reference the calculated value for "startingPt"
 						bool converge = true;
-						if (radius < 0.0) { converge = false; }
-						if (converge == false) { radius += 0; }
+						if (radius < 0.0) {
+							converge = false;
+						}
+						if (converge == false) {
+							radius += 0;
+						}
 						Vector3r centroidA = blkA.centre + startingPt;
 						Real     fA        = joint[j].a * (centroidA.x() - joint[j].centre.x())
 						        + joint[j].b * (centroidA.y() - joint[j].centre.y())
@@ -1375,7 +1493,7 @@ bool BlockGen::generate(string& /*message*/)
 
 			} while (subMemberIter < subMemberSize);
 		} /* outer loop for block */
-	}         /* outer loop for joint */
+	} /* outer loop for joint */
 
 
 	/* NEW Find temp centre and remove redundant planes */
@@ -1398,7 +1516,9 @@ bool BlockGen::generate(string& /*message*/)
 				//bool converge = startingPointFeasibility(blk[i].subMembers[j], startingPt);
 				Real radius   = inscribedSphereCLP(blk[i].subMembers[j], startingPt, twoDimension);
 				bool converge = true;
-				if (radius < 0.0) { converge = false; }
+				if (radius < 0.0) {
+					converge = false;
+				}
 				Vector3r centroid           = blk[i].subMembers[j].centre + startingPt;
 				Vector3r prevCentre         = blk[i].subMembers[j].centre;
 				blk[i].subMembers[j].centre = centroid;
@@ -1419,7 +1539,9 @@ bool BlockGen::generate(string& /*message*/)
 							std::cout << "blk.d[h]: " << blk[i].subMembers[j].d[h] << endl;
 						}
 					}
-					if (fabs(blk[i].subMembers[j].d[h]) > maxd) { maxd = fabs(blk[i].subMembers[j].d[h]); }
+					if (fabs(blk[i].subMembers[j].d[h]) > maxd) {
+						maxd = fabs(blk[i].subMembers[j].d[h]);
+					}
 				}
 				if (converge == false) {
 					blk[i].subMembers[j].tooSmall = true;
@@ -1447,7 +1569,9 @@ bool BlockGen::generate(string& /*message*/)
 					plane.d             = blk[i].subMembers[j].d[k];
 					Vector3r falseVertex(0.0, 0.0, 0.0);
 
-					if (!checkRedundancyLPCLP(plane, blk[i].subMembers[j], falseVertex)) { blk[i].subMembers[j].redundant[k] = true; }
+					if (!checkRedundancyLPCLP(plane, blk[i].subMembers[j], falseVertex)) {
+						blk[i].subMembers[j].redundant[k] = true;
+					}
 				}
 
 				/* Remove redundant planes */
@@ -1488,7 +1612,9 @@ bool BlockGen::generate(string& /*message*/)
 			//bool converge = startingPointFeasibility(blk[i], startingPt);
 			Real radius   = inscribedSphereCLP(blk[i], startingPt, twoDimension);
 			bool converge = true;
-			if (radius < 0.0) { converge = false; }
+			if (radius < 0.0) {
+				converge = false;
+			}
 			Vector3r centroid   = blk[i].centre + startingPt;
 			Vector3r prevCentre = blk[i].centre;
 			blk[i].centre       = centroid;
@@ -1508,7 +1634,9 @@ bool BlockGen::generate(string& /*message*/)
 						std::cout << "blk.d[h]: " << blk[i].d[h] << endl;
 					}
 				}
-				if (fabs(blk[i].d[h]) > maxd) { maxd = fabs(blk[i].d[h]); }
+				if (fabs(blk[i].d[h]) > maxd) {
+					maxd = fabs(blk[i].d[h]);
+				}
 			}
 			if (converge == false) {
 				blk[i].tooSmall = true;
@@ -1536,7 +1664,9 @@ bool BlockGen::generate(string& /*message*/)
 				plane.d             = blk[i].d[k];
 				Vector3r falseVertex(0.0, 0.0, 0.0);
 
-				if (!checkRedundancyLPCLP(plane, blk[i], falseVertex)) { blk[i].redundant[k] = true; }
+				if (!checkRedundancyLPCLP(plane, blk[i], falseVertex)) {
+					blk[i].redundant[k] = true;
+				}
 			}
 
 			/* Remove redundant planes */
@@ -1648,7 +1778,9 @@ bool BlockGen::generate(string& /*message*/)
 //#if 0
 bool BlockGen::createBlock(shared_ptr<Body>& body, struct Block block, int number)
 {
-	if (block.tooSmall == true) { return false; }
+	if (block.tooSmall == true) {
+		return false;
+	}
 
 	block.r = block.r + initialOverlap;
 
@@ -1696,7 +1828,9 @@ bool BlockGen::createBlock(shared_ptr<Body>& body, struct Block block, int numbe
 	} else {
 		pBlock->color = color;
 	}
-	if (block.isBoundary == true) { pBlock->color = Vector3r(0, 0.4, 0); }
+	if (block.isBoundary == true) {
+		pBlock->color = Vector3r(0, 0.4, 0);
+	}
 
 	pBlock->isBoundary = block.isBoundary;
 	pBlock->vertices
@@ -1839,7 +1973,9 @@ bool BlockGen::checkCentroid(struct Block block, Vector3r presentTrial)
 
 bool BlockGen::contactDetectionLPCLPglobal(struct Discontinuity joint, struct Block block, Vector3r& touchingPt)
 {
-	if (block.tooSmall == true) { return false; }
+	if (block.tooSmall == true) {
+		return false;
+	}
 	/* Parameters for particles A and B */
 	int planeNoA       = block.a.size();
 	int persistenceNoA = joint.persistence_a.size();
@@ -1958,7 +2094,9 @@ bool BlockGen::contactDetectionLPCLPglobal(struct Discontinuity joint, struct Bl
 
 bool BlockGen::contactBoundaryLPCLP(struct Discontinuity joint, struct Block block, Vector3r& touchingPt)
 {
-	if (block.tooSmall == true) { return false; }
+	if (block.tooSmall == true) {
+		return false;
+	}
 
 	Vector3r solution(0, 0, 0);
 	/* Parameters for particles A and B */
@@ -2170,7 +2308,9 @@ bool BlockGen::contactBoundaryLPCLP(struct Discontinuity joint, struct Block blo
 
 bool BlockGen::checkRedundancyLPCLP(struct Discontinuity joint, struct Block block, Vector3r& touchingPt)
 {
-	if (block.tooSmall == true) { return false; }
+	if (block.tooSmall == true) {
+		return false;
+	}
 
 	Vector3r solution(0, 0, 0);
 	/* Parameters for particles A and B */
@@ -2346,7 +2486,9 @@ Real BlockGen::inscribedSphereCLP(struct Block block, Vector3r& initialPoint, bo
 	int counter = 0;
 	for (unsigned int i = 0; i < block.a.size(); i++) {
 		if (twoDimension2 == true) {
-			if (i == plane2Dno[0] || i == plane2Dno[1]) { continue; }
+			if (i == plane2Dno[0] || i == plane2Dno[1]) {
+				continue;
+			}
 		}
 		rowUpper[counter]   = block.d[i] + block.r;
 		planeIndex[counter] = i;

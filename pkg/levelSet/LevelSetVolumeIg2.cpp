@@ -391,8 +391,12 @@ bool Ig2_LevelSet_LevelSet_VolumeGeom::go(
 						Vector3r cornerLoc = rotGuess1 * rotConj1 * (cornerGlob - centrEnd1);
 						// Find maximum and minimum values of the corners
 						for (int m = 0; m < 3; m++) {
-							if (cornerLoc[m] > maxBoOverlapOld[m]) { maxBoOverlapOld[m] = cornerLoc[m]; }
-							if (cornerLoc[m] < minBoOverlapOld[m]) { minBoOverlapOld[m] = cornerLoc[m]; }
+							if (cornerLoc[m] > maxBoOverlapOld[m]) {
+								maxBoOverlapOld[m] = cornerLoc[m];
+							}
+							if (cornerLoc[m] < minBoOverlapOld[m]) {
+								minBoOverlapOld[m] = cornerLoc[m];
+							}
 						}
 					}
 				}
@@ -923,8 +927,12 @@ bool Ig2_Wall_LevelSet_VolumeGeom::go(
 						Vector3r cornerLoc = rotGuess * rotConjLS * (cornerGlob - centrEndLS);
 						// Find maximum and minimum values of the corners
 						for (int m = 0; m < 3; m++) {
-							if (cornerLoc[m] > maxBoOverlapOld[m]) { maxBoOverlapOld[m] = cornerLoc[m]; }
-							if (cornerLoc[m] < minBoOverlapOld[m]) { minBoOverlapOld[m] = cornerLoc[m]; }
+							if (cornerLoc[m] > maxBoOverlapOld[m]) {
+								maxBoOverlapOld[m] = cornerLoc[m];
+							}
+							if (cornerLoc[m] < minBoOverlapOld[m]) {
+								minBoOverlapOld[m] = cornerLoc[m];
+							}
 						}
 					}
 				}

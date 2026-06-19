@@ -73,7 +73,9 @@ std::string DynLibManager::lastError() { return lastError_; }
 bool DynLibManager::error()
 {
 	char* error = dlerror();
-	if (error != NULL) { lastError_ = error; }
+	if (error != NULL) {
+		lastError_ = error;
+	}
 	return (error != NULL);
 }
 

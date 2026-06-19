@@ -41,7 +41,7 @@ namespace Foam {
 
 class YadeParticle {
 public:
-	YadeParticle() {};
+	YadeParticle() { };
 	double                              dia;
 	bool                                isFib = false;
 	double                              vol;
@@ -60,12 +60,12 @@ public:
 	{
 		if (!isFib) vol = M_PI * std::pow(dia, 3.0) / 6.0;
 	}
-	virtual ~YadeParticle() {};
+	virtual ~YadeParticle() { };
 };
 
 class YadeProc {
 public:
-	YadeProc() {};
+	YadeProc() { };
 	int                                        yRank;            //  world rank of the yade Proc.
 	std::vector<int>                           numParticlesProc; // number of particles from intersections with yade proc
 	bool                                       inComm = false;   //  flag for intersection with this proc.
@@ -76,7 +76,7 @@ public:
 	std::vector<std::pair<int, vector>>        uParticleContrib; // particle velocity contribution from this yade proc.
 	std::vector<std::shared_ptr<YadeParticle>> foundParticles;   // vector of found particles from this yadeProc.
 	int                                        numParticles;
-	~YadeProc() {};
+	~YadeProc() { };
 };
 
 class FoamYade {
@@ -214,7 +214,7 @@ public:
 	void setPvolContrib(const int&, const double&, const vector&);
 	void incrementCellCount(const int&);
 
-	virtual ~FoamYade() {};
+	virtual ~FoamYade() { };
 };
 
 }

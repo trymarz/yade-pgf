@@ -21,7 +21,9 @@ Real Wall::getVolume() { return 0.; }
 void Bo1_Wall_Aabb::go(const shared_ptr<Shape>& cm, shared_ptr<Bound>& bv, const Se3r& se3, const Body* /*b*/)
 {
 	Wall* wall = static_cast<Wall*>(cm.get());
-	if (!bv) { bv = shared_ptr<Bound>(new Aabb); }
+	if (!bv) {
+		bv = shared_ptr<Bound>(new Aabb);
+	}
 	Aabb* aabb = static_cast<Aabb*>(bv.get());
 	if (scene->isPeriodic && scene->cell->hasShear()) throw logic_error(__FILE__ "Walls not supported in sheared cell.");
 	const Real& inf       = std::numeric_limits<Real>::infinity();

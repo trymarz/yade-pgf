@@ -16,7 +16,7 @@ using namespace ::yade::MathEigenTypes;
 
 #include <py/high-precision/minieigen/RealVisitor.hpp>
 template <int N, bool> struct Helper {
-	static void expose_math_Real(bool /* notDuplicate */, const py::scope& /* topScope */) {};
+	static void expose_math_Real(bool /* notDuplicate */, const py::scope& /* topScope */) { };
 };
 
 template <int N> struct Helper<N, true> {

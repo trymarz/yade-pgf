@@ -20,7 +20,7 @@ private:
 	int temoin;
 
 public:
-	virtual ~KinemCTDEngine() {};
+	virtual ~KinemCTDEngine() { };
 
 	void action() override;
 	// 			;

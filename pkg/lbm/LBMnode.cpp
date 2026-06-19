@@ -15,7 +15,7 @@
 namespace yade { // Cannot have #include directive inside.
 
 YADE_PLUGIN((LBMnode)(LBMlink)(LBMbody));
-LBMnode::~LBMnode() {};
+LBMnode::~LBMnode() { };
 
 
 void LBMnode::MixteBC(string lbmodel, Real density, Vector3r U, string where)

@@ -40,7 +40,7 @@ namespace yade { // Cannot have #include directive inside.
 	inline Factorable*            Create##name() { return new name; }                                                                                      \
 	inline void*                  CreatePureCustom##name() { return new name; }                                                                            \
 	const bool                    registered##name __attribute__((unused))                                                                                 \
-	        = ClassFactory::instance().registerFactorable(#name, Create##name, CreateShared##name, CreatePureCustom##name);
+	= ClassFactory::instance().registerFactorable(#name, Create##name, CreateShared##name, CreatePureCustom##name);
 
 
 class Factorable;
@@ -75,7 +75,7 @@ private:
 		CreateSharedFactorableFnPtr createShared;     /// Used to create a shared pointer on the class (if serializable)
 		CreatePureCustomFnPtr       createPureCustom; /// Used to create a void C pointer on the class
 
-		FactorableCreators() {};
+		FactorableCreators() { };
 		FactorableCreators(CreateFactorableFnPtr c, CreateSharedFactorableFnPtr cs, CreatePureCustomFnPtr cpc)
 		{
 			create           = c;
@@ -98,7 +98,7 @@ private:
 	}
 	ClassFactory(const ClassFactory&);
 	ClassFactory& operator=(const ClassFactory&);
-	virtual ~ClassFactory() {};
+	virtual ~ClassFactory() { };
 	DECLARE_LOGGER;
 
 public:

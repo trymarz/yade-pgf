@@ -99,10 +99,10 @@ bool Ig2_Facet_Sphere_ScGeom::go(
 		LOG_DEBUG("The 'else' part for Facet-Sphere contact");
 		cp = cp + ne[m] * (icr - bm);
 		if (cp.dot(ne[(m - 1 < 0) ? 2 : m - 1]) > icr) // contact with vertex m
-		                                               //			cp = facet->vertices[m];
+			                                       //			cp = facet->vertices[m];
 			cp = facet->vu[m] * (facet->vl[m] - sh);
 		else if (cp.dot(ne[m = (m + 1 > 2) ? 0 : m + 1]) > icr) // contact with vertex m+1
-		                                                        //			cp = facet->vertices[(m+1>2)?0:m+1];
+			                                                //			cp = facet->vertices[(m+1>2)?0:m+1];
 			cp = facet->vu[m] * (facet->vl[m] - sh);
 		normal    = cl - cp;
 		Real norm = normal.norm();
@@ -201,8 +201,10 @@ bool Ig2_Wall_Sphere_ScGeom::go(
 	Wall*      wall   = static_cast<Wall*>(cm1.get());
 	const Real radius = static_cast<Sphere*>(cm2.get())->radius;
 	const int& ax(wall->axis);
-	Real       dist = (state2.pos)[ax] + shift2[ax] - state1.pos[ax];         // signed "distance" between centers
-	if (!c->isReal() && math::abs(dist) > radius && !force) { return false; } // wall and sphere too far from each other
+	Real       dist = (state2.pos)[ax] + shift2[ax] - state1.pos[ax]; // signed "distance" between centers
+	if (!c->isReal() && math::abs(dist) > radius && !force) {
+		return false;
+	} // wall and sphere too far from each other
 
 	// contact point is sphere center projected onto the wall
 	Vector3r contPt = state2.pos + shift2;

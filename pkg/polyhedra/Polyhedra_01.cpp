@@ -13,8 +13,8 @@ namespace yade { // Cannot have #include directive inside.
 using math::max;
 using math::min; // using inside .cpp file is ok.
 
-YADE_PLUGIN(/* self-contained in hpp: */ (Polyhedra)(PolyhedraGeom)(Bo1_Polyhedra_Aabb)(PolyhedraPhys)(PolyhedraMat)(
-        Ip2_PolyhedraMat_PolyhedraMat_PolyhedraPhys)(Ip2_FrictMat_PolyhedraMat_FrictPhys)(Law2_PolyhedraGeom_PolyhedraPhys_Volumetric));
+YADE_PLUGIN(/* self-contained in hpp: */ (
+        Polyhedra)(PolyhedraGeom)(Bo1_Polyhedra_Aabb)(PolyhedraPhys)(PolyhedraMat)(Ip2_PolyhedraMat_PolyhedraMat_PolyhedraPhys)(Ip2_FrictMat_PolyhedraMat_FrictPhys)(Law2_PolyhedraGeom_PolyhedraPhys_Volumetric));
 
 CREATE_LOGGER(Law2_PolyhedraGeom_PolyhedraPhys_Volumetric);
 CREATE_LOGGER(Polyhedra);
@@ -70,7 +70,7 @@ void Polyhedra::Initialize()
 
 	//connect triagular facets if possible
 	std::transform(P.facets_begin(), P.facets_end(), P.planes_begin(), Plane_equation());
-	P = Simplify(P,1E-9);
+	P = Simplify(P, 1E-9);
 
 	//modify order of v according to CGAl polyhedron
 	//int i = 0;

@@ -199,7 +199,7 @@ class MindlinCapillaryPhys : public MindlinPhys {
 public:
 	int currentIndexes[4]; // used for faster interpolation (stores previous positions in tables)
 
-	virtual ~MindlinCapillaryPhys() {};
+	virtual ~MindlinCapillaryPhys() { };
 
 	// clang-format off
 	YADE_CLASS_BASE_DOC_ATTRS_INIT_CTOR_PY(MindlinCapillaryPhys,MindlinPhys,"Adds capillary physics to Mindlin's interaction physics.",

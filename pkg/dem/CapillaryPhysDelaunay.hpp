@@ -226,11 +226,12 @@ REGISTER_SERIALIZABLE(Ip2_FrictMat_FrictMat_CapillaryPhysDelaunay);
 			}                                                                                                                                      \
 		};                                                                                                                                             \
 		FUNCTOR2D(matType, matType);                                                                                                                   \
-		YADE_CLASS_BASE_DOC_ATTRS_CTOR(Ip2_##matType##_##matType##_Capillary##iPhysType##Delaunay,                                                     \
-		                               Ip2_##matType##_##matType##_##iPhysType,                                                                        \
-		                               "Variant of :yref:`Ip2_(matType)_(matType)_(iPhysType)` to be used with :yref:`CapillarityEngine`.",            \
-		                               ((bool, computeDefault, true, , "bool to assign the default value of computeBridge.")),                         \
-		                               ;);                                                                                                             \
+		YADE_CLASS_BASE_DOC_ATTRS_CTOR(                                                                                                                \
+		        Ip2_##matType##_##matType##_Capillary##iPhysType##Delaunay,                                                                            \
+		        Ip2_##matType##_##matType##_##iPhysType,                                                                                               \
+		        "Variant of :yref:`Ip2_(matType)_(matType)_(iPhysType)` to be used with :yref:`CapillarityEngine`.",                                   \
+		        ((bool, computeDefault, true, , "bool to assign the default value of computeBridge.")),                                                \
+		        ;);                                                                                                                                    \
 	};                                                                                                                                                     \
 	REGISTER_SERIALIZABLE(Ip2_##matType##_##matType##_Capillary##iPhysType##Delaunay);
 

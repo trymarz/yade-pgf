@@ -78,7 +78,9 @@ Real Law2_ScGeom6D_InelastCohFrictPhys_CohesionMoment::normElastEnergy()
 	{
 		if (!I->isReal()) continue;
 		InelastCohFrictPhys* phys = YADE_CAST<InelastCohFrictPhys*>(I->phys.get());
-		if (phys) { normEnergy += 0.5 * (phys->normalForce.squaredNorm() / phys->kn); }
+		if (phys) {
+			normEnergy += 0.5 * (phys->normalForce.squaredNorm() / phys->kn);
+		}
 	}
 	return normEnergy;
 }
@@ -90,7 +92,9 @@ Real Law2_ScGeom6D_InelastCohFrictPhys_CohesionMoment::shearElastEnergy()
 	{
 		if (!I->isReal()) continue;
 		InelastCohFrictPhys* phys = YADE_CAST<InelastCohFrictPhys*>(I->phys.get());
-		if (phys) { shearEnergy += 0.5 * (phys->shearForce.squaredNorm() / phys->ks); }
+		if (phys) {
+			shearEnergy += 0.5 * (phys->shearForce.squaredNorm() / phys->ks);
+		}
 	}
 	return shearEnergy;
 }

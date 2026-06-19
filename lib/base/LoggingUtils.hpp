@@ -95,7 +95,9 @@ namespace units { // C++ standard uses int64_t because ↓ it supports ±292.5 y
 		static_assert(                                                                                                                                 \
 		        ::yade::units::isSecOrMilliSec<decltype(howOften)>, "LOG_TIMED_* Bad first argument, see testTimedLevels(); in file py/_log.cpp.");    \
 		thread_local static auto t = ::yade::Timer(true);                                                                                              \
-		if (t.check(howOften)) { MSG }                                                                                                                 \
+		if (t.check(howOften)) {                                                                                                                       \
+			MSG                                                                                                                                    \
+		}                                                                                                                                              \
 	}
 
 #define LOG_TIMED_NOFILTER(howOften, msg) LOG_TIMED(howOften, LOG_NOFILTER(msg))

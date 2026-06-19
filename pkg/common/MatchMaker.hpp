@@ -28,7 +28,7 @@ class MatchMaker : public Serializable {
 	boost::unordered_map<std::pair<int, int>, Real> matchSet;
 
 public:
-	virtual ~MatchMaker() {};
+	virtual ~MatchMaker() { };
 	MatchMaker(std::string _algo)
 	        : algo(_algo)
 	{

@@ -163,7 +163,9 @@ static PyObject* face_number(PygtsEdge* self, PyObject* args)
 	SELF_CHECK
 
 	/* Parse the args */
-	if (!PyArg_ParseTuple(args, "O", &s_)) { return NULL; }
+	if (!PyArg_ParseTuple(args, "O", &s_)) {
+		return NULL;
+	}
 
 	/* Convert to PygtsObjects */
 	if (!pygts_surface_check(s_)) {
@@ -198,7 +200,9 @@ static PyObject* is_boundary(PygtsEdge* self, PyObject* args)
 	SELF_CHECK
 
 	/* Parse the args */
-	if (!PyArg_ParseTuple(args, "O", &s_)) { return NULL; }
+	if (!PyArg_ParseTuple(args, "O", &s_)) {
+		return NULL;
+	}
 
 	/* Convert to PygtsObjects */
 	if (!pygts_surface_check(s_)) {
@@ -311,8 +315,12 @@ static PyObject* new_(PyTypeObject* type, PyObject* args, PyObject* kwds)
 	/* Parse the args */
 	if (kwds) {
 		o = PyDict_GetItemString(kwds, "alloc_gtsobj");
-		if (o == Py_False) { alloc_gtsobj = FALSE; }
-		if (o != NULL) { PyDict_DelItemString(kwds, "alloc_gtsobj"); }
+		if (o == Py_False) {
+			alloc_gtsobj = FALSE;
+		}
+		if (o != NULL) {
+			PyDict_DelItemString(kwds, "alloc_gtsobj");
+		}
 	}
 	if (kwds) {
 		Py_INCREF(Py_False);
@@ -393,7 +401,9 @@ static int init(PygtsEdge* self, PyObject* args, PyObject* kwds)
 	gint ret;
 
 	/* Chain up */
-	if ((ret = PygtsSegmentType.tp_init((PyObject*)self, args, kwds)) != 0) { return ret; }
+	if ((ret = PygtsSegmentType.tp_init((PyObject*)self, args, kwds)) != 0) {
+		return ret;
+	}
 
 	return 0;
 }

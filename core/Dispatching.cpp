@@ -11,10 +11,10 @@ using math::min; // using inside .cpp file is ok.
 
 
 YADE_PLUGIN((BoundFunctor)(IGeomFunctor)(IPhysFunctor)(LawFunctor)(BoundDispatcher)(IGeomDispatcher)(IPhysDispatcher)(LawDispatcher));
-BoundFunctor::~BoundFunctor() {};
-IGeomFunctor::~IGeomFunctor() {};
-IPhysFunctor::~IPhysFunctor() {};
-LawFunctor::~LawFunctor() {};
+BoundFunctor::~BoundFunctor() { };
+IGeomFunctor::~IGeomFunctor() { };
+IPhysFunctor::~IPhysFunctor() { };
+LawFunctor::~LawFunctor() { };
 
 
 /********************************************************************
@@ -121,7 +121,9 @@ shared_ptr<Interaction> IGeomDispatcher::explicitAction(const shared_ptr<Body>& 
 		throw invalid_argument(
 		        "IGeomDispatcher::explicitAction could not dispatch for given types (" + b1->shape->getClassName() + "," + b2->shape->getClassName()
 		        + ").");
-	if (swap) { I->swapOrder(); }
+	if (swap) {
+		I->swapOrder();
+	}
 	const shared_ptr<Body>& b1Swp = Body::byId(I->getId1(), scene);
 	const shared_ptr<Body>& b2Swp = Body::byId(I->getId2(), scene);
 	bool                    succ  = I->functorCache.geom->go(b1Swp->shape, b2Swp->shape, *b1Swp->state, *b2Swp->state, shift2, /*force*/ true, I);
@@ -177,7 +179,9 @@ void IGeomDispatcher::action()
 			geomCreated     = I->functorCache.geom->go(b1->shape, b2->shape, *b1->state, *b2->state, shift2, /*force*/ false, I);
 		}
 		// reset && erase interaction that existed but now has no geometry anymore
-		if (wasReal && !geomCreated) { scene->interactions->requestErase(I); }
+		if (wasReal && !geomCreated) {
+			scene->interactions->requestErase(I);
+		}
 	}
 }
 
@@ -218,7 +222,7 @@ void IPhysDispatcher::action()
 			shared_ptr<Body>& b1      = (*bodies)[interaction->getId1()];
 			shared_ptr<Body>& b2      = (*bodies)[interaction->getId2()];
 			bool              hadPhys = (interaction->phys.get() != 0);
-			                  operator()(b1->material, b2->material, interaction);
+			operator()(b1->material, b2->material, interaction);
 			assert(interaction->phys);
 			if (!hadPhys) interaction->iterMadeReal = scene->iter;
 		}
@@ -248,8 +252,9 @@ void LawDispatcher::action()
 			assert(I->phys);
 			operator()(I->geom, I->phys, I.get());
 			if (!I->isReal() && I->isFresh(scene))
-				LOG_ERROR("Law functor deleted interaction that was just created. Please report bug: either this message is spurious, or the "
-				          "functor (or something else) is buggy.");
+				LOG_ERROR(
+				        "Law functor deleted interaction that was just created. Please report bug: either this message is spurious, or the "
+				        "functor (or something else) is buggy.");
 		}
 	}
 }

@@ -16,8 +16,8 @@ namespace yade { // Cannot have #include directive inside.
 
 class FrontEnd : public Factorable {
 public:
-	FrontEnd() {};
-	virtual ~FrontEnd() {};
+	FrontEnd() { };
+	virtual ~FrontEnd() { };
 
 	virtual int run(int, char*[]) { return -1; };
 	// called before actually invoking it

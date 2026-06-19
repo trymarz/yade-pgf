@@ -53,7 +53,9 @@ Real BubblePhys::computeForce(Real separation, Real /*surfaceTension*/, Real rAv
 			} else {
 				residual = fabs(ret - retOld) / retOld;
 			}
-			if (i++ > newtonIter) { throw runtime_error("BubblePhys::computeForce: no convergence\n"); }
+			if (i++ > newtonIter) {
+				throw runtime_error("BubblePhys::computeForce: no convergence\n");
+			}
 		} while (residual > newtonTol);
 		return ret;
 	} else { //Artificial Extension of [Chan2011] equation 25 to approximiate behaviour outside the valid regime (large penetration cases)
@@ -69,7 +71,9 @@ bool Law2_ScGeom_BubblePhys_Bubble::go(shared_ptr<IGeom>& _geom, shared_ptr<IPhy
 	ScGeom*     geom = static_cast<ScGeom*>(_geom.get());
 	BubblePhys* phys = static_cast<BubblePhys*>(_phys.get());
 
-	if (geom->penetrationDepth <= 0.0) { return false; }
+	if (geom->penetrationDepth <= 0.0) {
+		return false;
+	}
 
 	if (I->isFresh(scene)) {
 		c1         = 2 * Mathr::PI * surfaceTension;

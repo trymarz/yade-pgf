@@ -22,7 +22,7 @@ namespace yade { // Cannot have #include directive inside.
 // The following code was moved from CohFrictMat.hpp
 class CohFrictMat : public FrictMat {
 public:
-	virtual ~CohFrictMat() {};
+	virtual ~CohFrictMat() { };
 	/// Serialization
 	// clang-format off
 	YADE_CLASS_BASE_DOC_ATTRS_CTOR(CohFrictMat,FrictMat,"Material description extending :yref:`FrictMat` with cohesive properties and rotational stiffnesses. For use e.g. with :yref:`Law2_ScGeom6D_CohFrictPhys_CohesionMoment`.",

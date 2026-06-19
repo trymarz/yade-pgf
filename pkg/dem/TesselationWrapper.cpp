@@ -81,14 +81,14 @@ void build_triangulation_with_ids(const shared_ptr<BodyContainer>& bodies, Tesse
 	Tes.vertexHandles.clear();
 	Tes.vertexHandles.resize(bodies->size() + 6, NULL); //+6 extra slots in case boundaries will be added latter as additional vertices
 
-	Body::id_t  Ng                = 0;
-	Body::id_t& MaxId             = Tes.maxId;
-	TW.mean_radius                = 0;
+	Body::id_t  Ng    = 0;
+	Body::id_t& MaxId = Tes.maxId;
+	TW.mean_radius    = 0;
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpragmas"
 #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
-// silence the warning that nonSpheres is only written to, but never read from, and therefore useless.
-	int                nonSpheres = 0;
+	// silence the warning that nonSpheres is only written to, but never read from, and therefore useless.
+	int nonSpheres = 0;
 #pragma GCC diagnostic pop
 	shared_ptr<Sphere> sph(new Sphere);
 	int                Sph_Index = sph->getClassIndexStatic();

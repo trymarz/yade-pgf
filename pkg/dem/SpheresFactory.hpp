@@ -67,7 +67,7 @@ protected:
 	void pickRandomPosition(Vector3r&, Real) override;
 
 public:
-	virtual ~CircularFactory() {};
+	virtual ~CircularFactory() { };
 	DECLARE_LOGGER;
 	// clang-format off
 		YADE_CLASS_BASE_DOC_ATTRS(CircularFactory,SpheresFactory,"Circular geometry of the SpheresFactory region. It can be disk (given by radius and center), or cylinder (given by radius, length and center).",
@@ -84,7 +84,7 @@ protected:
 	void pickRandomPosition(Vector3r&, Real) override;
 
 public:
-	virtual ~BoxFactory() {};
+	virtual ~BoxFactory() { };
 	DECLARE_LOGGER;
 	// clang-format off
 		YADE_CLASS_BASE_DOC_ATTRS(BoxFactory,SpheresFactory,"Box geometry of the SpheresFactory region, given by extents and center",

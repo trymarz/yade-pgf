@@ -58,8 +58,7 @@ template <> struct numeric_limits<::yade::math::ThinRealWrapper<long double>> {
 	// constexpr static const auto& float_denorm_style= std::numeric_limits<UnderlyingReal>::float_denorm_style;
 };
 
-template <> struct is_floating_point<::yade::math::ThinRealWrapper<long double>> : std::true_type {
-};
+template <> struct is_floating_point<::yade::math::ThinRealWrapper<long double>> : std::true_type { };
 
 }
 

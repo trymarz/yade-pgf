@@ -28,7 +28,9 @@ Real Law2_SCG_KnKsPBPhys_KnKsPBLaw::ratioSlidingContacts()
 	{
 		if (!I->isReal()) continue;
 		KnKsPBPhys* phys = dynamic_cast<KnKsPBPhys*>(I->phys.get()); /* contact physics */
-		if (phys->isSliding) { ratio += 1; }
+		if (phys->isSliding) {
+			ratio += 1;
+		}
 		count++;
 	}
 	ratio /= count;
@@ -151,7 +153,7 @@ bool Law2_SCG_KnKsPBPhys_KnKsPBLaw::go(shared_ptr<IGeom>& ig /* contact geometry
 		phys->tensionBroken  = true;
 		phys->cohesionBroken = true;
 	} /* no cohesion and tension if the contact is a boundary*/
-	  //	if( s1->isBoundary == true || s2->isBoundary==true ){ phys->tensionBroken = true; phys->cohesionBroken = true; }
+	//	if( s1->isBoundary == true || s2->isBoundary==true ){ phys->tensionBroken = true; phys->cohesionBroken = true; }
 
 	//TODO: In many instances, we consider a minimum value for the contactArea, equal to: pow(10,-15). This is meant to cover the cases where the contactArea is so small that the contact volume is degenerated to nearly a point. I think we should let the user decide the size of this minimum contactArea, since it depends on the scale of the problem and the unit system they consider @vsangelidakis
 
@@ -453,7 +455,9 @@ bool Law2_SCG_KnKsPBPhys_KnKsPBLaw::go(shared_ptr<IGeom>& ig /* contact geometry
 		//		if (fN<=0) { std::cout<<"Negative fN: "<<fN<<endl; } //This is here for debugging purposes, to check when fN can be negative
 		//		else       { std::cout<<"Positive fN: "<<fN<<endl; }
 
-		if (math::isnan(fN)) { fN = 0.0; } //FIXME: Maybe output a warning if fN is negative (i.e. attractive) and/or include an assertion
+		if (math::isnan(fN)) {
+			fN = 0.0;
+		} //FIXME: Maybe output a warning if fN is negative (i.e. attractive) and/or include an assertion
 		//fN should contribute to friction only when it is compressive. If allowViscousAttraction=True, fN can be tensile, and friction is not present
 
 		if (phys->intactRock == true) {
@@ -475,7 +479,9 @@ bool Law2_SCG_KnKsPBPhys_KnKsPBLaw::go(shared_ptr<IGeom>& ig /* contact geometry
 				Real ratio      = maxFs / shearForce.norm(); //Define the plastic work input and increment the total plastic energy dissipated
 				shearForce *= ratio;
 				shearForce = shearForce; //FIXME: Check whether this line is necessary
-				if (allowBreakage == true) { phys->cohesionBroken = true; }
+				if (allowBreakage == true) {
+					phys->cohesionBroken = true;
+				}
 				dampedShearForce = shearForce; /* no damping when it slides */
 				phys->shearForce = shearForce; //FIXME: Stop storing the shearForce in two places: dampedShearForce and phys->shearForce
 			} else {
@@ -493,7 +499,9 @@ bool Law2_SCG_KnKsPBPhys_KnKsPBLaw::go(shared_ptr<IGeom>& ig /* contact geometry
 				/*const*/ Vector3r trialForce = shearForce;  //Store prev force for definition of plastic slip
 				shearForce *= ratio;
 				shearForce = shearForce; //FIXME: Check whether this line is necessary
-				if (allowBreakage == true) { phys->cohesionBroken = true; }
+				if (allowBreakage == true) {
+					phys->cohesionBroken = true;
+				}
 				dampedShearForce = shearForce; /* no damping when it slides */
 				phys->shearForce = shearForce; //FIXME: Stop storing the shearForce in two places: dampedShearForce and phys->shearForce
 
@@ -549,7 +557,9 @@ bool Law2_SCG_KnKsPBPhys_KnKsPBLaw::go(shared_ptr<IGeom>& ig /* contact geometry
 		//Real beta = 0.0; /* rate of plastic multiplier */
 		Real beta_prev = phys->cumulative_us;      /* accumulated plastic mutliplier before stress update */
 		Real fN        = phys->normalForce.norm(); //FIXME: We calculate this differently in the above branch. Check whether they lead to the same value
-		if (math::isnan(fN)) { fN = 0.0; }
+		if (math::isnan(fN)) {
+			fN = 0.0;
+		}
 		Real     phi = phys->phi_b;
 		Vector3r newFs(0, 0, 0);
 		Real     plasticDisp = 0.0;
@@ -669,8 +679,12 @@ Real Law2_SCG_KnKsPBPhys_KnKsPBLaw::stressUpdateVec(
 
 		/* Establish upper bound for lambda*/
 		Real upperBound = du.norm() / Fs_prev.norm();
-		if (math::isnan(upperBound) == true) { upperBound = 1.0; }
-		if (math::isinf(upperBound) == true || upperBound > pow(10.0, 12)) { upperBound = pow(10.0, 12); }
+		if (math::isnan(upperBound) == true) {
+			upperBound = 1.0;
+		}
+		if (math::isinf(upperBound) == true || upperBound > pow(10.0, 12)) {
+			upperBound = pow(10.0, 12);
+		}
 		termA              = (Fs_prev + Ks * du) / (Ks * upperBound + 1.0);
 		beta               = beta_prev + upperBound * termA.norm();
 		Real f_upper_bound = termA.norm() - fN * (miu_peak - delta_miu * (1.0 - exp(-1.0 * beta / 0.35)));
@@ -681,7 +695,9 @@ Real Law2_SCG_KnKsPBPhys_KnKsPBLaw::stressUpdateVec(
 			beta          = beta_prev + upperBound * termA.norm();
 			f_upper_bound = termA.norm() - fN * (miu_peak - delta_miu * (1.0 - exp(-1.0 * beta / 0.35)));
 			iterUpper++;
-			if (iterUpper > 1000) { std::cout << "iterUpper: " << iterUpper << endl; }
+			if (iterUpper > 1000) {
+				std::cout << "iterUpper: " << iterUpper << endl;
+			}
 		}
 
 		Real oriUpperBound    = upperBound;
@@ -798,8 +814,12 @@ Real Law2_SCG_KnKsPBPhys_KnKsPBLaw::stressUpdateVecTalesnick(
 
 		/* Establish upper bound for lambda*/
 		Real upperBound = du.norm() / Fs_prev.norm();
-		if (math::isnan(upperBound) == true) { upperBound = 1.0; }
-		if (math::isinf(upperBound) == true || upperBound > pow(10.0, 12)) { upperBound = pow(10.0, 12); }
+		if (math::isnan(upperBound) == true) {
+			upperBound = 1.0;
+		}
+		if (math::isinf(upperBound) == true || upperBound > pow(10.0, 12)) {
+			upperBound = pow(10.0, 12);
+		}
 		termA              = (Fs_prev + Ks * du) / (Ks * upperBound + 1.0);
 		beta               = beta_prev + upperBound * termA.norm();
 		Real f_upper_bound = termA.norm() - fN * (miu_peak * (1.0 - exp(-1.0 * beta_prev / upeak)));
@@ -810,7 +830,9 @@ Real Law2_SCG_KnKsPBPhys_KnKsPBLaw::stressUpdateVecTalesnick(
 			beta          = beta_prev + upperBound * termA.norm();
 			f_upper_bound = termA.norm() - fN * (miu_peak * (1.0 - exp(-1.0 * beta_prev / upeak)));
 			iterUpper++;
-			if (iterUpper > 1000) { std::cout << "iterUpper: " << iterUpper << endl; }
+			if (iterUpper > 1000) {
+				std::cout << "iterUpper: " << iterUpper << endl;
+			}
 		}
 
 		Real oriUpperBound    = upperBound;
@@ -911,7 +933,9 @@ void Ip2_FrictMat_FrictMat_KnKsPBPhys::go(const shared_ptr<Material>& b1, const 
 	contactPhysics->cohesionBroken = cohesionBroken;
 	contactPhysics->tensionBroken  = tensionBroken;
 	contactPhysics->intactRock     = intactRock;
-	if (intactRock) { contactPhysics->cohesion = cohesion; }
+	if (intactRock) {
+		contactPhysics->cohesion = cohesion;
+	}
 	//	contactPhysics->unitWidth2D = unitWidth2D;
 	contactPhysics->frictionAngle = math::min(fa, fb);
 	if (!useFaceProperties) {

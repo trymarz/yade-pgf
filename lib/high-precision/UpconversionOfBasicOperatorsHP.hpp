@@ -87,23 +87,15 @@ namespace math {
 		//  RealHP<10> c = a+b;
 		//
 		// If operator+ does not exist, and compiler is about to raise a compilation error, then the template HasPlus::value will return false. This allows to avoid that compilation error.
-		template <typename A, typename B, class = void> struct HasPlus : std::false_type {
-		};
+		template <typename A, typename B, class = void> struct HasPlus : std::false_type { };
 		//                                                                        std::declval<A>()            + std::declval<B>() // also works.
-		template <typename A, typename B> struct HasPlus<A, B, void_type<decltype(std::declval<A, B>().operator+())>> : std::true_type {
-		};
-		template <typename A, typename B, class = void> struct HasMinus : std::false_type {
-		};
-		template <typename A, typename B> struct HasMinus<A, B, void_type<decltype(std::declval<A, B>().operator-())>> : std::true_type {
-		};
-		template <typename A, typename B, class = void> struct HasMult : std::false_type {
-		};
-		template <typename A, typename B> struct HasMult<A, B, void_type<decltype(std::declval<A, B>().operator*())>> : std::true_type {
-		};
-		template <typename A, typename B, class = void> struct HasDiv : std::false_type {
-		};
-		template <typename A, typename B> struct HasDiv<A, B, void_type<decltype(std::declval<A, B>().operator/())>> : std::true_type {
-		};
+		template <typename A, typename B> struct HasPlus<A, B, void_type<decltype(std::declval<A, B>().operator+())>> : std::true_type { };
+		template <typename A, typename B, class = void> struct HasMinus : std::false_type { };
+		template <typename A, typename B> struct HasMinus<A, B, void_type<decltype(std::declval<A, B>().operator-())>> : std::true_type { };
+		template <typename A, typename B, class = void> struct HasMult : std::false_type { };
+		template <typename A, typename B> struct HasMult<A, B, void_type<decltype(std::declval<A, B>().operator*())>> : std::true_type { };
+		template <typename A, typename B, class = void> struct HasDiv : std::false_type { };
+		template <typename A, typename B> struct HasDiv<A, B, void_type<decltype(std::declval<A, B>().operator/())>> : std::true_type { };
 
 		// Enable all of this only when the operators+-*/ are not provided and both types are of the HP kind. Either RealHP or ComplexHP.
 		// These templates help o determine if these operators are needed by the compiler.

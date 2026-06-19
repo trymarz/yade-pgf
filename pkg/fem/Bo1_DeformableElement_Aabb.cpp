@@ -16,7 +16,9 @@ void Bo1_DeformableElement_Aabb::go(const shared_ptr<Shape>& cm, shared_ptr<Boun
 {
 	DeformableElement* deformableElement = static_cast<DeformableElement*>(cm.get());
 
-	if (!bv) { bv = shared_ptr<Bound>(new Aabb); }
+	if (!bv) {
+		bv = shared_ptr<Bound>(new Aabb);
+	}
 
 	Aabb*    aabb = static_cast<Aabb*>(bv.get());
 	Real     inf  = std::numeric_limits<Real>::infinity();
@@ -25,13 +27,25 @@ void Bo1_DeformableElement_Aabb::go(const shared_ptr<Shape>& cm, shared_ptr<Boun
 	max = Vector3r(-inf, -inf, -inf);
 	//Not sure this is the best of all possible algorithms, therefore, I think it can be improved
 	for (DeformableElement::NodeMap::iterator it = deformableElement->localmap.begin(); it != deformableElement->localmap.end(); it++) {
-		if (it->first->state->pos(0) < min(0)) { min(0) = it->first->state->pos(0); }
-		if (it->first->state->pos(1) < min(1)) { min(1) = it->first->state->pos(1); }
-		if (it->first->state->pos(0) < min(2)) { min(2) = it->first->state->pos(2); }
+		if (it->first->state->pos(0) < min(0)) {
+			min(0) = it->first->state->pos(0);
+		}
+		if (it->first->state->pos(1) < min(1)) {
+			min(1) = it->first->state->pos(1);
+		}
+		if (it->first->state->pos(0) < min(2)) {
+			min(2) = it->first->state->pos(2);
+		}
 
-		if (it->first->state->pos(0) > max(0)) { max(0) = it->first->state->pos(0); }
-		if (it->first->state->pos(1) > max(1)) { max(1) = it->first->state->pos(1); }
-		if (it->first->state->pos(2) > max(2)) { max(2) = it->first->state->pos(2); }
+		if (it->first->state->pos(0) > max(0)) {
+			max(0) = it->first->state->pos(0);
+		}
+		if (it->first->state->pos(1) > max(1)) {
+			max(1) = it->first->state->pos(1);
+		}
+		if (it->first->state->pos(2) > max(2)) {
+			max(2) = it->first->state->pos(2);
+		}
 	}
 
 

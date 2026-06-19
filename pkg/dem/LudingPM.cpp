@@ -129,9 +129,13 @@ bool Law2_ScGeom_LudingPhys_Basic::go(shared_ptr<IGeom>& _geom, shared_ptr<IPhys
 		phys.k2 = phys.k1 + (phys.kp - phys.k1) * phys.DeltMax / phys.DeltPMax;
 	}
 
-	if (phys.k2 > phys.kp) { phys.k2 = phys.kp; }
+	if (phys.k2 > phys.kp) {
+		phys.k2 = phys.kp;
+	}
 
-	if (phys.k1 > phys.k2) { phys.k1 = phys.k2; }
+	if (phys.k1 > phys.k2) {
+		phys.k1 = phys.k2;
+	}
 
 	phys.DeltMin = (phys.k2 - phys.k1) / (phys.k2 + phys.kc);
 

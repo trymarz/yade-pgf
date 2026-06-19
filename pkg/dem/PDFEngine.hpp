@@ -14,8 +14,8 @@ public:
 	class PDFCalculator {
 	public:
 		PDFCalculator(string const& n)
-		        : name(n) {};
-		virtual ~PDFCalculator() {};
+		        : name(n) { };
+		virtual ~PDFCalculator() { };
 
 		virtual vector<string> getSuffixes() const { return vector<string>({ "" }); }
 		virtual vector<string> getDatas() const                                                                                    = 0;
@@ -53,10 +53,10 @@ REGISTER_SERIALIZABLE(PDFEngine);
 
 template <class Phys> class PDFSpheresStressCalculator : public PDFEngine::PDFCalculator {
 public:
-	PDFSpheresStressCalculator(Vector3r Phys::*member, string name2)
+	PDFSpheresStressCalculator(Vector3r Phys::* member, string name2)
 	        : PDFEngine::PDFCalculator(name2)
 	        , m_member(member)
-	        , m_stress(Matrix3r::Zero()) {};
+	        , m_stress(Matrix3r::Zero()) { };
 	vector<string> getSuffixes() const override { return vector<string>({ "xx", "xy", "xz", "yx", "yy", "yz", "zx", "zy", "zz" }); }
 	vector<string> getDatas() const override
 	{
@@ -83,8 +83,8 @@ public:
 	}
 
 private:
-	Vector3r Phys::*m_member;
-	Matrix3r        m_stress;
+	Vector3r Phys::* m_member;
+	Matrix3r         m_stress;
 };
 
 class PDFSpheresDistanceCalculator : public PDFEngine::PDFCalculator {
@@ -114,8 +114,7 @@ private:
 
 class PDFSpheresIntrsCalculator : public PDFEngine::PDFCalculator {
 public:
-	PDFSpheresIntrsCalculator(
-	        string name, bool (*)(shared_ptr<Interaction> const&) = [](shared_ptr<Interaction> const&) { return true; });
+	PDFSpheresIntrsCalculator(string name, bool (*)(shared_ptr<Interaction> const&) = [](shared_ptr<Interaction> const&) { return true; });
 	vector<string> getDatas() const override;
 	void           cleanData() override;
 	bool           addData(const shared_ptr<Interaction>&, Real const& dS, Real const& V, int const& N, bool inversed) override;

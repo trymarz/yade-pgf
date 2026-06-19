@@ -47,7 +47,9 @@ void PeriIsoCompressor::action()
 	Vector3r    cellSize = scene->cell->getSize(); //unused: Real cellVolume=cellSize[0]*cellSize[1]*cellSize[2];
 	Vector3r    cellArea = Vector3r(cellSize[1] * cellSize[2], cellSize[0] * cellSize[2], cellSize[0] * cellSize[1]);
 	Real        minSize = min(cellSize[0], min(cellSize[1], cellSize[2])), maxSize = max(cellSize[0], max(cellSize[1], cellSize[2]));
-	if (minSize < 2.1 * maxSpan) { throw runtime_error("Minimum cell size is smaller than 2.1*span_of_the_biggest_body! (periodic collider requirement)"); }
+	if (minSize < 2.1 * maxSpan) {
+		throw runtime_error("Minimum cell size is smaller than 2.1*span_of_the_biggest_body! (periodic collider requirement)");
+	}
 	if (((step % globalUpdateInt) == 0) || avgStiffness < 0 || sigma[0] < 0 || sigma[1] < 0 || sigma[2] < 0) {
 		//  declaration of ‘sumForces’ shadows a member of ‘yade::PeriIsoCompressor’ [-Werror=shadow]
 		Vector3r sumForces2 = Shop::totalForceInVolume(avgStiffness, scene);
@@ -68,8 +70,9 @@ void PeriIsoCompressor::action()
 		if (math::abs(maxToAvg * avgGrow) > maxDisplPerStep) avgGrow = math::sign(avgGrow) * maxDisplPerStep / maxToAvg;
 		Real okGrow = -(minSize - 2.1 * maxSpan) / maxToAvg;
 		if (avgGrow < okGrow)
-			throw runtime_error("Unable to shrink cell due to maximum body size (although required by stress condition). Increase particle "
-			                    "rigidity, increase total sample dimensions, or decrease goal stress.");
+			throw runtime_error(
+			        "Unable to shrink cell due to maximum body size (although required by stress condition). Increase particle "
+			        "rigidity, increase total sample dimensions, or decrease goal stress.");
 		// avgGrow=max(avgGrow,-(minSize-2.1*maxSpan)/maxToAvg);
 		if (avgStiffness > 0) {
 			sigma += (avgGrow * avgStiffness) * Vector3r::Ones();
@@ -160,7 +163,9 @@ CREATE_LOGGER(PeriTriaxController);
 
 void PeriTriaxController::action()
 {
-	if (!scene->isPeriodic) { throw runtime_error("PeriTriaxController run on aperiodic simulation."); }
+	if (!scene->isPeriodic) {
+		throw runtime_error("PeriTriaxController run on aperiodic simulation.");
+	}
 	const Vector3r& cellSize = scene->cell->getSize();
 	//FIXME : this is wrong I think (almost sure, B.)
 	Vector3r cellArea = Vector3r(cellSize[1] * cellSize[2], cellSize[0] * cellSize[2], cellSize[0] * cellSize[1]);
@@ -179,7 +184,9 @@ void PeriTriaxController::action()
 		throw runtime_error("Minimum cell size is smaller than 2.1*maxBodySpan (periodic collider requirement)");
 	}
 	bool doUpdate((scene->iter % globUpdate) == 0);
-	if (doUpdate || min(stiff[0], min(stiff[1], stiff[2])) <= 0 || dynCell) { strainStressStiffUpdate(); }
+	if (doUpdate || min(stiff[0], min(stiff[1], stiff[2])) <= 0 || dynCell) {
+		strainStressStiffUpdate();
+	}
 
 	// set mass to be sum of masses, if not set by the user
 	if (dynCell && math::isnan(mass)) {
@@ -360,7 +367,9 @@ void Peri3dController::action()
 
 	// increase the pathCounter by one if we cross to the next part of path
 	for (int i = 0; i < 6; i++) {
-		if (progress >= PATH_OP_OP(i, pathsCounter[i], 0)) { pathsCounter[i]++; }
+		if (progress >= PATH_OP_OP(i, pathsCounter[i], 0)) {
+			pathsCounter[i]++;
+		}
 	}
 
 	/* values of prescribed stress (strain) rate in respect to prescribed path.

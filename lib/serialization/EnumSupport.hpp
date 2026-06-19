@@ -115,7 +115,7 @@ template <typename ArbitraryEnum> struct ArbitraryEnum_from_python {
 
 #define YADE_ENUM(FULL_SCOPE, ENUM_TYPE, ENUM_SEQUENCE)                                                                                                        \
 	TEMPLATE_CREATE_LOGGER(ArbitraryEnum_from_python<FULL_SCOPE::ENUM_TYPE>);                                                                              \
-	}                                                                        /* end namespace yade */                                                      \
+	} /* end namespace yade */                                                                                                                             \
 	namespace {                                                              /* start anonymous namespace */                                               \
 		__attribute__((constructor)) void registerEnum_##ENUM_TYPE(void) /* we cannot have enums with same name in multiple scopes */                  \
 		{                                                                                                                                              \

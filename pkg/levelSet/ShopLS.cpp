@@ -138,7 +138,7 @@ vector<vector<vector<Real>>> ShopLS::phiIni(int usage, Vector3r radii, Vector2r 
 				}
 			}
 		} // closing the gp loop
-	}         // closing the side loop
+	} // closing the side loop
 	return phiField;
 }
 

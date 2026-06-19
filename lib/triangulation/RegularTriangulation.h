@@ -57,7 +57,7 @@ namespace CGT {
 #if CGAL_VERSION_NR < CGAL_VERSION_NUMBER(4, 11, 0)
 	typedef CGAL::Regular_triangulation_euclidean_traits_3<K> Traits;
 #else
-	typedef K                        Traits;
+	typedef K Traits;
 #endif
 
 	typedef K::Point_3        Point;
@@ -142,11 +142,11 @@ namespace CGT {
 		inline const unsigned int& id(void) const { return i; }
 		SimpleVertexInfo(void)
 		{
-			isAlpha = false;
+			isAlpha    = false;
 			isFictious = false;
-			s = 0;
-			i = 0;
-			vol = -1;
+			s          = 0;
+			i          = 0;
+			vol        = -1;
 		}
 		//virtual function that will be defined for all classes, allowing shared function (e.g. for display)
 		bool isReal(void) { return !isFictious; }

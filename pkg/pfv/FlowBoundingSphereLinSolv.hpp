@@ -153,7 +153,7 @@ namespace CGT {
 #define CHOLMOD(name) cholmod_l_##name
 		void add_T_entry(cholmod_triplet* triplet, long r, long c, Real value)
 		{
-			size_t k = triplet->nnz;
+			size_t k               = triplet->nnz;
 			((long*)triplet->i)[k] = r;
 			((long*)triplet->j)[k] = c;
 			((Real*)triplet->x)[k] = value;
@@ -164,9 +164,9 @@ namespace CGT {
 		void add_T_entry(cholmod_triplet* triplet, int r, int c, Real value)
 		// declaration of ‘T’ shadows a member of ‘yade::CGT::FlowBoundingSphereLinSolv<_Tesselation, FlowType>’ [-Werror=shadow]
 		{
-			size_t k = triplet->nnz;
-			((int*)triplet->i)[k] = r;
-			((int*)triplet->j)[k] = c;
+			size_t k               = triplet->nnz;
+			((int*)triplet->i)[k]  = r;
+			((int*)triplet->j)[k]  = c;
 			((Real*)triplet->x)[k] = value;
 			triplet->nnz++;
 		}

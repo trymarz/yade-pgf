@@ -82,7 +82,7 @@ namespace serialization {
 	template <class Archive> void serialize(Archive& ar, ::yade::math::Real& a, unsigned int)
 	{
 		::yade::math::UnderlyingReal& v = a.operator ::yade::math::UnderlyingReal&();
-		ar&                                 BOOST_SERIALIZATION_NVP(v);
+		ar&                           BOOST_SERIALIZATION_NVP(v);
 	}
 	// serialization of Complex numbers
 	template <class Archive> void save(Archive& ar, const ::yade::math::Complex& a, unsigned int)

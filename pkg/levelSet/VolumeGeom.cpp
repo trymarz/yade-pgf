@@ -46,7 +46,9 @@ void VolumeGeom::precompute(
 	}
 	Vector3r relativeVelocity = (rbp2.vel + rbp2.angVel.cross(c2x)) - (rbp1.vel + rbp1.angVel.cross(c1x));
 	// Add the shift velocity of the periodic box if periodicity is being used
-	if (scene->isPeriodic) { relativeVelocity += scene->cell->intrShiftVel(c->cellDist); }
+	if (scene->isPeriodic) {
+		relativeVelocity += scene->cell->intrShiftVel(c->cellDist);
+	}
 	// Keep the shear part only
 	relativeVelocity = relativeVelocity - normal.dot(relativeVelocity) * normal;
 	shearInc         = relativeVelocity * scene->dt;

@@ -16,7 +16,7 @@ class CapillaryPhys : public FrictPhys {
 public:
 	int currentIndexes[4]; // used for faster interpolation (stores previous positions in tables)
 
-	virtual ~CapillaryPhys() {};
+	virtual ~CapillaryPhys() { };
 
 	// clang-format off
 	YADE_CLASS_BASE_DOC_ATTRS_INIT_CTOR_PY(CapillaryPhys,FrictPhys,"Physics (of interaction) for :yref:`Law2_ScGeom_CapillaryPhys_Capillarity`.",

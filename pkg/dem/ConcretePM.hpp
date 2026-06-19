@@ -304,7 +304,7 @@ REGISTER_SERIALIZABLE(Law2_ScGeom_CpmPhys_Cpm);
 class Gl1_CpmPhys : public GlIPhysFunctor {
 public:
 	void go(const shared_ptr<IPhys>&, const shared_ptr<Interaction>&, const shared_ptr<Body>&, const shared_ptr<Body>&, bool wireFrame) override;
-	virtual ~Gl1_CpmPhys() {};
+	virtual ~Gl1_CpmPhys() { };
 	RENDERS(CpmPhys);
 	DECLARE_LOGGER;
 	// clang-format off

@@ -8,9 +8,10 @@ Bug Fixes
 Breaking Changes
 *********
   Fix the stressDamping in TriaxialStressController that altered max_vel (affects default behaviour of TriaxialStressController) (!1162)
-    
+
 Code Formatting & Organization
 ******************************
+  Reformat C++ sources with clang-format 21, matching the version now used by the CI format-check job
 
 Documentation & Comments
 ************************

@@ -33,7 +33,7 @@ inline Vector3r makeVector3r ( const CVector& yv ) {return Vector3r ( yv[0],yv[1
 		extra;                                                                                                                                         \
 	}
 
-#define CELL_SCALAR_SETTER(type, param, setterName) CELL_SCALAR_SETTER_EXTRA(type, param, setterName, return )
+#define CELL_SCALAR_SETTER(type, param, setterName) CELL_SCALAR_SETTER_EXTRA(type, param, setterName, return)
 
 #define CELL_VECTOR_GETTER(param, getterName)                                                                                                                  \
 	Vector3r getterName(unsigned int id)                                                                                                                   \

@@ -37,5 +37,5 @@ public:
 	DECLARE_LOGGER;
 };
 REGISTER_SERIALIZABLE(RegularGrid);
-};     // namespace yade
+}; // namespace yade
 #endif // YADE_LS_DEM

@@ -93,7 +93,9 @@ Real CapillarityEngine::waterVolume()
 	{
 		if (!I->isReal()) continue;
 		CapillaryPhysDelaunay* phys = static_cast<CapillaryPhysDelaunay*>(I->phys.get());
-		if (phys) { volume += phys->vMeniscus; }
+		if (phys) {
+			volume += phys->vMeniscus;
+		}
 	}
 	return volume;
 }
@@ -333,8 +335,9 @@ void CapillarityEngine::action()
 {
 	timingDeltas->start();
 	if (fusionDetection and ompThreads > 1) {
-		LOG_WARN("Fusion detection is not thread-safe. Turning ompThreads=1. (It is in fact 'most-likely' unsafe, not tested, comment-out this check "
-		         "if you want to see by yourself)")
+		LOG_WARN(
+		        "Fusion detection is not thread-safe. Turning ompThreads=1. (It is in fact 'most-likely' unsafe, not tested, comment-out this check "
+		        "if you want to see by yourself)")
 		ompThreads = 1;
 	}
 	if (!hertzInitialized) checkPhysType();

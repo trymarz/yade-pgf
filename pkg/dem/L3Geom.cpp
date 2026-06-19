@@ -15,8 +15,8 @@ namespace yade { // Cannot have #include directive inside.
 using math::max;
 using math::min; // using inside .cpp file is ok.
 
-YADE_PLUGIN((L3Geom)(L6Geom)(Ig2_Sphere_Sphere_L3Geom)(Ig2_Wall_Sphere_L3Geom)(Ig2_Facet_Sphere_L3Geom)(Ig2_Sphere_Sphere_L6Geom)(
-        Law2_L3Geom_FrictPhys_ElPerfPl)(Law2_L6Geom_FrictPhys_Linear)
+YADE_PLUGIN((
+        L3Geom)(L6Geom)(Ig2_Sphere_Sphere_L3Geom)(Ig2_Wall_Sphere_L3Geom)(Ig2_Facet_Sphere_L3Geom)(Ig2_Sphere_Sphere_L6Geom)(Law2_L3Geom_FrictPhys_ElPerfPl)(Law2_L6Geom_FrictPhys_Linear)
 #ifdef YADE_OPENGL
                     (Gl1_L3Geom)(Gl1_L6Geom)
 #endif
@@ -33,7 +33,9 @@ void L3Geom::applyLocalForceTorque(const Vector3r& localF, const Vector3r& local
 		nsp->shearForce  = globF - nsp->normalForce;
 	}
 	Vector3r globT = Vector3r::Zero();
-	if (localT != Vector3r::Zero()) { globT = trsf.transpose() * localT; }
+	if (localT != Vector3r::Zero()) {
+		globT = trsf.transpose() * localT;
+	}
 	// apply force and torque
 	scene->forces.addForce(I->getId1(), globF);
 	scene->forces.addTorque(I->getId1(), x1c.cross(globF) + globT);
@@ -261,8 +263,10 @@ bool Ig2_Wall_Sphere_L3Geom::go(
 	const Real& radius = s2->cast<Sphere>().radius;
 	const int&  ax(s1->cast<Wall>().axis);
 	const int&  sense(s1->cast<Wall>().sense);
-	Real        dist = state2.pos[ax] + shift2[ax] - state1.pos[ax];          // signed "distance" between centers
-	if (!I->isReal() && math::abs(dist) > radius && !force) { return false; } // wall and sphere too far from each other
+	Real        dist = state2.pos[ax] + shift2[ax] - state1.pos[ax]; // signed "distance" between centers
+	if (!I->isReal() && math::abs(dist) > radius && !force) {
+		return false;
+	} // wall and sphere too far from each other
 	// contact point is sphere center projected onto the wall
 	Vector3r contPt = state2.pos + shift2;
 	contPt[ax]      = state1.pos[ax];
@@ -321,12 +325,15 @@ bool Ig2_Facet_Sphere_L3Geom::go(
 		case 5: contactPt = facet.vertices[0]; break;                                                   // +-+ (v0)
 		case 6: contactPt = facet.vertices[2]; break;                                                   // -++ (v2)
 		case 7:
-			throw logic_error("Ig2_Facet_Sphere_L3Geom: Impossible sphere-facet intersection (all points are outside the edges). (please report "
-			                  "bug)"); // +++ (impossible)
+			throw logic_error(
+			        "Ig2_Facet_Sphere_L3Geom: Impossible sphere-facet intersection (all points are outside the edges). (please report "
+			        "bug)"); // +++ (impossible)
 		default: throw logic_error("Ig2_Facet_Sphere_L3Geom: Nonsense intersection value. (please report bug)");
 	}
-	normal = cogLine - contactPt;                                                           // normal is now the contact normal, still in local coords
-	if (!I->isReal() && normal.squaredNorm() > radius * radius && !force) { return false; } // fast test before sqrt
+	normal = cogLine - contactPt; // normal is now the contact normal, still in local coords
+	if (!I->isReal() && normal.squaredNorm() > radius * radius && !force) {
+		return false;
+	} // fast test before sqrt
 	Real dist = normal.norm();
 	normal /= dist; // normal is unit vector now
 	// end facet-local coordinates

@@ -137,7 +137,7 @@ template <typename T, typename Tvalue> struct WeightedAverage {
 	const shared_ptr<GridContainer<T>> grid;
 	Real                               weightedSupportArea; // must be computed by derived class
 	WeightedAverage(const shared_ptr<GridContainer<T>>& _grid)
-	        : grid(_grid) {};
+	        : grid(_grid) { };
 	virtual Vector2r         getPosition(const T&) const                      = 0;
 	virtual Real             getWeight(const Vector2r& refPt, const T&) const = 0;
 	virtual Tvalue           getValue(const T&) const                         = 0;

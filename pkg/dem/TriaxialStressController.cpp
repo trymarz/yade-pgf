@@ -113,8 +113,9 @@ void TriaxialStressController::controlExternalStress(
 	} else {
 		previousTranslation[wall] = (1 - stressDamping) * translation * normal[wall]
 		        + stressDamping * previousTranslation[wall]; // formula for "steady-flow" evolution with fluctuations
-		LOG_ONCE_WARN("Note that default stressDamping behaviour changed since February 2026. It may affect the velocity of walls. Set "
-		              "'legacyStressDamping' true to use the legacy behaviour.");
+		LOG_ONCE_WARN(
+		        "Note that default stressDamping behaviour changed since February 2026. It may affect the velocity of walls. Set "
+		        "'legacyStressDamping' true to use the legacy behaviour.");
 	}
 
 	//Don't update position since Newton is doing that starting from bzr2612

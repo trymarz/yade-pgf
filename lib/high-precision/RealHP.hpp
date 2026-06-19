@@ -9,10 +9,8 @@
 #define YADE_REAL_HP_TYPE_HPP
 
 namespace forCtags {
-struct RealHP {
-}; // for ctags, but also see RealHPEigenCgal
-struct ComplexHP {
-};
+struct RealHP { }; // for ctags, but also see RealHPEigenCgal
+struct ComplexHP { };
 }
 
 // In this file following things are declared for the users:
@@ -259,8 +257,8 @@ namespace math {
 
 #else
 	// RealHP<…> won't work on this system, cmake sets YADE_DISABLE_REAL_MULTI_HP to use RealHP<1> for all precisions RealHP<N>.
-	template <int Level> using RealHP                     = Real;                      // ignore Level
-	template <int Level> using ComplexHP                  = UnderlyingComplexHP<Real>; // ignore Level
+	template <int Level> using RealHP    = Real;                      // ignore Level
+	template <int Level> using ComplexHP = UnderlyingComplexHP<Real>; // ignore Level
 #endif
 
 	/*************************************************************************/
@@ -277,10 +275,8 @@ namespace math {
 		};
 		template <typename... Ts> using void_type = typename make_void<Ts...>::type;
 
-		template <class, class = void> struct has_value_type : std::false_type {
-		};
-		template <class T> struct has_value_type<T, void_type<typename T::value_type>> : std::true_type {
-		};
+		template <class, class = void> struct has_value_type : std::false_type { };
+		template <class T> struct has_value_type<T, void_type<typename T::value_type>> : std::true_type { };
 		template <typename T, bool = has_value_type<T>::value> struct IsHPComplex {
 			static constexpr bool value = false;
 		};
@@ -377,8 +373,8 @@ using Complex = math::Complex;
 static_assert(sizeof(Real) == sizeof(math::UnderlyingReal), "This compiler introduced padding, which breaks binary compatibility");
 static_assert(
         (sizeof(Complex) == sizeof(std::complex<math::UnderlyingReal>))
-                or ((not math::isConstexprFloatingPoint<math::UnderlyingReal>)and(
-                        std::is_same<Complex, typename math::detail::MakeComplex<math::UnderlyingReal>::type>::value)),
+                or ((not math::isConstexprFloatingPoint<math::UnderlyingReal>)
+                    and (std::is_same<Complex, typename math::detail::MakeComplex<math::UnderlyingReal>::type>::value)),
         "This compiler introduced padding, which breaks binary compatibility");
 
 // If necessary for debugging put here the static_assert tests from the end of py/high-precision/_math.cpp file

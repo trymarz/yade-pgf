@@ -196,10 +196,8 @@ inline ::yade::math::Real abs2(const ::yade::math::Real& x) { return x * x; }
 
 // There are two ways to avoid this macro (hint: the best is to use C++20). See file lib/high-precision/RealHPEigenCgal.hpp for details.
 #define YADE_EIGEN_SUPPORT_REAL_HP(levelHP)                                                                                                                    \
-	template <> struct NumTraits<::yade::RealHP<levelHP>> : public NumTraitsRealHP<levelHP> {                                                              \
-	};                                                                                                                                                     \
-	template <> struct NumTraits<::yade::ComplexHP<levelHP>> : public NumTraitsComplexHP<levelHP> {                                                        \
-	};                                                                                                                                                     \
+	template <> struct NumTraits<::yade::RealHP<levelHP>> : public NumTraitsRealHP<levelHP> { };                                                           \
+	template <> struct NumTraits<::yade::ComplexHP<levelHP>> : public NumTraitsComplexHP<levelHP> { };                                                     \
 	namespace internal {                                                                                                                                   \
 		template <> inline long double cast<typename ::yade::math::RealHP<levelHP>, long double>(const ::yade::math::RealHP<levelHP>& x)               \
 		{                                                                                                                                              \

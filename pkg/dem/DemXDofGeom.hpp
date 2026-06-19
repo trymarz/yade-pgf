@@ -20,7 +20,7 @@ class GenericSpheresContact : public IGeom {
 	// clang-format on
 	REGISTER_CLASS_INDEX(GenericSpheresContact, IGeom);
 
-	virtual ~GenericSpheresContact() {};
+	virtual ~GenericSpheresContact() { };
 };
 REGISTER_SERIALIZABLE(GenericSpheresContact);
 

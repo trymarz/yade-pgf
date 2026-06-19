@@ -65,7 +65,9 @@ void HydroForceEngine::computeRadiusParts()
 			const Sphere* sphere = dynamic_cast<Sphere*>(b->shape.get());
 			if (sphere) {
 				Real r = sphere->radius;
-				if (std::find(radiusParts.begin(), radiusParts.end(), r) == radiusParts.end()) { radiusParts.push_back(r); }
+				if (std::find(radiusParts.begin(), radiusParts.end(), r) == radiusParts.end()) {
+					radiusParts.push_back(r);
+				}
 			}
 		}
 	}
@@ -113,7 +115,9 @@ void HydroForceEngine::action()
 				}
 				//buoyant weight force calculation
 				Vector3r buoyantForce = -4.0 / 3.0 * Mathr::PI * pow(sphere->radius, 3.0) * densFluid * gravityBuoyancy;
-				if (convAccOption == true) { convAccForce[0] = -convAcc[p]; }
+				if (convAccOption == true) {
+					convAccForce[0] = -convAcc[p];
+				}
 				//add the hydro forces to the particle
 				scene->forces.addForce(id, dragForce + liftForce + buoyantForce + convAccForce);
 			}
@@ -225,7 +229,9 @@ void HydroForceEngine::averageProfile()
 			if (twoSize || enableMultiClassAverage) {
 				// Getting the radius index of the particle.
 				const unsigned int i = find(radiusParts.begin(), radiusParts.end(), rPart) - radiusParts.begin();
-				if (i >= radiusParts.size()) { throw runtime_error("Radius of particlenot found. Did you call computeRadiusParts ?"); }
+				if (i >= radiusParts.size()) {
+					throw runtime_error("Radius of particlenot found. Did you call computeRadiusParts ?");
+				}
 				phiAverageMulti[i][nPart] += volPart;
 				vAverageMultiX[i][nPart] += volPart * b->state->vel[0];
 				vAverageMultiY[i][nPart] += volPart * b->state->vel[1];
@@ -246,14 +252,20 @@ void HydroForceEngine::averageProfile()
 				// Compute zInf and zSup
 				Real zInf = (n - nPart - 1) * deltaZ + deltaCenter;
 				Real zSup = (n - nPart) * deltaZ + deltaCenter;
-				if (zInf < -rPart) { zInf = -rPart; }
-				if (zSup > rPart) { zSup = rPart; }
+				if (zInf < -rPart) {
+					zInf = -rPart;
+				}
+				if (zSup > rPart) {
+					zSup = rPart;
+				}
 				// Analytical formulation of the volume of a slice of sphere.
 				const Real volPart = Mathr::PI * pow(rPart, 2) * (zSup - zInf + (pow(zInf, 3) - pow(zSup, 3)) / (3 * pow(rPart, 2)));
 				if (twoSize || enableMultiClassAverage) {
 					// Getting the radius index of the particle.
 					const unsigned int i = find(radiusParts.begin(), radiusParts.end(), rPart) - radiusParts.begin();
-					if (i >= radiusParts.size()) { throw runtime_error("Radius of particle not found. Did you call computeRadiusParts ?"); }
+					if (i >= radiusParts.size()) {
+						throw runtime_error("Radius of particle not found. Did you call computeRadiusParts ?");
+					}
 					phiAverageMulti[i][n] += volPart;
 					vAverageMultiX[i][nPart] += volPart * b->state->vel[0];
 					vAverageMultiY[i][nPart] += volPart * b->state->vel[1];
@@ -266,8 +278,8 @@ void HydroForceEngine::averageProfile()
 				// Incrementing.
 				n++;
 			} //End of the while loop
-		}         //End of the else loop
-	}                 //End of the loop over the particles
+		} //End of the else loop
+	} //End of the loop over the particles
 
 
 	//
@@ -323,7 +335,9 @@ void HydroForceEngine::averageProfile()
 
 	// Saving for an average over time
 	phiPartT.push(phiAverageTot);
-	if (phiPartT.size() > nbAverageT) { phiPartT.pop(); }
+	if (phiPartT.size() > nbAverageT) {
+		phiPartT.pop();
+	}
 
 	// If asked by the user, variables are evaluated in order to make it compatible with former versions of the code
 	if (compatibilityOldVersion == true) {

@@ -327,10 +327,10 @@ Polyhedron Simplify(Polyhedron P) // this version does not use 'limit' but check
 	while (elimination) {
 		elimination = false;
 		for (Polyhedron::Edge_iterator hei = P.edges_begin(); hei != P.edges_end(); ++hei) {
-		    CGALpoint& a = hei->vertex()->point();
-		    CGALpoint& b = hei->next()->vertex()->point();
-		    CGALpoint& c = hei->next()->next()->vertex()->point();
-		    CGALpoint& d = hei->opposite()->next()->vertex()->point();
+			CGALpoint& a = hei->vertex()->point();
+			CGALpoint& b = hei->next()->vertex()->point();
+			CGALpoint& c = hei->next()->next()->vertex()->point();
+			CGALpoint& d = hei->opposite()->next()->vertex()->point();
 			if (CGAL::coplanar(a, b, c, d)) {
 				if (hei->vertex()->vertex_degree() < 3) hei = P.erase_center_vertex(hei);
 				else if (hei->opposite()->vertex()->vertex_degree() < 3)

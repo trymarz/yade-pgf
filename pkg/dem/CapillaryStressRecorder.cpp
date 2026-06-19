@@ -27,7 +27,9 @@ void CapillaryStressRecorder::action()
 	shared_ptr<BodyContainer>& bodies = scene->bodies;
 
 	// at the beginning of the file; write column titles
-	if (out.tellp() == 0) { out << "iteration Scap11 Scap22 Scap33 Scap12 Scap13 Scap23 Uc Sr w" << endl; }
+	if (out.tellp() == 0) {
+		out << "iteration Scap11 Scap22 Scap33 Scap12 Scap13 Scap23 Uc Sr w" << endl;
+	}
 	if (!triaxialCompressionEngine) {
 		vector<shared_ptr<Engine>>::iterator itFirst = scene->engines.begin();
 		vector<shared_ptr<Engine>>::iterator itLast  = scene->engines.end();
@@ -102,7 +104,7 @@ void CapillaryStressRecorder::action()
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpragmas"
 #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
-// silence the warning that SR is only written to, but never read from, and therefore useless.
+	// silence the warning that SR is only written to, but never read from, and therefore useless.
 	Real Vs = 0, Rbody = 0, SR = 0;
 #pragma GCC diagnostic pop
 

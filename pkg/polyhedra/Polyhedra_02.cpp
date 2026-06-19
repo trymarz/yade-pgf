@@ -48,7 +48,9 @@ void Bo1_Polyhedra_Aabb::go(const shared_ptr<Shape>& ig, shared_ptr<Bound>& bv, 
 {
 	Polyhedra* t = static_cast<Polyhedra*>(ig.get());
 	if (!t->IsInitialized()) t->Initialize();
-	if (!bv) { bv = shared_ptr<Bound>(new Aabb); }
+	if (!bv) {
+		bv = shared_ptr<Bound>(new Aabb);
+	}
 	Aabb* aabb = static_cast<Aabb*>(bv.get());
 	//Quaternionr invRot=se3.orientation.conjugate();
 	int      N = (int)t->v.size();
@@ -116,7 +118,7 @@ void Gl1_Polyhedra::go(const shared_ptr<Shape>& cm, const shared_ptr<State>&, bo
 
 void Gl1_PolyhedraGeom::go(const shared_ptr<IGeom>& ig, const shared_ptr<Interaction>&, const shared_ptr<Body>&, const shared_ptr<Body>&, bool) { draw(ig); }
 
-void Gl1_PolyhedraGeom::draw(const shared_ptr<IGeom>& /*ig*/) {};
+void Gl1_PolyhedraGeom::draw(const shared_ptr<IGeom>& /*ig*/) { };
 
 GLUquadric* Gl1_PolyhedraPhys::gluQuadric = NULL;
 Real        Gl1_PolyhedraPhys::maxFn;
@@ -252,7 +254,9 @@ Real Law2_PolyhedraGeom_PolyhedraPhys_Volumetric::elasticEnergy()
 	{
 		if (!I->isReal()) continue;
 		FrictPhys* phys = dynamic_cast<FrictPhys*>(I->phys.get());
-		if (phys) { energy += 0.5 * (phys->normalForce.squaredNorm() / phys->kn + phys->shearForce.squaredNorm() / phys->ks); }
+		if (phys) {
+			energy += 0.5 * (phys->normalForce.squaredNorm() / phys->kn + phys->shearForce.squaredNorm() / phys->ks);
+		}
 	}
 	return energy;
 }
@@ -261,9 +265,13 @@ Real Law2_PolyhedraGeom_PolyhedraPhys_Volumetric::elasticEnergy()
 // Apply forces on polyhedrons in collision based on geometric configuration
 bool Law2_PolyhedraGeom_PolyhedraPhys_Volumetric::go(shared_ptr<IGeom>& /*ig*/, shared_ptr<IPhys>& /*ip*/, Interaction* I)
 {
-	if (!I->geom) { return true; }
+	if (!I->geom) {
+		return true;
+	}
 	const shared_ptr<PolyhedraGeom>& contactGeom(YADE_PTR_DYN_CAST<PolyhedraGeom>(I->geom));
-	if (!contactGeom) { return true; }
+	if (!contactGeom) {
+		return true;
+	}
 	const Body::id_t       idA = I->getId1(), idB = I->getId2();
 	const shared_ptr<Body>&A = Body::byId(idA), B = Body::byId(idB);
 

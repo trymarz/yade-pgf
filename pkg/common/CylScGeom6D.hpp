@@ -11,7 +11,7 @@ public:
 	State fictiousState;
 	// 		shared_ptr<Interaction> duplicate;
 
-	virtual ~CylScGeom() {};
+	virtual ~CylScGeom() { };
 	// clang-format off
     YADE_CLASS_BASE_DOC_ATTRS_CTOR(CylScGeom,ScGeom,"Geometry of a cylinder-sphere contact.",
                                    ((bool,onNode,false,,"contact on node?"))
@@ -31,7 +31,7 @@ REGISTER_SERIALIZABLE(CylScGeom);
 
 class CylScGeom6D : public ScGeom6D {
 public:
-	virtual ~CylScGeom6D() {};
+	virtual ~CylScGeom6D() { };
 	void precomputeRotations(const State& rbp1, const State& rbp2, bool /*isNew*/, bool /*creep*/ = false) { initRotations(rbp1, rbp2); }
 	void initRotations(const State& rbp1, const State& rbp2)
 	{

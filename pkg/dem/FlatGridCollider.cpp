@@ -30,7 +30,9 @@ void FlatGridCollider::action()
 			newton = YADE_PTR_DYN_CAST<NewtonIntegrator>(e);
 			if (newton) break;
 		}
-		if (!newton) { throw runtime_error("FlatGridCollider: Unable to find NewtonIntegrator in engines."); }
+		if (!newton) {
+			throw runtime_error("FlatGridCollider: Unable to find NewtonIntegrator in engines.");
+		}
 	}
 	fastestBodyMaxDist = 0;
 	// make interaction loop delete unseen potential interactions

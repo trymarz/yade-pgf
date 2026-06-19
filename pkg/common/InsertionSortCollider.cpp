@@ -75,7 +75,9 @@ void InsertionSortCollider::insertionSortParallel(VecBounds& v, InteractionConta
 	if ((ompThreads <= 1) or (v.size() < size_t(10 * ompThreads))) return insertionSort(v, interactions, scene, doCollide);
 
 	Real chunksVerlet = 4 * verletDist; //is 2* the theoretical requirement?
-	if (chunksVerlet <= 0) { LOG_ERROR("Parallel insertion sort needs verletDist>0"); }
+	if (chunksVerlet <= 0) {
+		LOG_ERROR("Parallel insertion sort needs verletDist>0");
+	}
 
 	///chunks defines subsets of the bounds lists, we make sure they are not too small wrt. verlet dist.
 	std::vector<Body::id_t> chunks;
@@ -190,7 +192,9 @@ void InsertionSortCollider::insertionSortParallel(VecBounds& v, InteractionConta
 
 vector<Body::id_t> InsertionSortCollider::probeBoundingVolume(const Bound& bv)
 {
-	if (periodic) { throw invalid_argument("InsertionSortCollider::probeBoundingVolume: handling periodic boundary not implemented."); }
+	if (periodic) {
+		throw invalid_argument("InsertionSortCollider::probeBoundingVolume: handling periodic boundary not implemented.");
+	}
 	vector<Body::id_t> ret;
 	for (vector<Bounds>::const_iterator it = BB[0].cbegin(), et = BB[0].cend(); it < et; ++it) {
 		if (it->coord > bv.max[0]) break;
@@ -213,13 +217,25 @@ bool InsertionSortCollider::isActivated()
 {
 	// activated if number of bodies changes (hence need to refresh collision information)
 	// or the time of scheduled run already came, or we were never scheduled yet
-	if (!strideActive) { return true; }
-	if (!newton) { return true; }
+	if (!strideActive) {
+		return true;
+	}
+	if (!newton) {
+		return true;
+	}
 	fastestBodyMaxDist = newton->maxVelocitySq;
-	if (fastestBodyMaxDist >= 1 || fastestBodyMaxDist == 0) { return true; }
-	if (BB[0].size() != 2 * scene->bodies->size() and not scene->bodies->useRedirection) { return true; }
-	if (scene->interactions->dirty) { return true; }
-	if (scene->doSort) { return true; }
+	if (fastestBodyMaxDist >= 1 || fastestBodyMaxDist == 0) {
+		return true;
+	}
+	if (BB[0].size() != 2 * scene->bodies->size() and not scene->bodies->useRedirection) {
+		return true;
+	}
+	if (scene->interactions->dirty) {
+		return true;
+	}
+	if (scene->doSort) {
+		return true;
+	}
 	return false;
 }
 
@@ -299,7 +315,7 @@ void InsertionSortCollider::action()
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpragmas"
 #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
-// silence the warning that countNoBound is only written to, but never read from, and therefore useless.
+		// silence the warning that countNoBound is only written to, but never read from, and therefore useless.
 		int countNoBound = 0;
 #pragma GCC diagnostic pop
 		if (nErased > 0) {
@@ -376,8 +392,9 @@ void InsertionSortCollider::action()
 			minR = min(s->radius, minR);
 		}
 		if (math::isinf(minR))
-			LOG_WARN("verletDist is set to 0 because no spheres were found. It will result in suboptimal performances, consider setting a positive "
-			         "verletDist in your script.");
+			LOG_WARN(
+			        "verletDist is set to 0 because no spheres were found. It will result in suboptimal performances, consider setting a positive "
+			        "verletDist in your script.");
 		// if no spheres, disable stride
 		verletDist = math::isinf(minR) ? 0 : math::abs(verletDist) * minR;
 	}
@@ -405,7 +422,9 @@ void InsertionSortCollider::action()
 				newton = YADE_PTR_DYN_CAST<NewtonIntegrator>(e);
 				if (newton) break;
 			}
-			if (!newton) { throw runtime_error("InsertionSortCollider.verletDist>0, but unable to locate NewtonIntegrator within O.engines."); }
+			if (!newton) {
+				throw runtime_error("InsertionSortCollider.verletDist>0, but unable to locate NewtonIntegrator within O.engines.");
+			}
 		}
 	}
 	// STRIDE
@@ -442,8 +461,8 @@ void InsertionSortCollider::action()
 				        - (periodic ? BBj.cellDim * BBji.period : 0.);
 				// if initializing periodic, shift coords & record the period into BBj[i].period
 				if (doInitSort && periodic) BBji.coord = cellWrap(BBji.coord, 0, BBj.cellDim, BBji.period);
-					// for each body, copy its minima and maxima, for quick checks of overlaps later
-					//bounds have been all updated when j==0, we can safely copy them here when j==1
+				// for each body, copy its minima and maxima, for quick checks of overlaps later
+				//bounds have been all updated when j==0, we can safely copy them here when j==1
 #if (YADE_REAL_BIT <= 64)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpragmas"

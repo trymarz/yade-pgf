@@ -28,7 +28,7 @@ public:
 	TimingInfo timingInfo;
 	//! precise profiling information (timing of fragments of the engine)
 	shared_ptr<TimingDeltas> timingDeltas;
-	virtual ~Engine() {};
+	virtual ~Engine() { };
 
 	virtual bool isActivated() { return true; };
 	virtual void action()

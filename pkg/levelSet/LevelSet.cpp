@@ -102,7 +102,7 @@ std::vector<Vector3r> LevelSet::rayTrace(const Vector3r& ray, const Real& nodesT
 	        move;                                    // to control the move from one cell to another
 	std::array<Real, 3>
 	        kVal; // points of the ray are of the form pointP + k * ray (k>= 0). Then, this kVal will include the 3 smallest k-values that make the ray exit of the cell, considering in an independent manner the three axis. E.G. for a ray = (1,0,0) starting from point0, kVal = (spacing, infinity, infinity)
-	bool    diffSign // true if and only if at least one gp has a different sign than the others, ie iff at least one gp has a diff sign than the 1st one
+	bool diffSign // true if and only if at least one gp has a different sign than the others, ie iff at least one gp has a diff sign than the 1st one
 	        ,
 	        sign(false) // binary sign of current grid point
 	        ,
@@ -129,7 +129,7 @@ std::vector<Vector3r> LevelSet::rayTrace(const Vector3r& ray, const Real& nodesT
 			if (gp == 0) sign = gpDist > 0;       // precedence OK; the binary sign of the "1st" gridpoint (third case = 0 handled otherwise)
 			if (gp > 0 and (gpDist > 0) != sign)  // "and" least precedence OK
 				diffSign = diffSign || true;  // diffSign is now (and will remain) true because we found one gp with a different sign
-				                              // including the case of a zero distance at one cell gp
+			                                      // including the case of a zero distance at one cell gp
 			if (gpDist == 0) {
 				LOG_DEBUG("We should find one gridpoint among the boundary nodes");
 				diffSign = diffSign || true; // that s also a case where we need to trigger ray tracing (if not already done)..
@@ -257,8 +257,9 @@ bool LevelSet::rayTraceInCell(const Vector3r& ray, const Vector3r& pointP, const
 	if (!Shop::isInBB(trialNode, lsGrid->min, lsGrid->max())) return false; // still starting to check whether trialNodes fits into lsGrid
 	Vector3i indicesPt(lsGrid->closestCorner(
 	        trialNode)); // in which cell do we find trialNode (see below) ? (quite useless since Feb 2021 actually, except for log messages)
-	LOG_INFO("We have a possible intersection point (" << trialNode << "): it would be in cell " << indicesPt << " whereas we considered cell " << indX
-	                                                   << " " << indY << " " << indZ << endl;);
+	LOG_INFO(
+	        "We have a possible intersection point (" << trialNode << "): it would be in cell " << indicesPt << " whereas we considered cell " << indX
+	                                                  << " " << indY << " " << indZ << endl;);
 	LOG_INFO(
 	        "Dimensionless distance, wrt to grid spacing, is here (from distance function) = " << distance(trialNode)
 	                / spac << " ; while nodesTol*epsilon = " << nodesTol * Mathr::EPSILON);
@@ -320,8 +321,9 @@ void LevelSet::rayTraceSurfNodes(const int& nSurfNodes, const int& nodesPath, co
 	surfNodes.clear();
 	// Obtaining the boundary nodes through "ray tracing", starting from the center
 	if (nSurfNodes <= 2 && nodesPath == 1 && !twoD)
-		LOG_ERROR("You asked for a level set shape with no more than two boundary nodes, for contact detection purposes. This is too few and will lead "
-		          "to square roots of negative numbers, then unexpected events.");
+		LOG_ERROR(
+		        "You asked for a level set shape with no more than two boundary nodes, for contact detection purposes. This is too few and will lead "
+		        "to square roots of negative numbers, then unexpected events.");
 	int              nAngle(int(sqrt(nSurfNodes - 2)));    // useful only if(!twoD && case 1), but let s declare and assign it once for all
 	Real             phiMult(Mathr::PI * (3. - sqrt(5.))); // useful only if(!twoD && case 2), ditto
 	vector<Vector3r> tracedNodes;                          // quite redundant with class member nodesOnRay, let it be
@@ -385,8 +387,9 @@ void LevelSet::init() // computes stuff (center, volume, inertia, nVoxInside) on
 	Vector3i gpPerAxis = lsGrid->nGP;
 	int      nGPx(gpPerAxis[0]), nGPy(gpPerAxis[1]), nGPz(gpPerAxis[2]);
 	if ((int(distField.size()) != nGPx) or (int((distField[0][0]).size()) != nGPz))
-		LOG_ERROR("There is a size-inconsistency between the current level set grid and shape.distField for this body! The level set grid has changed "
-		          "since the creation of this body, this is not supported.");
+		LOG_ERROR(
+		        "There is a size-inconsistency between the current level set grid and shape.distField for this body! The level set grid has changed "
+		        "since the creation of this body, this is not supported.");
 	Real spac  = lsGrid->spacing;
 	Real Vcell = pow(spac, 3);
 	Real phiRef(0.);
@@ -424,8 +427,9 @@ void LevelSet::init() // computes stuff (center, volume, inertia, nVoxInside) on
 		}
 	}
 	if (nVoxInside == 0)
-		LOG_ERROR("We have a level set body with 0 voxels being considered inside (0 positive values in distField ?), this is not expected neither "
-		          "supported.");
+		LOG_ERROR(
+		        "We have a level set body with 0 voxels being considered inside (0 positive values in distField ?), this is not expected neither "
+		        "supported.");
 
 	xMean /= volume;
 	yMean /= volume;
@@ -505,7 +509,7 @@ void LevelSet::init_neighborsNodes()
 	neighborsNodes.resize(nNodes);
 	std::vector<std::vector<std::pair<int, Real>>>
 	        d_ijList; // d_ijList[i] has a number of (j,d_ij) pairs describing the distances between a node i and other nodes j (i excluded). Note that using a std::array< .. , nNodes > would probably be impossible to compile
-	Real    d_ij(-1),
+	Real d_ij(-1),
 	        lChar((maxRad + minRad) / 2.) // some arbitrary threshold (D/4 for a sphere) beyond which we re sure not to find any node for neighborsNodes.
 	        ;
 	if (lChar < 0) LOG_ERROR("Having a negative lChar = " << lChar << "; how comes ?");

@@ -6,12 +6,14 @@ namespace yade { // Cannot have #include directive inside.
 using math::max;
 using math::min;
 
-ForceContainer::ForceContainer() {};
+ForceContainer::ForceContainer() { };
 void ForceContainer::ensureSize(Body::id_t id)
 {
 	const Body::id_t idMaxTmp = max(id, _maxId);
 	_maxId                    = 0;
-	if (size <= (size_t)idMaxTmp) { resize(min((size_t)1.5 * (idMaxTmp + 100), (size_t)(idMaxTmp + 2000))); };
+	if (size <= (size_t)idMaxTmp) {
+		resize(min((size_t)1.5 * (idMaxTmp + 100), (size_t)(idMaxTmp + 2000)));
+	};
 }
 
 const Vector3r& ForceContainer::getForce(Body::id_t id)
@@ -109,7 +111,7 @@ void ForceContainer::sync()
 #pragma GCC diagnostic ignored "-Wpragmas"
 // this is to remove warning about manipulating raw memory
 #pragma GCC diagnostic ignored "-Wclass-memaccess"
-void                   ForceContainer::reset(long iter, bool resetAll)
+void ForceContainer::reset(long iter, bool resetAll)
 {
 	memset(&_force[0], 0, sizeof(Vector3r) * size);
 	memset(&_torque[0], 0, sizeof(Vector3r) * size);

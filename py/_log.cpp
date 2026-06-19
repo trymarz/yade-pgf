@@ -71,7 +71,9 @@ py::dict getUsedLevels()
 {
 	py::dict ret {};
 	for (const auto& a : Logging::instance().getClassLogLevels()) {
-		if (a.second != -1) { ret[a.first] = a.second; }
+		if (a.second != -1) {
+			ret[a.first] = a.second;
+		}
 	}
 	return ret;
 }
@@ -257,8 +259,9 @@ void testTimedLevels()
 		std::this_thread::sleep_for(100ms);
 	}
 
-	LOG_WARN("Upon next call of this function the '2s' will be printed first also, because the timers are 'thread_local static', which means that they "
-	         "preserve timers between different calls to this function, but have separate static instances for each different thread.")
+	LOG_WARN(
+	        "Upon next call of this function the '2s' will be printed first also, because the timers are 'thread_local static', which means that they "
+	        "preserve timers between different calls to this function, but have separate static instances for each different thread.")
 }
 
 } // namespace yade

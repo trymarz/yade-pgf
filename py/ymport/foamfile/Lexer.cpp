@@ -49,7 +49,9 @@ namespace ymport {
 		void Lexer::readFullFile()
 		{
 			int fd = open(m_path.string().c_str(), O_RDONLY);
-			if (fd == -1) { error("Unable to open file."); }
+			if (fd == -1) {
+				error("Unable to open file.");
+			}
 
 			struct stat st;
 			fstat(fd, &st);
@@ -79,16 +81,22 @@ namespace ymport {
 		{
 			for (; m_currentCharIndex < m_data.length(); m_currentCharIndex++) {
 				char curr = m_data[m_currentCharIndex];
-				if (curr == '\n') { m_lineNumber++; }
+				if (curr == '\n') {
+					m_lineNumber++;
+				}
 
-				if (!isWhiteSpace(curr)) { break; }
+				if (!isWhiteSpace(curr)) {
+					break;
+				}
 			}
 		}
 
 		Token Lexer::getNextToken()
 		{
 			consumeWhiteSpaces();
-			if (m_currentCharIndex >= m_data.length() - 1) { return { Token::Type::END }; }
+			if (m_currentCharIndex >= m_data.length() - 1) {
+				return { Token::Type::END };
+			}
 
 			// Blob consists one or more characters, they will become 'word's, 'int's or 'double's.
 			auto isBlobChar = [](char c) {
@@ -106,7 +114,9 @@ namespace ymport {
 			for (; m_currentCharIndex < m_data.length(); m_currentCharIndex++) {
 				char curr = m_data[m_currentCharIndex];
 
-				if (isWhiteSpace(curr)) { break; }
+				if (isWhiteSpace(curr)) {
+					break;
+				}
 
 				if (state == EMPTY) {
 					if (isBlobChar(curr)) {
@@ -179,7 +189,9 @@ namespace ymport {
 				char c1 = m_data[i];
 				char c2 = m_data[i + 1];
 
-				if (c1 == '\n') { m_lineNumber++; }
+				if (c1 == '\n') {
+					m_lineNumber++;
+				}
 
 				if (c1 == '/' && c2 == '/') {
 					inComment = true;
@@ -203,7 +215,9 @@ namespace ymport {
 				inComment = false;
 			}
 
-			if (inComment) { error("Non-terminated single line comment."); }
+			if (inComment) {
+				error("Non-terminated single line comment.");
+			}
 		}
 
 		void Lexer::removeMultiLineComments()
@@ -217,7 +231,9 @@ namespace ymport {
 				char c1 = m_data[i];
 				char c2 = m_data[i + 1];
 
-				if (c1 == '\n') { m_lineNumber++; }
+				if (c1 == '\n') {
+					m_lineNumber++;
+				}
 
 				if (c1 == '/' && c2 == '*') {
 					numberOfNewLines = 0;
@@ -246,7 +262,9 @@ namespace ymport {
 				}
 			}
 
-			if (inComment) { error("Non-terminated multi line comment."); }
+			if (inComment) {
+				error("Non-terminated multi line comment.");
+			}
 		}
 
 		void Lexer::error(const char* fmt, ...)

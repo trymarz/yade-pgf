@@ -24,7 +24,7 @@ class VolumeGeom : public IGeom {
 public:
 	virtual ~VolumeGeom()         = default;
 	VolumeGeom(const VolumeGeom&) = default;
-	inline VolumeGeom& operator   =(const VolumeGeom& source)
+	inline VolumeGeom& operator=(const VolumeGeom& source)
 	{
 		penetrationVolume       = source.penetrationVolume;
 		contactArea             = source.contactArea;

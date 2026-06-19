@@ -155,10 +155,7 @@ public:
 		GLV;
 		return Vector2i(glv->width(), glv->height());
 	}
-	void set_screenSize(Vector2i t)
-	{ /*GLV;*/
-		OpenGLManager::self->emitResizeView(viewNo, t[0], t[1]);
-	}
+	void   set_screenSize(Vector2i t) { /*GLV;*/ OpenGLManager::self->emitResizeView(viewNo, t[0], t[1]); }
 	string pyStr() { return string("<GLViewer for view #") + boost::lexical_cast<string>(viewNo) + ">"; }
 	void   saveDisplayParameters(size_t n)
 	{

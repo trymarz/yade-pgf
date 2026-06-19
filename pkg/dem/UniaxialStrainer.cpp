@@ -118,7 +118,9 @@ void UniaxialStrainer::init()
 			b->state->vel[axis] = pNormalized * (v1 - v0) + v0;
 		}
 	}
-	if (math::isnan(crossSectionArea)) { throw std::invalid_argument("UniaxialStrain.crossSectionArea must be specified."); }
+	if (math::isnan(crossSectionArea)) {
+		throw std::invalid_argument("UniaxialStrain.crossSectionArea must be specified.");
+	}
 }
 
 void UniaxialStrainer::action()

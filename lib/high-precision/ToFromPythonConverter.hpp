@@ -20,8 +20,7 @@
 #define YADE_REGISTER_HP_PYTHON_LEVELS(name) BOOST_PP_SEQ_FOR_EACH(YADE_HP_PARSE_ONE, name, YADE_MINIEIGEN_HP) // it just creates: name(1) name(2) name(3) ....
 
 namespace forCtags {
-struct ToFromPythonConverter {
-}; // for ctags
+struct ToFromPythonConverter { }; // for ctags
 }
 
 /*************************************************************************/
@@ -55,13 +54,21 @@ template <typename ArbitraryReal> struct ArbitraryReal_from_python {
 	static void* convertible(PyObject* obj_ptr)
 	{
 		// read from python int
-		if (PyLong_CheckExact(obj_ptr) == 1) { return obj_ptr; }
+		if (PyLong_CheckExact(obj_ptr) == 1) {
+			return obj_ptr;
+		}
 		// read from python float
-		if (PyFloat_CheckExact(obj_ptr) == 1) { return obj_ptr; }
+		if (PyFloat_CheckExact(obj_ptr) == 1) {
+			return obj_ptr;
+		}
 		// read from all other precision RealHP<levelHP> levels.
-		if (PyObject_HasAttrString(obj_ptr, "levelRealHPMethod") == 1) { return obj_ptr; }
+		if (PyObject_HasAttrString(obj_ptr, "levelRealHPMethod") == 1) {
+			return obj_ptr;
+		}
 		// read from mpmath.mpf
-		if (PyObject_HasAttrString(obj_ptr, "_mpf_") == 1) { return obj_ptr; }
+		if (PyObject_HasAttrString(obj_ptr, "_mpf_") == 1) {
+			return obj_ptr;
+		}
 		// The quick way didn't work. So check if that is a string with a valid number inside.
 		// This is a little more expensive. But it is used very rarely - only when user writes a python line like val="0.123123123123123123123333312312333333123123123"
 		// Otherwise only Real type objects are passed around inside python scripts which does not reach this line.

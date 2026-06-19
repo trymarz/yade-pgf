@@ -106,7 +106,7 @@ public:
 
 	// Description
 	// Evaluate gradient for function
-	void EvaluateGradient(double /*x*/[3], double /*n*/[3]) override {};
+	void EvaluateGradient(double /*x*/[3], double /*n*/[3]) override { };
 	// FIXME - better use Vector3r here instead of Real[3] (here I only fix the unused parameter warning).
 	//         you would need to change the virtual function signature in file vtkImplicitFunction.h in VTK library. Which of course cannot be done
 	//         without sending a patch to VTK library authors. So better to use your own function instead of vtkImplicitFunction. / Janek

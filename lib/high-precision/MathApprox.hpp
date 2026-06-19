@@ -19,8 +19,7 @@
 #include <lib/high-precision/Real.hpp>
 
 namespace forCtags {
-struct MathApprox {
-}; // for ctags
+struct MathApprox { }; // for ctags
 }
 
 namespace yade {

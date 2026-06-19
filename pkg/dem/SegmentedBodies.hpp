@@ -19,24 +19,24 @@ namespace yade {
 
 class SegmentedState : public State {
 public:
-        struct Segment {
-            int segmentPosition; //segment position in state
-            Real thickness;
-            Real volume;
-            Real area;
-        };
-        struct SegmentContact { // structure representing geometry of two neighbor ("contacting") segments of the same sphere
-            int segmentPosition1; //segment position in state
-            int segmentPosition2; //segment position in state
-            Real distance;
-            Real edgeLen;
-        };
-        vector<SegmentContact> segmentContacts; //stores information about segment "interactions" within one sphere (segments "contacting" to each other)
-        int thetaResolution = -1;// positive only for spheres - this is also the way to know the shape of the particle
-        int phiResolution = -1;
-        Vector3r facetRefNormal; // If we store facet normal during initialization, we will be able to know it without accessing the shape 
-        Segment getSegmentFromContactPoint(Vector3r midPoint_);
-        void initializeSegmentContacts();
+	struct Segment {
+		int  segmentPosition; //segment position in state
+		Real thickness;
+		Real volume;
+		Real area;
+	};
+	struct SegmentContact {        // structure representing geometry of two neighbor ("contacting") segments of the same sphere
+		int  segmentPosition1; //segment position in state
+		int  segmentPosition2; //segment position in state
+		Real distance;
+		Real edgeLen;
+	};
+	vector<SegmentContact> segmentContacts;      //stores information about segment "interactions" within one sphere (segments "contacting" to each other)
+	int                    thetaResolution = -1; // positive only for spheres - this is also the way to know the shape of the particle
+	int                    phiResolution   = -1;
+	Vector3r               facetRefNormal; // If we store facet normal during initialization, we will be able to know it without accessing the shape
+	Segment                getSegmentFromContactPoint(Vector3r midPoint_);
+	void                   initializeSegmentContacts();
 	// clang-format off
 	YADE_CLASS_BASE_DOC_ATTRS_CTOR(SegmentedState,State,"State information about body coating map used by :yref:`CohFrictMatSeg`. It allows spheres or facets to store information about the coating thickness. The coating thickness for the facets is stored in two fields (positive and negative side of the facets). In the case of spheres, the surface of sphere is divided into segments of equal area (controlled by :yref:`SegmentedStateUpdater::thetaResolution` and :yref:`SegmentedStateUpdater.phiResolution` parameters).",
 		((vector<Real>,coatingThickness,,,"Vector storing information about coating thickness in each segment. It is assumed that the linear unit of coating thickness is 1000 times smaller than the unit of radius (e.g., if the simulation basic unit is meter, then coating thickness is provided in milimeters). It is one-dimensional, hence for easier intepretation can be reshaped based on the information about thetaResolution and phiResolution. "))
@@ -61,13 +61,17 @@ REGISTER_SERIALIZABLE(SegmentedState);
 
 class SegmentedStateUpdater : public PeriodicEngine {
 public:
-
 	void action() override; //
 	void initialize(Body::id_t bId, Real thickness_ = 0);
 	void setThicknessToSegmentRange(Body::id_t bId, int thetaMin_, int thetaMax_, int phiMin_, int phiMax_, Real thickness_ = 0); // general function
 	void setSegmentThickness(
 	        Body::id_t bId, int segmentPos_, Real thickness_); // directly sets thickness of segment (segmentPos in coatingThickness needs to be known)
-	Real computeVolumeExchange(Real thickness1_, Real thickness2_, Real volume1_, Real volume2_, Real exchangeRate_); // returns volume change in segments (subtract from first segment and add to second segment)
+	Real computeVolumeExchange(
+	        Real thickness1_,
+	        Real thickness2_,
+	        Real volume1_,
+	        Real volume2_,
+	        Real exchangeRate_); // returns volume change in segments (subtract from first segment and add to second segment)
 	void setThicknessToSphereSeg(Body::id_t bId, int theta_, int phi_, Real thickness_ = 0);
 	void setThicknessToFacetSide(Body::id_t bId, int side_, Real thickness_ = 0);
 	void setThicknessToSpheres(vector<Body::id_t> bIds_, int thetaMin_, int thetaMax_, int phiMin_, int phiMax_, Real thickness_ = 0);
@@ -104,20 +108,21 @@ REGISTER_SERIALIZABLE(SegmentedStateUpdater);
 
 class SegmentedMatSprinkler : public PeriodicEngine {
 private:
-	bool needsInit = true;
-	void init();
-    vector<Vector3r> cornerVersors; // corner versors required to define limiting planes of the volume potentially within the reach of the sprinkler.
-    vector<Body::id_t> roiSpheres; // Spheres in the region of interest. Storing preselected spheres that can be reached by the ray.
-    struct rayToSphereInfo { // structure to pass information information about versor / ray hitting a sphere
-        bool bodyFound;
-        Real minB;
-        Body::id_t bId;
-    };    
+	bool               needsInit = true;
+	void               init();
+	vector<Vector3r>   cornerVersors; // corner versors required to define limiting planes of the volume potentially within the reach of the sprinkler.
+	vector<Body::id_t> roiSpheres;    // Spheres in the region of interest. Storing preselected spheres that can be reached by the ray.
+	struct rayToSphereInfo {          // structure to pass information information about versor / ray hitting a sphere
+		bool       bodyFound;
+		Real       minB;
+		Body::id_t bId;
+	};
+
 public:
-	void action() override; //
+	void            action() override;                   //
 	rayToSphereInfo oneLineAction(Vector3r lineVersor_); // performs action for one line (searches for sphere and applies to the closest segment)
 	/// functions exposed to Pyhon below
-	void setVersors(Quaternionr ori_);//
+	void setVersors(Quaternionr ori_); //
 	// clang-format off
 	YADE_CLASS_BASE_DOC_ATTRS_CTOR_PY(SegmentedMatSprinkler,PeriodicEngine,"A periodic engine distributing coating material of particles having :yref:`CohFrictMatSeg`. Determines the particles to cover by ray tracing algorithm.",
 		((Vector3r,pos,Vector3r(0,0,0),,"Origin of the sprinkling source."))
@@ -149,7 +154,7 @@ public:
 	shared_ptr<State> newAssocState() const override { return shared_ptr<State>(new SegmentedState); }
 	bool              stateTypeOk(State* s) const override { return (bool)dynamic_cast<SegmentedState*>(s); }
 
-	virtual ~CohFrictMatSeg() {};
+	virtual ~CohFrictMatSeg() { };
 	/// Serialization
 	// clang-format off
 	YADE_CLASS_BASE_DOC_ATTRS_CTOR(CohFrictMatSeg,CohFrictMat,"Material extending :yref:`CohFrictMat` to use dual material properties with segmented bodies (transition between properties depends on the coating thickness). Should be used with :yref:`Ip2_CohFrictMatSeg_CohFrictMatSeg_CohFrictPhys` to benefit from dual material capabilites. The other functors can be the same as for :yref:`CohFrictMat` (e.g. with contact law :yref:`Law2_ScGeom6D_CohFrictPhys_CohesionMoment`). Besides primary set of material parameter of :yref:`CohFrictMat`, some are doubled and called secondary (e.g. secondaryYoung, secondaryNormalCohesion etc.). When this material is used with spheres or facets, a special state (:yref:`SegmentedState`) is assigned to them, allowing to store information about coating thickness.",
@@ -181,13 +186,13 @@ REGISTER_SERIALIZABLE(CohFrictMatSeg);
 class Ip2_CohFrictMatSeg_CohFrictMatSeg_CohFrictPhys : public IPhysFunctor {
 public:
 	// new structure for storing blended properties of the material based on the thickness
-        struct BlendedProp {
-            Real blendedFrictionAngle; //segment position in state
-            Real blendedYoung;
-            Real blendedPoisson;
-            Real blendedNormalCohesion;
-            Real blendedShearCohesion;
-        };
+	struct BlendedProp {
+		Real blendedFrictionAngle; //segment position in state
+		Real blendedYoung;
+		Real blendedPoisson;
+		Real blendedNormalCohesion;
+		Real blendedShearCohesion;
+	};
 	void go(const shared_ptr<Material>& b1, const shared_ptr<Material>& b2, const shared_ptr<Interaction>& interaction) override;
 	int  cohesionDefinitionIteration;
 	// assign cohesion, return false only if typecasting fails
@@ -201,7 +206,8 @@ public:
 			YADE_CAST<CohFrictPhys*>(interaction->phys.get())->unp = YADE_CAST<ScGeom6D*>(interaction->geom.get())->penetrationDepth;
 	}*/
 	// method for blending properties of the material based on the thickness
-        BlendedProp blendMatProp(Body::id_t bId, int segmentPosition_); // returns 'blended' primary and secondary material properties of the body based on the coating thickness
+	BlendedProp blendMatProp(
+	        Body::id_t bId, int segmentPosition_); // returns 'blended' primary and secondary material properties of the body based on the coating thickness
 	// clang-format off
 		YADE_CLASS_BASE_DOC_ATTRS_CTOR_PY(Ip2_CohFrictMatSeg_CohFrictMatSeg_CohFrictPhys,IPhysFunctor,
 		"This is a version of Ip2 to be used with :yref:`CohFrictMatSeg` (material with coating thickness-dependent properties). It generates cohesive-frictional interactions with moments, used in the contact law :yref:`Law2_ScGeom6D_CohFrictPhys_CohesionMoment`. For details regarding the computation of cohesion, twisting, bending, etc. please refer to :yref:`Ip2_CohFrictMat_CohFrictMat_CohFrictPhys`.",

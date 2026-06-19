@@ -30,7 +30,9 @@ Vector3r& ScGeom::rotateNonSpherical(Vector3r& shearForce) const
 	//shearForce -= shearForce.cross(twist_axis);
 	//NOTE : make sure it is in the tangent plane? It's never been done before. Is it not adding rounding errors at the same time in fact?...
 	//shearForce -= normal.dot(shearForce)*normal;
-	if (math::isnan(shearForce.norm())) { std::cout << "orthonormal_axis: " << orthonormal_axis << ", normal: " << normal << endl; }
+	if (math::isnan(shearForce.norm())) {
+		std::cout << "orthonormal_axis: " << orthonormal_axis << ", normal: " << normal << endl;
+	}
 	return shearForce;
 }
 

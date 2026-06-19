@@ -13,15 +13,15 @@
 
 namespace yade { // Cannot have #include directive inside.
 
-YADE_PLUGIN((FrictViscoMat)(FrictViscoPhys)(Ip2_FrictViscoMat_FrictViscoMat_FrictViscoPhys)(Ip2_FrictMat_FrictViscoMat_FrictViscoPhys)(
-        Law2_ScGeom_FrictViscoPhys_CundallStrackVisco));
+YADE_PLUGIN((
+        FrictViscoMat)(FrictViscoPhys)(Ip2_FrictViscoMat_FrictViscoMat_FrictViscoPhys)(Ip2_FrictMat_FrictViscoMat_FrictViscoPhys)(Law2_ScGeom_FrictViscoPhys_CundallStrackVisco));
 
 FrictViscoMat::~FrictViscoMat() { }
 
 /********************** Ip2_FrictViscoMat_FrictMat_FrictViscoPhys ****************************/
 CREATE_LOGGER(FrictViscoPhys);
 
-FrictViscoPhys::~FrictViscoPhys() {};
+FrictViscoPhys::~FrictViscoPhys() { };
 
 /********************** Ip2_FrictViscoMat_FrictMat_FrictViscoPhys ****************************/
 CREATE_LOGGER(Ip2_FrictViscoMat_FrictViscoMat_FrictViscoPhys);
@@ -164,7 +164,9 @@ Real Law2_ScGeom_FrictViscoPhys_CundallStrackVisco::elasticEnergy()
 	{
 		if (!I->isReal()) continue;
 		FrictPhys* phys = dynamic_cast<FrictPhys*>(I->phys.get());
-		if (phys) { energy += 0.5 * (phys->normalForce.squaredNorm() / phys->kn + phys->shearForce.squaredNorm() / phys->ks); }
+		if (phys) {
+			energy += 0.5 * (phys->normalForce.squaredNorm() / phys->kn + phys->shearForce.squaredNorm() / phys->ks);
+		}
 	}
 	return energy;
 }

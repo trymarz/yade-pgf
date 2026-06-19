@@ -55,7 +55,7 @@ public:
 	vector<Vector3r> getMarchingCubeTriangles();         // Retrieve marching cube triangles
 	vector<Vector3r> getMarchingCubeNormals();           // Retrieve marching cube normals
 	int              getMarchingCubeNbTriangles();       // Retrieve marching cube number of triangles
-	virtual ~LevelSet() {};
+	virtual ~LevelSet() { };
 	// clang-format off
   YADE_CLASS_BASE_DOC_ATTRS_CTOR_PY(LevelSet,Shape,"A level set description of particle shape based on a :yref:`discrete distance field<LevelSet.distField>` (denoting $\\phi$ the underlying signed distance function) and :yref:`surface nodes<LevelSet.surfNodes>` [Duriez2021a]_ [Duriez2021b]_. See :ysrc:`examples/levelSet` for example scripts.",
 		((vector< vector< vector<Real> > >,distField,,Attr::readonly,"The signed (< 0 when inside) distance-to-surface function as a discrete scalar field on :yref:`lsGrid<LevelSet.lsGrid>`, with `distField[i][j][k]` corresponding to `lsGrid.gridPoint(i,j,k)`. From Python, slice this multi-dimensional list with care: while `distField[i][:][:]` corresponds to values on a x-cst plane, `distField[:][:][k]` is not at z-constant (use `[[distField[i][j][k] for j in ..] for i in ..]` instead)"))

@@ -79,8 +79,12 @@ void SpherePack::fromFile(const string& file)
 void SpherePack::toFile(const string& fname) const
 {
 	std::ofstream f(fname.c_str());
-	if (!f.good()) { throw runtime_error("Unable to open file `" + fname + "'"); }
-	if (cellSize != Vector3r::Zero()) { f << "##PERIODIC:: " << cellSize[0] << " " << cellSize[1] << " " << cellSize[2] << endl; }
+	if (!f.good()) {
+		throw runtime_error("Unable to open file `" + fname + "'");
+	}
+	if (cellSize != Vector3r::Zero()) {
+		f << "##PERIODIC:: " << cellSize[0] << " " << cellSize[1] << " " << cellSize[2] << endl;
+	}
 	for (const Sph& s : pack) {
 		f << s.c[0] << " " << s.c[1] << " " << s.c[2] << " " << s.r << " " << s.clumpId << endl;
 	}
@@ -127,18 +131,22 @@ long SpherePack::makeCloud(
 	vector<Real> psdCumm2; // psdCumm but dimensionally transformed to match mass distribution
 	const auto   size       = mx - mn;
 	bool         hSizeFound = (hSize != Matrix3r::Zero()); //is hSize passed to the function?
-	if (!hSizeFound) { hSize = size.asDiagonal(); }
+	if (!hSizeFound) {
+		hSize = size.asDiagonal();
+	}
 	if (hSizeFound && !periodic) LOG_WARN("hSize can be defined only for periodic cells.");
 	Real     volume   = hSize.determinant();
 	Matrix3r invHsize = hSize.inverse();
 	Real area = math::abs(size[0] * size[2] + size[0] * size[1] + size[1] * size[2]); //2 terms will be null if one coordinate is 0, the other is the area
 	if (!volume) {
 		if (hSizeFound)
-			throw invalid_argument("The period defined by hSize has null length in at least one direction, this is not supported. Define flat "
-			                       "boxes via min-max and keep hSize undefined if you want a 2D packing.");
+			throw invalid_argument(
+			        "The period defined by hSize has null length in at least one direction, this is not supported. Define flat "
+			        "boxes via min-max and keep hSize undefined if you want a 2D packing.");
 		else
-			LOG_WARN("The volume of the min-max box is null, we will assume that the packing is 2D. If it is not what you want then you defined "
-			         "wrong input values; check that min and max corners are defined correctly.");
+			LOG_WARN(
+			        "The volume of the min-max box is null, we will assume that the packing is 2D. If it is not what you want then you defined "
+			        "wrong input values; check that min and max corners are defined correctly.");
 	}
 	auto mode = e_Mode::UNDEFINED;
 	bool err  = false;
@@ -214,8 +222,9 @@ long SpherePack::makeCloud(
 				psdCumm2[i] /= psdCumm2[psdSizes.size() - 1];
 	}
 	if (err || mode == e_Mode::UNDEFINED)
-		throw invalid_argument("SpherePack.makeCloud: at least one of rMean, porosity, psdSizes & psdCumm arguments must be specified. rMean can't be "
-		                       "combined with psdSizes.");
+		throw invalid_argument(
+		        "SpherePack.makeCloud: at least one of rMean, porosity, psdSizes & psdCumm arguments must be specified. rMean can't be "
+		        "combined with psdSizes.");
 	// adjust uniform distribution parameters with distributeMass; rMean has the meaning (dimensionally) of _volume_
 	const int maxTry = 1000;
 	if (periodic && volume && !hSizeFound) (cellSize = size);
@@ -356,8 +365,12 @@ void SpherePack::cellFill(Vector3r vol)
 
 void SpherePack::cellRepeat(Vector3i count)
 {
-	if (cellSize == Vector3r::Zero()) { throw std::runtime_error("cellRepeat cannot be used on non-periodic packing."); }
-	if (count[0] <= 0 || count[1] <= 0 || count[2] <= 0) { throw std::invalid_argument("Repeat count components must be positive."); }
+	if (cellSize == Vector3r::Zero()) {
+		throw std::runtime_error("cellRepeat cannot be used on non-periodic packing.");
+	}
+	if (count[0] <= 0 || count[1] <= 0 || count[2] <= 0) {
+		throw std::invalid_argument("Repeat count components must be positive.");
+	}
 	size_t origSize = pack.size();
 	pack.reserve(origSize * count[0] * count[1] * count[2]);
 	for (int i = 0; i < count[0]; i++) {
@@ -455,7 +468,9 @@ long SpherePack::makeClumpCloud(const Vector3r& mn, const Vector3r& mx, const ve
 	}
 	std::list<ClumpInfo> clumpInfos;
 	const auto           sizePack = mx - mn;
-	if (periodic) { cellSize = sizePack; }
+	if (periodic) {
+		cellSize = sizePack;
+	}
 	const auto                       maxTry = 200;
 	int                              nGen   = 0; // number of clumps generated
 	std::random_device               rd;
@@ -507,7 +522,9 @@ long SpherePack::makeClumpCloud(const Vector3r& mn, const Vector3r& mx, const ve
 					if (detailedCheck) {
 						for (const auto& s : C.pack) {
 							for (int id = cInfo.minId; id <= cInfo.maxId; id++) {
-								if ((s.c - pack[id].c).squaredNorm() < pow(s.r + pack[id].r, 2)) { goto overlap; }
+								if ((s.c - pack[id].c).squaredNorm() < pow(s.r + pack[id].r, 2)) {
+									goto overlap;
+								}
 							}
 						}
 					}
@@ -528,7 +545,9 @@ long SpherePack::makeClumpCloud(const Vector3r& mn, const Vector3r& mx, const ve
 						if (detailedCheck) {
 							for (const auto& s : C.pack) {
 								for (int id = cInfo.minId; id <= cInfo.maxId; id++) {
-									if (periPtDistSq(s.c, pack[id].c) < pow(s.r + pack[id].r, 2)) { goto overlap; }
+									if (periPtDistSq(s.c, pack[id].c) < pow(s.r + pack[id].r, 2)) {
+										goto overlap;
+									}
 								}
 							}
 						}

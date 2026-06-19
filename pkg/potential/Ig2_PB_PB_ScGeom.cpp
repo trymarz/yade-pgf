@@ -54,10 +54,18 @@ bool Ig2_PB_PB_ScGeom::go(
 	PotentialBlock* s2 = static_cast<PotentialBlock*>(cm2.get());
 
 	/* Short circuit if both particles are boundary particles */
-	if ((s1->isBoundary == true) && (s2->isBoundary == true)) { return false; }
-	if ((s1->isLining == true) && (s2->isLining == true)) { return false; } //2D cases only
-	if ((s1->erase == true) && (s2->isLining == true)) { return false; }    //2D cases only
-	if ((s1->isLining == true) && (s2->erase == true)) { return false; }    //2D cases only
+	if ((s1->isBoundary == true) && (s2->isBoundary == true)) {
+		return false;
+	}
+	if ((s1->isLining == true) && (s2->isLining == true)) {
+		return false;
+	} //2D cases only
+	if ((s1->erase == true) && (s2->isLining == true)) {
+		return false;
+	} //2D cases only
+	if ((s1->isLining == true) && (s2->erase == true)) {
+		return false;
+	} //2D cases only
 
 	TIMING_DELTAS_START();
 
@@ -83,8 +91,12 @@ bool Ig2_PB_PB_ScGeom::go(
 	if (c->geom) {
 		hasGeom = true;
 		scm     = YADE_PTR_CAST<ScGeom>(c->geom);
-		if (scm->penetrationDepth > stepBisection) { stepBisection = 0.5 * scm->penetrationDepth; }
-		if (stepBisection < pow(10, -6)) { std::cout << "stepBisection: " << stepBisection << ", penetrationDepth: " << scm->penetrationDepth << endl; }
+		if (scm->penetrationDepth > stepBisection) {
+			stepBisection = 0.5 * scm->penetrationDepth;
+		}
+		if (stepBisection < pow(10, -6)) {
+			std::cout << "stepBisection: " << stepBisection << ", penetrationDepth: " << scm->penetrationDepth << endl;
+		}
 		contactPt = scm->contactPoint;
 	} else {
 		scm       = shared_ptr<ScGeom>(new ScGeom());
@@ -155,7 +167,9 @@ bool Ig2_PB_PB_ScGeom::go(
 				        false /* avoidGranularRatcheting */); //Assign contact point and normal after precompute!!!!
 				scm->contactPoint     = contactPt;
 				scm->penetrationDepth = overlap;
-				if (math::isnan(avgNormal.norm())) { std::cout << "avgNormal: " << avgNormal << endl; }
+				if (math::isnan(avgNormal.norm())) {
+					std::cout << "avgNormal: " << avgNormal << endl;
+				}
 				scm->normal = avgNormal;
 				if (hasPhys) {
 					//					phys->normal = avgNormal;
@@ -247,8 +261,12 @@ bool Ig2_PB_PB_ScGeom::go(
 			avgNormal = (normalP1 - normalP2);
 			avgNormal.normalize();
 
-			if (s1->fixedNormal) { avgNormal = s1->boundaryNormal; }
-			if (s2->fixedNormal) { avgNormal = -s2->boundaryNormal; }
+			if (s1->fixedNormal) {
+				avgNormal = s1->boundaryNormal;
+			}
+			if (s2->fixedNormal) {
+				avgNormal = -s2->boundaryNormal;
+			}
 
 			Vector3r step = avgNormal * stepBisection;
 			//int locationStuck = 2;
@@ -256,7 +274,7 @@ bool Ig2_PB_PB_ScGeom::go(
 			getPtOnParticle2(cm2, state2, shift2, contactPt, -1.0 * step, ptOnP2);
 
 			Real penetrationDepth = (ptOnP2 - ptOnP1).norm(); // overlap;
-			        //std::cout<<"contactpoint: "<<contactPt<<", penetrationDepth: "<<penetrationDepth<<", avgNormal: "<<avgNormal<<endl;
+			//std::cout<<"contactpoint: "<<contactPt<<", penetrationDepth: "<<penetrationDepth<<", avgNormal: "<<avgNormal<<endl;
 
 			if (hasPhys) {
 				//				phys->normal = avgNormal;
@@ -285,7 +303,9 @@ bool Ig2_PB_PB_ScGeom::go(
 					        twoDimension,
 					        unitWidth2D);
 					/* phys->smallerID = smallerID; */
-					if (twoDimension) { phys->jointLength = jointLength; }
+					if (twoDimension) {
+						phys->jointLength = jointLength;
+					}
 				} else { //don't calculate jointLength or contactArea; assume constant linear stiffness in both normal and shear directions
 					phys->jointLength = 1.0;
 					if (twoDimension == true) {
@@ -307,7 +327,7 @@ bool Ig2_PB_PB_ScGeom::go(
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpragmas"
 #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
-		// silence the warning that f1 and f2 are only written to, but never read from, and therefore useless.
+					// silence the warning that f1 and f2 are only written to, but never read from, and therefore useless.
 					Real f1 = evaluatePhys(
 					        cm1,
 					        state1,
@@ -364,7 +384,9 @@ bool Ig2_PB_PB_ScGeom::go(
 						/*phys->lambda0 = math::max(lambda01,lambda02); phys->hwater = math::max(hwater1,hwater2); */
 						/*phys->heatCapacities = math::max(heatCapacity1,heatCapacity2); */
 						phys->intactRock = true;
-						if (intactRock1 == false || intactRock2 == false) { phys->intactRock = false; }
+						if (intactRock1 == false || intactRock2 == false) {
+							phys->intactRock = false;
+						}
 					}
 					//					if(noActive1 == 1 || noActive2 == 1){phys->rockJointContact = true;}else{phys->rockJointContact = false; }
 				}
@@ -380,7 +402,9 @@ bool Ig2_PB_PB_ScGeom::go(
 			        false /* avoidGranularRatcheting */); //Assign contact point and normal after precompute!!!!
 			scm->contactPoint     = contactPt;
 			scm->penetrationDepth = penetrationDepth;
-			if (math::isnan(avgNormal.norm())) { std::cout << "avgNormal: " << avgNormal << endl; }
+			if (math::isnan(avgNormal.norm())) {
+				std::cout << "avgNormal: " << avgNormal << endl;
+			}
 			scm->normal = avgNormal;
 
 			TIMING_DELTAS_CHECKPOINT("After contact normal, overlap, area");
@@ -450,7 +474,9 @@ Real Ig2_PB_PB_ScGeom::evaluatePhys(
 	Real     y       = localP1.y();
 	Real     z       = localP1.z();
 	int      planeNo = s1->a.size();
-	if (s1->phi_b.empty()) { return 0.0; }
+	if (s1->phi_b.empty()) {
+		return 0.0;
+	}
 	Real pSum2    = 0.0, plane;
 	int  activeNo = 0;
 	intactRock    = true;
@@ -483,7 +509,9 @@ Real Ig2_PB_PB_ScGeom::evaluatePhys(
 			cohesion  = math::min(cohesion, s1->cohesion[i]);
 			jointType = math::max(jointType, s1->jointType[i]);
 
-			if (s1->intactRock[i] == false) { intactRock = false; }
+			if (s1->intactRock[i] == false) {
+				intactRock = false;
+			}
 			activeNo++;
 			//if(lambda0>pow(10,-5)){std::cout<<"lambda0: "<<lambda0<<",s1->lambda0: "<<s1->lambda0[i]<<", i: "<<i<<", activeNo: "<<activeNo<<endl;}
 		}
@@ -577,7 +605,9 @@ Real Ig2_PB_PB_ScGeom::getAreaPolygon2(
 		if (orthogonalDir.norm() < pow(10, -5)) {
 			orthogonalDir = Vector3r(contactNormal.z(), 0.0, -contactNormal.x());
 		} //TODO: Optimise these two ifs into a nested one
-		if (orthogonalDir.norm() < pow(10, -5)) { orthogonalDir = Vector3r(0.0, contactNormal.z(), -contactNormal.y()); }
+		if (orthogonalDir.norm() < pow(10, -5)) {
+			orthogonalDir = Vector3r(0.0, contactNormal.z(), -contactNormal.y());
+		}
 		orthogonalDir.normalize();
 		Real     tol            = pow(10, -8);
 		Vector3r orthogonalDir2 = contactNormal.cross(orthogonalDir);
@@ -620,7 +650,9 @@ Real Ig2_PB_PB_ScGeom::getAreaPolygon2(
 			prevNoB = -1;
 		}
 
-		if (prevNoA == -1 && prevNoB == -1) { std::cout << "before loop fail" << endl; }
+		if (prevNoA == -1 && prevNoB == -1) {
+			std::cout << "before loop fail" << endl;
+		}
 
 		Vector3r vec1 = (ptOnP1 - contactPoint);
 		Vector3r vec2 = (ptOnP2 - contactPoint);
@@ -697,7 +729,9 @@ Real Ig2_PB_PB_ScGeom::getAreaPolygon2(
 				std::cout << "no intersection B? " << endl;
 				prevNoB = -1;
 			}
-			if (prevNoA == -1 && prevNoB == -1) { std::cout << "loop fail" << endl; }
+			if (prevNoA == -1 && prevNoB == -1) {
+				std::cout << "loop fail" << endl;
+			}
 
 			p1 = (ptOnP1a - prevPoint);
 			p2 = (ptOnP2a - prevPoint);
@@ -757,7 +791,9 @@ Real Ig2_PB_PB_ScGeom::getAreaPolygon2(
 				areaTri += 0.5 * sqrt((pow(area1.determinant(), 2) + pow(area2.determinant(), 2) + pow(area3.determinant(), 2)));
 			}
 
-			if (count == 1) { secondPoint = ptOnBoundary; }
+			if (count == 1) {
+				secondPoint = ptOnBoundary;
+			}
 			//#if 0
 			if (count == 10) {
 				distanceBackup = (newPt - secondPoint).norm();
@@ -866,7 +902,9 @@ bool Ig2_PB_PB_ScGeom::getPtOnParticleAreaNormal(
 	Real     d, dotProd, u, testDistance;
 
 	for (int i = 0; i < planeNo; i++) {
-		if (i == prevNo) { continue; }
+		if (i == prevNo) {
+			continue;
+		}
 		planeNormal = Vector3r(s1->a[i], s1->b[i], s1->c[i]);
 		planeNormal = Q1 * planeNormal;
 		d           = -1.0
@@ -911,7 +949,9 @@ bool Ig2_PB_PB_ScGeom::getPtOnParticleAreaNormal(
 
 	//std::cout<<"newNormal: "<<newNormal<<", newNo: "<<newNo<<", intersection: "<<intersection<<", previousPt: "<<previousPt<<endl;
 	newPt = intersection;
-	if (newNo < 0) { return false; }
+	if (newNo < 0) {
+		return false;
+	}
 	return true;
 }
 
@@ -1084,7 +1124,9 @@ bool Ig2_PB_PB_ScGeom::customSolveAnalyticCentre(
 			b    = Atranspose[3 * i + 1];
 			c    = Atranspose[3 * i + 2];
 			D[i] = B[i] - a * xx[0] - b * xx[1] - c * xx[2];
-			if (iter == 0 && D[i] < oriMinD) { oriMinD = D[i]; }
+			if (iter == 0 && D[i] < oriMinD) {
+				oriMinD = D[i];
+			}
 			//Dinit[i]=D[i];
 			val -= log(D[i]);
 			Dinvert[i]                 = 1.0 / D[i];
@@ -1187,7 +1229,9 @@ bool Ig2_PB_PB_ScGeom::customSolveAnalyticCentre(
 		dcopy_(&totalPlanes, &B[0], &incx, &D[0], &incy);
 		dgemv_(&blasT, &blas3, &totalPlanes, &blasNeg1, &Atranspose[0], &blas3, &blasNewX[0], &incx, &blas1, &D[0], &incy);
 		for (int i = 0; i < totalPlanes; i++) {
-			if (D[i] < minD) { minD = D[i]; }
+			if (D[i] < minD) {
+				minD = D[i];
+			}
 		}
 		while (math::sign(minD) * 1.0 < 0.0) {
 			backtrack *= 0.5;
@@ -1199,7 +1243,9 @@ bool Ig2_PB_PB_ScGeom::customSolveAnalyticCentre(
 			dgemv_(&blasT, &blas3, &totalPlanes, &blasNeg1, &Atranspose[0], &blas3, &blasNewX[0], &incx, &blas1, &D[0], &incy);
 
 			for (int i = 0; i < totalPlanes; i++) {
-				if (D[i] < minD) { minD = D[i]; }
+				if (D[i] < minD) {
+					minD = D[i];
+				}
 			}
 			if (backtrack < pow(10, -15)) {
 				std::cout << "backtrack: " << backtrack << ", iter: " << iter << ", blasStep: " << blasStep[0] << "," << blasStep[1] << ","
@@ -1254,12 +1300,16 @@ bool Ig2_PB_PB_ScGeom::customSolveAnalyticCentre(
 			std::cout << "custom analytic center iter: " << iter << ", blasFprime: " << blasFprime << endl;
 			converge = false;
 		}
-		if (converge == false) { break; }
+		if (converge == false) {
+			break;
+		}
 	}
 
 	solution = Vector3r((xx[0] - 0.0), (xx[1] - 0.0), (xx[2] - 0.0));
 
-	if (converge) { contactPt = solution + contactPt; }
+	if (converge) {
+		contactPt = solution + contactPt;
+	}
 	return converge;
 }
 
@@ -1554,11 +1604,15 @@ Real Ig2_PB_PB_ScGeom::evaluatePB(const shared_ptr<Shape>& cm1, const State& sta
 	Real plane;
 	for (int i = 0; i < planeNo; i++) {
 		plane = s1->a[i] * x + s1->b[i] * y + s1->c[i] * z - s1->d[i] - r; //-pow(10,-10);
-		if (math::sign(plane) * 1.0 < 0.0) { insideCount++; }
+		if (math::sign(plane) * 1.0 < 0.0) {
+			insideCount++;
+		}
 	}
 	/* Complete potential particle */
 	Real f = 1.0;
-	if (insideCount == planeNo) { f = -1.0; }
+	if (insideCount == planeNo) {
+		f = -1.0;
+	}
 	return f;
 }
 
@@ -1583,12 +1637,12 @@ Vector3r Ig2_PB_PB_ScGeom::getNormal(const shared_ptr<Shape>& cm1, const State& 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpragmas"
 #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
-		// silence the warning that pSum2 is only written to, but never read from, and therefore useless.
-	Real         pSum2           = 0.0, plane;
+	// silence the warning that pSum2 is only written to, but never read from, and therefore useless.
+	Real pSum2 = 0.0, plane;
 #pragma GCC diagnostic pop
-	bool         isSphere        = true;
-	int          minNo           = 0;
-	Real         closestDistance = pow(10, 12);
+	bool isSphere        = true;
+	int  minNo           = 0;
+	Real closestDistance = pow(10, 12);
 	for (int i = 0; i < planeNo; i++) {
 		plane = s1->a[i] * x + s1->b[i] * y + s1->c[i] * z - s1->d[i]; //Distance aX-d: innerPP
 		if (plane < pow(10, -15)) {                                    //if trial point inside the inner PP
@@ -2322,7 +2376,9 @@ blasX[3]=s;
 			dgesv_(&varNo, &bColNo, blasHess, &varNo, ipiv, blasStep, &varNo, &info);
 		}
 
-		if (info != 0) { std::cout << "linear algebra error" << endl; }
+		if (info != 0) {
+			std::cout << "linear algebra error" << endl;
+		}
 
 		//timingDeltas->checkpoint("Cholesky");
 
@@ -2376,9 +2432,13 @@ blasX[3]=s;
 		dgemv_(&transA, &planeNoAB, &varNo, &blasNeg1, &blasAL[0], &blas1planeNoAB, &blasNewX[0], &incx, &blas1, &blasWL[0], &incy);
 
 		minWL = 0.00001;
-		if (planeNoAB > 0) { minWL = blasWL[0]; }
+		if (planeNoAB > 0) {
+			minWL = blasWL[0];
+		}
 		for (int i = 0; i < planeNoAB; i++) {
-			if (blasWL[i] < minWL) { minWL = blasWL[i]; }
+			if (blasWL[i] < minWL) {
+				minWL = blasWL[i];
+			}
 		}
 
 		int count = 0;
@@ -2415,9 +2475,13 @@ blasX[3]=s;
 			//blasM = planeNoAB;   blasLDA = math::max(1,planeNoAB);     blasN = varNo;    blasAlpha = -1.0;    blasBeta = 1.0;
 			//dgemv_(&transA, &blasM, &blasN, &blasAlpha, &blasAL[0], &blasLDA, &blasNewX[0], &incx, &blasBeta, &blasWL[0], &incy);
 			dgemv_(&blasNT, &planeNoAB, &varNo, &blasNeg1, &blasAL[0], &blas1planeNoAB, &blasNewX[0], &incx, &blas1, &blasWL[0], &incy);
-			if (planeNoAB > 0) { minWL = blasWL[0]; }
+			if (planeNoAB > 0) {
+				minWL = blasWL[0];
+			}
 			for (int i = 0; i < planeNoAB; i++) {
-				if (blasWL[i] < minWL) { minWL = blasWL[i]; }
+				if (blasWL[i] < minWL) {
+					minWL = blasWL[i];
+				}
 			}
 			count++;
 			//std::cout<<"count: "<<count<<", s : "<<s<<", u1: "<<u1<<", u2: "<<u2<<", wLmincoeff: "<<minWL<<endl;
@@ -2507,7 +2571,9 @@ blasX[3]=s;
 		dcopy_(&noElements, &blasNewX[0], &incx, &blasX[0], &incy);
 
 
-		if (blasFprime > 0.0) { std::cout << "count: " << count << ", totalIter: " << totalIter << ", blasFprime: " << blasFprime << endl; }
+		if (blasFprime > 0.0) {
+			std::cout << "count: " << count << ", totalIter: " << totalIter << ", blasFprime: " << blasFprime << endl;
+		}
 
 
 		if (-blasFprime * 0.5 < NTTOL) {
@@ -2520,7 +2586,9 @@ blasX[3]=s;
 				//if(warmstart){std::cout<<" totalIter : "<<totalIter<<endl;}
 				Real fA = evaluatePB(cm1, state1, Vector3r(0, 0, 0), contactPt);
 				Real fB = evaluatePB(cm2, state2, shift2, contactPt);
-				if (fabs(fA - fB) > 0.001) { std::cout << "inside fA-fB: " << fA - fB << endl; }
+				if (fabs(fA - fB) > 0.001) {
+					std::cout << "inside fA-fB: " << fA - fB << endl;
+				}
 
 				//timingDeltas->checkpoint("newton");
 				return true;

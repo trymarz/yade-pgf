@@ -22,7 +22,7 @@ namespace yade { // Cannot have #include directive inside.
 class DummyCellInfo : public FlowCellInfo_DummyFlowEngineT {
 public:
 	Real anotherVariable;
-	void anotherFunction() {};
+	void anotherFunction() { };
 };
 
 class DummyVertexInfo : public FlowVertexInfo_DummyFlowEngineT {
@@ -38,7 +38,7 @@ class DummyFlowEngine : public DummyFlowEngineT {
 public:
 	//We can overload every functions of the base engine to make it behave differently
 	//if we overload action() like this, this engine is doing nothing in a standard timestep, it can still have useful functions
-	virtual void action() {};
+	virtual void action() { };
 
 	//If a new function is specific to the derived engine, put it here, else go to the base TemplateFlowEngine
 	//if it is useful for everyone

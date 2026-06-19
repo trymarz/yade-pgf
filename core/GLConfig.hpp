@@ -47,8 +47,7 @@ class GLConfig : public Serializable {
 
 	REGISTER_ATTRIBUTES(
 	        Serializable,
-	        (dof)(id)(bbox)(geom)(wire)(intrGeom)(intrPhys)(mask)(scaleDisplacements)(scaleRotations)(displacementScale)(rotationScale)(clipPlaneSe3)(
-	                clipPlaneActive));
+	        (dof)(id)(bbox)(geom)(wire)(intrGeom)(intrPhys)(mask)(scaleDisplacements)(scaleRotations)(displacementScale)(rotationScale)(clipPlaneSe3)(clipPlaneActive));
 };
 
 } // namespace yade

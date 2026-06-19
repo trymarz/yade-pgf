@@ -178,7 +178,7 @@ namespace CGT {
 		virtual void gaussSeidel(Real dt = 0);
 		virtual void resetNetwork();
 		virtual void resetLinearSystem(); //reset both A and B in the linear system A*P=B, done typically after updating the mesh
-		virtual void resetRHS() {};       ////reset only B in the linear system A*P=B, done typically after changing values of imposed pressures
+		virtual void resetRHS() { };      ////reset only B in the linear system A*P=B, done typically after changing values of imposed pressures
 
 		Real        kFactor;      //permeability moltiplicator
 		Real        cavityFactor; // permeability factor for cavity cell neighbors

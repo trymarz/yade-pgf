@@ -22,7 +22,7 @@ protected:
 	std::ofstream out;
 
 public:
-	virtual ~Recorder() {};
+	virtual ~Recorder() { };
 	bool isActivated() override
 	{
 		if (PeriodicEngine::isActivated()) {

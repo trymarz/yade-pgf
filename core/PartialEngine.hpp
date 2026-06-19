@@ -15,7 +15,7 @@ namespace yade { // Cannot have #include directive inside.
 
 class PartialEngine : public Engine {
 public:
-	virtual ~PartialEngine() {};
+	virtual ~PartialEngine() { };
 	// clang-format off
 	YADE_CLASS_BASE_DOC_ATTRS(PartialEngine,Engine,"Engine affecting only particular bodies in the simulation, namely those defined in :yref:`ids attribute<PartialEngine::ids>`. See also :yref:`GlobalEngine`.",
 		((std::vector<int>,ids,,,":yref:`Ids<Body::id>` list of bodies affected by this PartialEngine."))

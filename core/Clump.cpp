@@ -55,7 +55,9 @@ void Clump::add(const shared_ptr<Body>& clumpBody, const shared_ptr<Body>& subBo
 	}
 	clumpBody->clumpId = clumpBody->id; // just to make sure
 	clumpBody->setBounded(false);       // disallow collisions with the clump itself
-	if (subBody->isStandalone()) { LOG_DEBUG("Added body #" << subBody->id << " to clump #" << clumpBody->id); }
+	if (subBody->isStandalone()) {
+		LOG_DEBUG("Added body #" << subBody->id << " to clump #" << clumpBody->id);
+	}
 }
 
 void Clump::del(const shared_ptr<Body>& clumpBody, const shared_ptr<Body>& subBody)
@@ -110,7 +112,9 @@ void Clump::updateProperties(const shared_ptr<Body>& clumpBody, unsigned int dis
 	const shared_ptr<State> state(clumpBody->state);
 	const shared_ptr<Clump> clump(YADE_PTR_CAST<Clump>(clumpBody->shape));
 
-	if (clump->members.empty()) { throw std::runtime_error("Clump::updateProperties: clump has zero members."); }
+	if (clump->members.empty()) {
+		throw std::runtime_error("Clump::updateProperties: clump has zero members.");
+	}
 	// trivial case
 	if (clump->members.size() == 1) {
 		LOG_DEBUG("Clump of size one will be treated specially.")

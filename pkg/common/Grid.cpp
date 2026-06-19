@@ -683,7 +683,9 @@ YADE_PLUGIN((Law2_GridCoGridCoGeom_FrictPhys_CundallStrack));
 void Bo1_GridConnection_Aabb::go(const shared_ptr<Shape>& cm, shared_ptr<Bound>& bv, const Se3r& /*se3*/, const Body* /*b*/)
 {
 	GridConnection* GC = static_cast<GridConnection*>(cm.get());
-	if (!bv) { bv = shared_ptr<Bound>(new Aabb); }
+	if (!bv) {
+		bv = shared_ptr<Bound>(new Aabb);
+	}
 	Aabb*    aabb = static_cast<Aabb*>(bv.get());
 	Vector3r O    = YADE_CAST<State*>(GC->node1->state.get())->pos;
 	Vector3r O2   = YADE_CAST<State*>(GC->node2->state.get())->pos;

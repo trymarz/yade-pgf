@@ -62,7 +62,7 @@ void OpenGLManager::closeViewSlot(int id)
 	const std::lock_guard<std::mutex> lock(viewsMutex);
 	for (size_t i = views.size() - 1; (!views[i]); i--) {
 		views.resize(i);
-	}                                       // delete empty views from the end
+	} // delete empty views from the end
 	if (id < 0) {                           // close the last one existing
 		assert(*views.rbegin());        // this should have been sanitized by the loop above
 		views.resize(views.size() - 1); // releases the pointer as well

@@ -45,15 +45,13 @@ template <int levelHP> class ERealHP;
 	template <>                                                                                                                                            \
 	class ERealHP<levelHP> : public Filtered_kernel_adaptor<                                                                                               \
 	                                 Type_equality_wrapper<Simple_cartesian<::yade::RealHP<levelHP>>::Base<ERealHP<levelHP>>::Type, ERealHP<levelHP>>,     \
-	                                 false> {                                                                                                              \
-	};
+	                                 false> { };
 #else
 #define YADE_REAL_HP_CGAL_KERNEL_ADAPTOR(levelHP)                                                                                                              \
 	template <>                                                                                                                                            \
 	class ERealHP<levelHP> : public Filtered_kernel_adaptor<                                                                                               \
 	                                 Type_equality_wrapper<Simple_cartesian<::yade::RealHP<levelHP>>::Base<ERealHP<levelHP>>::Type, ERealHP<levelHP>>,     \
-	                                 true> {                                                                                                               \
-	};
+	                                 true> { };
 #endif
 
 YADE_REGISTER_HP_LEVELS(YADE_REAL_HP_CGAL_KERNEL_ADAPTOR)

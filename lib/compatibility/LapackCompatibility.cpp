@@ -151,7 +151,9 @@ void dgemv_(
 	const double alpha_double = static_cast<double>(*alpha_Real);
 	const double beta_double  = static_cast<double>(*beta_Real);
 	bool         blasN        = false;
-	if (((*trans) == 'n') or ((*trans) == 'N')) { blasN = true; }
+	if (((*trans) == 'n') or ((*trans) == 'N')) {
+		blasN = true;
+	}
 	std::vector<double> A_double = toDoubleVec(A_Real, (*m) * (*n));
 	std::vector<double> x_double = toDoubleVec(x_Real, blasN ? (*n) : (*m));
 	std::vector<double> y_double = toDoubleVec(y_Real, blasN ? (*m) : (*n));

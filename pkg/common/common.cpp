@@ -19,7 +19,7 @@
 
 namespace yade { // Cannot have #include directive inside.
 
-YADE_PLUGIN((ForceResetter)(TorqueEngine)(FieldApplier)(BoundaryController)(NormPhys)(NormShearPhys)(Recorder)(CylScGeom6D)(CylScGeom)(Box)(StepDisplacer)(
-        GenericSpheresContact)(PeriodicEngine)(Sphere)(ElastMat)(FrictMat)(PyRunner));
+YADE_PLUGIN((
+        ForceResetter)(TorqueEngine)(FieldApplier)(BoundaryController)(NormPhys)(NormShearPhys)(Recorder)(CylScGeom6D)(CylScGeom)(Box)(StepDisplacer)(GenericSpheresContact)(PeriodicEngine)(Sphere)(ElastMat)(FrictMat)(PyRunner));
 
 } // namespace yade

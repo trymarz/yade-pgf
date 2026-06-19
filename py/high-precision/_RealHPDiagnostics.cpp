@@ -114,7 +114,9 @@ public:
 		fpNormal        = (fpClassify == FP_NORMAL);
 		fpSubNormal     = (fpClassify == FP_SUBNORMAL);
 		fpZero          = (fpClassify == FP_ZERO);
-		if ((fpInf != (fpClassify == FP_INFINITE)) or (fpNan != (fpClassify == FP_NAN))) { bad = true; }
+		if ((fpInf != (fpClassify == FP_INFINITE)) or (fpNan != (fpClassify == FP_NAN))) {
+			bad = true;
+		}
 		demangledType = boost::core::demangle(typeid(Rr).name());
 		whatEntered   = math::toStringHP(x);
 		bad           = (not math::isfinite(x)); // NaN or Inf
@@ -141,7 +143,9 @@ public:
 			}
 		};
 		bad = false;
-		if (x != rebuild<Rr>()) { throw std::runtime_error("DecomposedReal rebuild error."); }
+		if (x != rebuild<Rr>()) {
+			throw std::runtime_error("DecomposedReal rebuild error.");
+		}
 	}
 	template <typename Rr = double> void     print() const { std::cout << py::extract<std::string>(py::str(getDict<Rr>()))() << "\n"; }
 	template <typename Rr = double> py::dict getDict() const
@@ -412,9 +416,10 @@ public:
 		if (firstHighestN) { // store results for the highest N
 			reference[funcName] = static_cast<RealHP<maxN>>(funcValue);
 		} else if (math::isfinite(funcValue) and math::isfinite(reference[funcName])) {
-			auto ulpError = static_cast<RealHP<maxP>>(math::abs(boost::math::float_distance(
-			        static_cast<math::UnderlyingHP<RealHP<testN>>>(reference[funcName]),
-			        static_cast<math::UnderlyingHP<RealHP<testN>>>(funcValue))));
+			auto ulpError = static_cast<RealHP<maxP>>(math::abs(
+			        boost::math::float_distance(
+			                static_cast<math::UnderlyingHP<RealHP<testN>>>(reference[funcName]),
+			                static_cast<math::UnderlyingHP<RealHP<testN>>>(funcValue))));
 			if (ulpError > results[funcName][testN].second) {
 				std::array<RealHP<maxP>, 3> usedArgs { 0, 0, 0 };
 				for (size_t i = 0; i < 3; ++i)
@@ -679,7 +684,7 @@ public:
 template <int minHP> struct TestLoop {
 	TestBits<minHP>& tb;
 	TestLoop(TestBits<minHP>& t)
-	        : tb(t) {};
+	        : tb(t) { };
 	template <typename Nmpl> void operator()(Nmpl)
 	{
 		tb.template checkRealFunctions<Nmpl::value>();

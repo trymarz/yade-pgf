@@ -4,8 +4,8 @@
 
 namespace yade { // Cannot have #include directive inside.
 
-YADE_PLUGIN((Ip2_FrictMat_FrictMat_LubricationPhys)(LubricationPhys)(Law2_ScGeom_ImplicitLubricationPhys)(Law2_ScGeom_VirtualLubricationPhys)(
-        LubricationPDFEngine)(PDFEngine))
+YADE_PLUGIN((
+        Ip2_FrictMat_FrictMat_LubricationPhys)(LubricationPhys)(Law2_ScGeom_ImplicitLubricationPhys)(Law2_ScGeom_VirtualLubricationPhys)(LubricationPDFEngine)(PDFEngine))
 
 LubricationPhys::~LubricationPhys() { }
 
@@ -250,7 +250,9 @@ Real Law2_ScGeom_ImplicitLubricationPhys::normalForce_trpz_adim(LubricationPhys*
 	}
 
 	Real a((geom->radius1 + geom->radius2) / 2.);
-	if (isNew) { phys->u = -geom->penetrationDepth; }
+	if (isNew) {
+		phys->u = -geom->penetrationDepth;
+	}
 
 	Real uprim = trapz_integrate_u_adim(
 	        -geom->penetrationDepth / a, 2. * phys->eps, scene->dt * a * phys->kn / (phys->nun * 3. / 2.), phys->u / a, phys->contact, phys->prevDotU);
@@ -775,7 +777,9 @@ void LubricationPDFEngine::action()
 				ScGeom*          geom = dynamic_cast<ScGeom*>(I->geom.get());
 				LubricationPhys* ph   = dynamic_cast<LubricationPhys*>(I->phys.get());
 
-				if (geom && ph) { return ph->contact; }
+				if (geom && ph) {
+					return ph->contact;
+				}
 				return false;
 			}));
 		}

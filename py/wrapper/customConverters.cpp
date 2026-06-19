@@ -32,8 +32,7 @@
 #endif
 
 namespace forCtags {
-struct customConverters {
-}; // for ctags
+struct customConverters { }; // for ctags
 }
 
 CREATE_CPP_LOCAL_LOGGER("customConverters.cpp");
@@ -78,8 +77,8 @@ struct custom_Se3r_from_seq {
 			Real angle       = boost::python::extract<Real>(PySequence_GetItem(obj_ptr, 6));
 			se3->orientation = Quaternionr(AngleAxisr(angle, axis));
 		} else
-			throw std::logic_error(__FILE__
-			                       ": First, the sequence size for Se3r object was 2 or 7, but now is not? (programming error, please report!");
+			throw std::logic_error(
+			        __FILE__ ": First, the sequence size for Se3r object was 2 or 7, but now is not? (programming error, please report!");
 		data->convertible = storage;
 	}
 };
@@ -101,7 +100,7 @@ struct custom_OpenMPAccumulator_from_float {
 #if (YADE_REAL_BIT <= 64)
 	static void* convertible(PyObject* obj_ptr) { return PyFloat_Check(obj_ptr) ? obj_ptr : 0; }
 #else
-	static void*     convertible(PyObject* obj_ptr) { return ArbitraryReal_from_python<Real>::convertible(obj_ptr); }
+	static void* convertible(PyObject* obj_ptr) { return ArbitraryReal_from_python<Real>::convertible(obj_ptr); }
 #endif
 	static void construct(PyObject* obj_ptr, boost::python::converter::rvalue_from_python_stage1_data* data)
 	{
@@ -117,7 +116,7 @@ struct custom_OpenMPAccumulator_to_int {
 #if PY_MAJOR_VERSION >= 3
 		return boost::python::incref(PyLong_FromLong((long)acc.get()));
 #else
-                return boost::python::incref(PyInt_FromLong((long)acc.get()));
+		return boost::python::incref(PyInt_FromLong((long)acc.get()));
 #endif
 	}
 };
@@ -132,7 +131,7 @@ struct custom_OpenMPAccumulator_from_int {
 #if PY_MAJOR_VERSION >= 3
 		return PyLong_Check(obj_ptr) ? obj_ptr : 0;
 #else
-                return PyInt_Check(obj_ptr) ? obj_ptr : 0;
+		return PyInt_Check(obj_ptr) ? obj_ptr : 0;
 #endif
 	}
 	static void construct(PyObject* obj_ptr, boost::python::converter::rvalue_from_python_stage1_data* data)

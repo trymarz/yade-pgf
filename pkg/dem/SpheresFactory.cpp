@@ -188,7 +188,9 @@ void SpheresFactory::action()
 		shared_ptr<State>           state(material->newAssocState());
 		sphere->radius = r;
 		state->pos = state->refPos = c;
-		if (color[0] >= 0 and color[1] >= 0 and color[2] >= 0) { sphere->color = color; }
+		if (color[0] >= 0 and color[1] >= 0 and color[2] >= 0) {
+			sphere->color = color;
+		}
 
 		state->vel     = initVel;
 		Real vol       = (4 / 3.) * Mathr::PI * pow(r, 3);
@@ -199,7 +201,9 @@ void SpheresFactory::action()
 		b->shape    = sphere;
 		b->state    = state;
 		b->material = material;
-		if (mask > 0) { b->groupMask = mask; }
+		if (mask > 0) {
+			b->groupMask = mask;
+		}
 		// insert particle in the simulation
 		scene->bodies->insert(b);
 		ids.push_back(b->getId());

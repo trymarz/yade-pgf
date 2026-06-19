@@ -22,8 +22,8 @@
 namespace yade { // Cannot have #include directive inside.
 
 YADE_PLUGIN((Gl1_Aabb)(Gl1_Box)(Gl1_Facet));
-YADE_PLUGIN((GlBoundFunctor)(GlShapeFunctor)(GlIGeomFunctor)(GlIPhysFunctor)(GlStateFunctor)(GlBoundDispatcher)(GlShapeDispatcher)(GlIGeomDispatcher)(
-        GlIPhysDispatcher)(GlStateDispatcher));
+YADE_PLUGIN((
+        GlBoundFunctor)(GlShapeFunctor)(GlIGeomFunctor)(GlIPhysFunctor)(GlStateFunctor)(GlBoundDispatcher)(GlShapeDispatcher)(GlIGeomDispatcher)(GlIPhysDispatcher)(GlStateDispatcher));
 
 
 void Gl1_Aabb::go(const shared_ptr<Bound>& bv, Scene* scene2)

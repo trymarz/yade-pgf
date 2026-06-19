@@ -29,14 +29,14 @@ struct DynLibDispatcher_Item2D {
 	DynLibDispatcher_Item2D(int a, int b, std::string c)
 	        : ix1(a)
 	        , ix2(b)
-	        , functorName(c) {};
+	        , functorName(c) { };
 };
 struct DynLibDispatcher_Item1D {
 	int         ix1;
 	std::string functorName;
 	DynLibDispatcher_Item1D(int a, std::string c)
 	        : ix1(a)
-	        , functorName(c) {};
+	        , functorName(c) { };
 };
 ///
 /// base classes involved in multiple dispatch must be derived from Indexable
@@ -145,7 +145,9 @@ public:
 		vector<DynLibDispatcher_Item2D> ret;
 		for (size_t i = 0; i < callBacks.size(); i++) {
 			for (size_t j = 0; j < callBacks[i].size(); j++) {
-				if (callBacks[i][j]) { ret.push_back(DynLibDispatcher_Item2D(i, j, callBacks[i][j]->getClassName())); }
+				if (callBacks[i][j]) {
+					ret.push_back(DynLibDispatcher_Item2D(i, j, callBacks[i][j]->getClassName()));
+				}
 			}
 		}
 		return ret;

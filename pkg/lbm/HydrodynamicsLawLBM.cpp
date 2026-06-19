@@ -45,7 +45,7 @@ inline Vector3i vect3rToVect3i(Vector3r vect)
 }
 
 
-HydrodynamicsLawLBM::~HydrodynamicsLawLBM() {};
+HydrodynamicsLawLBM::~HydrodynamicsLawLBM() { };
 
 bool HydrodynamicsLawLBM::isActivated()
 {
@@ -615,7 +615,9 @@ void HydrodynamicsLawLBM::action()
 			NbSolidNodes++;
 		}
 
-		if (firstRun) { nodes[nidx].wasObstacle = nodes[nidx].isObstacle; }
+		if (firstRun) {
+			nodes[nidx].wasObstacle = nodes[nidx].isObstacle;
+		}
 	}
 
 	/*---------------------------------------------------------------*/
@@ -656,7 +658,9 @@ void HydrodynamicsLawLBM::action()
 						NbSolidNodes++;
 						NbParticleNodes++;
 					}
-					if (firstRun) { nodes[nidx].wasObstacle = nodes[nidx].isObstacle; }
+					if (firstRun) {
+						nodes[nidx].wasObstacle = nodes[nidx].isObstacle;
+					}
 				}
 			/*-------------------------------------------------------------------*/
 			/* ///NOTE : this should be removed since it can be done with python */
@@ -833,7 +837,9 @@ void HydrodynamicsLawLBM::action()
 			if (nodes[nidx].checkIsNewObstacle()) {
 				newObstacleCells_couter++;
 			} else {
-				if (nodes[nidx].checkIsNewFluid()) { newFluidCells_couter++; }
+				if (nodes[nidx].checkIsNewFluid()) {
+					newFluidCells_couter++;
+				}
 			}
 			if (nodes[nidx].applyBC) {
 				Vector3r U       = Vector3r::Zero();
@@ -959,7 +965,9 @@ void HydrodynamicsLawLBM::action()
 			nodes[nidx].rhob   = 0.;
 			nodes[nidx].velb   = Vector3r::Zero();
 			nodes[nidx].IsolNb = 0;
-			if (nodes[nidx].isFluidBoundary) { nodes[nidx].IsolNb = 8; }
+			if (nodes[nidx].isFluidBoundary) {
+				nodes[nidx].IsolNb = 8;
+			}
 
 			for (int dndx = 0; dndx < NbDir; dndx++) {
 				nodes[nidx].fprecol[dndx] = nodes[nidx].f[dndx];
@@ -1037,14 +1045,18 @@ void HydrodynamicsLawLBM::action()
 					if (I == Nx) {
 						I = 0;
 					} else {
-						if (I == -1) { I = Nx - 1; }
+						if (I == -1) {
+							I = Nx - 1;
+						}
 					}
 				}
 				if (Yperiodicity) {
 					if (J == Ny) {
 						J = 0;
 					} else {
-						if (J == -1) { J = Ny - 1; }
+						if (J == -1) {
+							J = Ny - 1;
+						}
 					}
 				}
 			} else {
@@ -1079,7 +1091,9 @@ void HydrodynamicsLawLBM::action()
 			}
 			nodes[fid].f[opp[idx_sigma_i]] = nodes[fid].fpostcol[idx_sigma_i] - 2.0 * links[lid].ct;
 			nodes[sid].f[idx_sigma_i]      = nodes[sid].fpostcol[opp[idx_sigma_i]] + 2.0 * links[lid].ct;
-			if ((MODE == 2) || ((MODE == 3) && (IterMax == 1))) { links[lid].ReinitDynamicalProperties(); }
+			if ((MODE == 2) || ((MODE == 3) && (IterMax == 1))) {
+				links[lid].ReinitDynamicalProperties();
+			}
 		}
 		VmeanFluidC = VmeanFluidC / NbFluidNodes;
 
@@ -1186,7 +1200,9 @@ void HydrodynamicsLawLBM::action()
 		}
 
 
-		if ((IterSubCyclingStart > 0) && (iter + 1 >= IterSubCyclingStart)) { modeTransition(); }
+		if ((IterSubCyclingStart > 0) && (iter + 1 >= IterSubCyclingStart)) {
+			modeTransition();
+		}
 		if ((Error < ConvergenceThreshold) && (use_ConvergenceCriterion)) {
 			if (MODE == 1) break;
 			if (MODE == 3) modeTransition();

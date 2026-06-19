@@ -10,8 +10,9 @@ typedef Real (*KernelFunction)(const double& r, const double& h);
 
 enum KernFunctions { Lucy = 1, BSpline1 = 2, BSpline2 = 3 };
 #define KERNELFUNCDESCR                                                                                                                                        \
-	throw runtime_error("Type of kernel function undefined! The following kernel functions are available: Lucy=1 ([Lucy1977]_ (27)), BSpline1=2 "          \
-	                    "([Monaghan1985]_ (21)), BSpline2=3 ([Monaghan1985]_ (22)).");
+	throw runtime_error(                                                                                                                                   \
+	        "Type of kernel function undefined! The following kernel functions are available: Lucy=1 ([Lucy1977]_ (27)), BSpline1=2 "                      \
+	        "([Monaghan1985]_ (21)), BSpline2=3 ([Monaghan1985]_ (22)).");
 
 enum typeKernFunctions { Norm, Grad, Lapl };
 class SPHEngine : public PartialEngine {

@@ -51,7 +51,9 @@ bool Ig2_PP_PP_ScGeom::go(
 	PotentialParticle* s2 = static_cast<PotentialParticle*>(cm2.get());
 
 	/* Short circuit if both particles are boundary particles */
-	if ((s1->isBoundary == true) && (s2->isBoundary == true)) { return false; }
+	if ((s1->isBoundary == true) && (s2->isBoundary == true)) {
+		return false;
+	}
 
 	bool                 hasGeom = false;
 	Vector3r             contactPt(0, 0, 0);
@@ -62,7 +64,7 @@ bool Ig2_PP_PP_ScGeom::go(
 	if (stepBisection
 	    < pow(10,
 	          -6)) { /*std::cout<<"R1: "<<s1->R<<", R2: "<<s2->R<<", stepBisection: "<<stepBisection<<", id1: "<<c->getId1()<<", id2: "<<c->getId2()<<endl;*/
-	}                //FIXME: Check whether we need this check. It is commented in the PBs
+	} //FIXME: Check whether we need this check. It is commented in the PBs
 
 	bool contact = false;
 
@@ -79,7 +81,9 @@ bool Ig2_PP_PP_ScGeom::go(
 	if (c->geom) {
 		hasGeom = true;
 		scm     = YADE_PTR_CAST<ScGeom>(c->geom);
-		if (scm->penetrationDepth > stepBisection) { stepBisection = 0.5 * scm->penetrationDepth; }
+		if (scm->penetrationDepth > stepBisection) {
+			stepBisection = 0.5 * scm->penetrationDepth;
+		}
 		if (stepBisection < pow(10, -6)) { /*std::cout<<"stepBisection: "<<stepBisection<<", penetrationDepth: "<<scm->penetrationDepth<<endl;*/
 		}
 		contactPt = scm->contactPoint;
@@ -135,8 +139,12 @@ bool Ig2_PP_PP_ScGeom::go(
 			avgNormal = (normalP1 - normalP2);
 			avgNormal.normalize();
 
-			if (s1->fixedNormal == true) { avgNormal = s1->boundaryNormal; }
-			if (s2->fixedNormal == true) { avgNormal = -s2->boundaryNormal; }
+			if (s1->fixedNormal == true) {
+				avgNormal = s1->boundaryNormal;
+			}
+			if (s2->fixedNormal == true) {
+				avgNormal = -s2->boundaryNormal;
+			}
 
 			Vector3r step = avgNormal * stepBisection;
 			//int locationStuck = 2;
@@ -269,7 +277,9 @@ Real Ig2_PP_PP_ScGeom::getAreaPolygon2(
 		if (orthogonalDir.norm() < pow(10, -5)) {
 			orthogonalDir = Vector3r(contactNormal.z(), 0.0, -contactNormal.x());
 		} //TODO: Optimise these two ifs into a nested one
-		if (orthogonalDir.norm() < pow(10, -5)) { orthogonalDir = Vector3r(0.0, contactNormal.z(), -contactNormal.y()); }
+		if (orthogonalDir.norm() < pow(10, -5)) {
+			orthogonalDir = Vector3r(0.0, contactNormal.z(), -contactNormal.y());
+		}
 		orthogonalDir.normalize();
 		Real tol = pow(10, -8);
 		//		Vector3r orthogonalDir2 = contactNormal.cross(orthogonalDir); orthogonalDir2.normalize(); //Vector along the shear direction, perpendicular to orthogonalDir
@@ -340,7 +350,9 @@ Real Ig2_PP_PP_ScGeom::getAreaPolygon2(
 				areaTri += 0.5 * sqrt((pow(area1.determinant(), 2) + pow(area2.determinant(), 2) + pow(area3.determinant(), 2)));
 				//				std::cout<<count<<" | "<<areaTri<<" | "<<contactPoint<<" | "<<prevPoint<< " | "<<ptOnBoundary<<endl;
 			}
-			if (count == 0) { secondPoint = ptOnBoundary; }
+			if (count == 0) {
+				secondPoint = ptOnBoundary;
+			}
 			newPt = ptOnBoundary;
 			count++;
 		}
@@ -353,7 +365,7 @@ Real Ig2_PP_PP_ScGeom::getAreaPolygon2(
 		} else {
 			smaller = 2;
 		} //TODO: countParticleA,B and smaller variables could be removed in the future; they are not actively used so far.
-	} else {  //2D contact (twoD=true)
+	} else { //2D contact (twoD=true)
 		Vector3r searchDir = shearDir;
 		Vector3r ptOnBoundary1(0, 0, 0), ptOnBoundary2(0, 0, 0);
 
@@ -534,7 +546,9 @@ Real Ig2_PP_PP_ScGeom::evaluatePP(const shared_ptr<Shape>& cm1, const State& sta
 	Real     pSum2   = 0.0, plane;
 	for (int i = 0; i < planeNo; i++) {
 		plane = s1->a[i] * x + s1->b[i] * y + s1->c[i] * z - s1->d[i];
-		if (plane < pow(10, -15)) { plane = 0.0; }
+		if (plane < pow(10, -15)) {
+			plane = 0.0;
+		}
 		pSum2 += pow(plane, 2);
 	}
 	Real r = s1->r;
@@ -568,12 +582,14 @@ Vector3r Ig2_PP_PP_ScGeom::getNormal(const shared_ptr<Shape>& cm1, const State& 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpragmas"
 #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
-		// silence the warning that pSum2 is only written to, but never read from, and therefore useless.
-	Real         pSum2 = 0.0, plane;
+	// silence the warning that pSum2 is only written to, but never read from, and therefore useless.
+	Real pSum2 = 0.0, plane;
 #pragma GCC diagnostic pop
 	for (int i = 0; i < planeNo; i++) {
 		plane = s1->a[i] * x + s1->b[i] * y + s1->c[i] * z - s1->d[i];
-		if (plane < pow(10, -15)) { plane = 0.0; }
+		if (plane < pow(10, -15)) {
+			plane = 0.0;
+		}
 		p.push_back(plane);
 		pSum2 += pow(p[i], 2);
 	}
@@ -687,10 +703,10 @@ bool Ig2_PP_PP_ScGeom::customSolve(
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpragmas"
 #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
-		// silence the warning that iter is only written to, but never read from, and therefore useless.
-	int                iter      = 0;
+	// silence the warning that iter is only written to, but never read from, and therefore useless.
+	int iter = 0;
 #pragma GCC diagnostic pop
-	int                totalIter = 0;
+	int totalIter = 0;
 
 	/* Parameters for particles A and B */
 	Real rA        = s1->r;
@@ -1399,9 +1415,13 @@ bool Ig2_PP_PP_ScGeom::customSolve(
 		dgemv_(&transA, &planeNoAB, &varNo, &blasNeg1, &blasAL[0], &blas1planeNoAB, &blasNewX[0], &incx, &blas1, &blasWL[0], &incy);
 
 		minWL = 0.00001;
-		if (planeNoAB > 0) { minWL = blasWL[0]; }
+		if (planeNoAB > 0) {
+			minWL = blasWL[0];
+		}
 		for (int i = 0; i < planeNoAB; i++) {
-			if (blasWL[i] < minWL) { minWL = blasWL[i]; }
+			if (blasWL[i] < minWL) {
+				minWL = blasWL[i];
+			}
 		}
 
 		int count = 0;
@@ -1438,9 +1458,13 @@ bool Ig2_PP_PP_ScGeom::customSolve(
 			//blasM = planeNoAB;   blasLDA = math::max(1,planeNoAB);     blasN = varNo;    blasAlpha = -1.0;    blasBeta = 1.0;
 			//dgemv_(&transA, &blasM, &blasN, &blasAlpha, &blasAL[0], &blasLDA, &blasNewX[0], &incx, &blasBeta, &blasWL[0], &incy);
 			dgemv_(&blasNT, &planeNoAB, &varNo, &blasNeg1, &blasAL[0], &blas1planeNoAB, &blasNewX[0], &incx, &blas1, &blasWL[0], &incy);
-			if (planeNoAB > 0) { minWL = blasWL[0]; }
+			if (planeNoAB > 0) {
+				minWL = blasWL[0];
+			}
 			for (int i = 0; i < planeNoAB; i++) {
-				if (blasWL[i] < minWL) { minWL = blasWL[i]; }
+				if (blasWL[i] < minWL) {
+					minWL = blasWL[i];
+				}
 			}
 			count++;
 			//std::cout<<"count: "<<count<<", s : "<<s<<", u1: "<<u1<<", u2: "<<u2<<", wLmincoeff: "<<minWL<<endl;

@@ -93,7 +93,9 @@ bool InteractionContainer::erase(Body::id_t id1, Body::id_t id2, int linPos)
 			b1->intrs.erase(I);
 			if (b2) {
 				Body::MapId2IntrT::iterator I2(b2->intrs.find(id1));
-				if (not(I2 == b2->intrs.end())) { b2->intrs.erase(I2); }
+				if (not(I2 == b2->intrs.end())) {
+					b2->intrs.erase(I2);
+				}
 			}
 		}
 	}

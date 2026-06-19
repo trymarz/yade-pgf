@@ -31,9 +31,7 @@ using math::min; // using inside .cpp file is ok.
 YADE_PLUGIN((MicroMacroAnalyser));
 CREATE_LOGGER(MicroMacroAnalyser);
 
-MicroMacroAnalyser::~MicroMacroAnalyser()
-{ /*delete analyser;*/
-} //no need, its a shared_ptr now...
+MicroMacroAnalyser::~MicroMacroAnalyser() { /*delete analyser;*/ } //no need, its a shared_ptr now...
 
 void MicroMacroAnalyser::postLoad(MicroMacroAnalyser&)
 {

@@ -16,7 +16,9 @@ YADE_PLUGIN((SpatialQuickSortCollider));
 
 void SpatialQuickSortCollider::action()
 {
-	if (scene->isPeriodic) { throw runtime_error("SpatialQuickSortCollider doesn't handle periodic boundaries."); }
+	if (scene->isPeriodic) {
+		throw runtime_error("SpatialQuickSortCollider doesn't handle periodic boundaries.");
+	}
 
 	// update bounds
 	boundDispatcher->scene = scene;

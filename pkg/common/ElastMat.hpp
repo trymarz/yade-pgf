@@ -7,7 +7,7 @@ namespace yade { // Cannot have #include directive inside.
 /*! Elastic material */
 class ElastMat : public Material {
 public:
-	virtual ~ElastMat() {};
+	virtual ~ElastMat() { };
 	// clang-format off
 	YADE_CLASS_BASE_DOC_ATTRS_CTOR(ElastMat,Material,"Purely elastic material. The material parameters may have different meanings depending on the :yref:`IPhysFunctor` used : true Young and Poisson in :yref:`Ip2_FrictMat_FrictMat_MindlinPhys`, or contact stiffnesses in :yref:`Ip2_FrictMat_FrictMat_FrictPhys`.",
 		((Real,young,1e9,,"elastic modulus [Pa]. It has different meanings depending on the Ip functor."))
@@ -22,7 +22,7 @@ REGISTER_SERIALIZABLE(ElastMat);
 /*! Granular material */
 class FrictMat : public ElastMat {
 public:
-	virtual ~FrictMat() {};
+	virtual ~FrictMat() { };
 	// clang-format off
 	YADE_CLASS_BASE_DOC_ATTRS_CTOR(FrictMat,ElastMat,"Elastic material with contact friction. See also :yref:`ElastMat`.",
 		((Real,frictionAngle,.5,,"Contact friction angle (in radians). Hint : use 'radians(degreesValue)' in python scripts.")),

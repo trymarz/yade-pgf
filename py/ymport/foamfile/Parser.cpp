@@ -39,7 +39,9 @@ namespace ymport {
 			while (true) {
 				Token token = m_lexer->getNextToken();
 
-				if (token.isEnd()) { error("Unexpected END."); }
+				if (token.isEnd()) {
+					error("Unexpected END.");
+				}
 
 				if (token.asWordEquals("version")) {
 					// NOTE: Maybe compare as a word?
@@ -67,19 +69,29 @@ namespace ymport {
 				}
 			}
 
-			if (!isOk[VERSION]) { error("No version was provided in the header."); }
+			if (!isOk[VERSION]) {
+				error("No version was provided in the header.");
+			}
 
-			if (!isOk[FORMAT]) { error("No format was provided in the header."); }
+			if (!isOk[FORMAT]) {
+				error("No format was provided in the header.");
+			}
 
-			if (!isOk[CLASS]) { error("No class was provided in the header."); }
+			if (!isOk[CLASS]) {
+				error("No class was provided in the header.");
+			}
 
-			if (!isOk[OBJECT]) { error("No object was provided in the header."); }
+			if (!isOk[OBJECT]) {
+				error("No object was provided in the header.");
+			}
 		}
 
 		void Parser::expect(Token token)
 		{
 			Token current = m_lexer->getNextToken();
-			if (!current.isEqual(token)) { error("Expected: %s, got: %s", token.debugString().c_str(), current.debugString().c_str()); }
+			if (!current.isEqual(token)) {
+				error("Expected: %s, got: %s", token.debugString().c_str(), current.debugString().c_str());
+			}
 		}
 
 		void Parser::skip(int n)
@@ -95,7 +107,9 @@ namespace ymport {
 			while (!current.isEqual(token)) {
 				current = m_lexer->getNextToken();
 
-				if (token.isEnd()) { error("Unexpected END."); }
+				if (token.isEnd()) {
+					error("Unexpected END.");
+				}
 			}
 		}
 
@@ -103,7 +117,9 @@ namespace ymport {
 		{
 			Token token = m_lexer->getNextToken();
 
-			if (!token.isWord()) { error("Expected 'WODD'', got: %s", token.debugString().c_str()); }
+			if (!token.isWord()) {
+				error("Expected 'WODD'', got: %s", token.debugString().c_str());
+			}
 
 			return token.asWord();
 		}
@@ -112,7 +128,9 @@ namespace ymport {
 		{
 			Token token = m_lexer->getNextToken();
 
-			if (!token.isInt()) { error("Expected 'INT'', got: %s", token.debugString().c_str()); }
+			if (!token.isInt()) {
+				error("Expected 'INT'', got: %s", token.debugString().c_str());
+			}
 
 			return token.asInt();
 		}
@@ -121,7 +139,9 @@ namespace ymport {
 		{
 			Token token = m_lexer->getNextToken();
 
-			if (!token.isDouble()) { error("Expected 'DOUBLE'', got: %s", token.debugString().c_str()); }
+			if (!token.isDouble()) {
+				error("Expected 'DOUBLE'', got: %s", token.debugString().c_str());
+			}
 
 			return token.asDouble();
 		}
@@ -130,7 +150,9 @@ namespace ymport {
 		{
 			Token token = m_lexer->getNextToken();
 
-			if (!token.isNumber()) { error("Expected 'NUMBER'', got: %s", token.debugString().c_str()); }
+			if (!token.isNumber()) {
+				error("Expected 'NUMBER'', got: %s", token.debugString().c_str());
+			}
 
 			return token.asNumber();
 		}

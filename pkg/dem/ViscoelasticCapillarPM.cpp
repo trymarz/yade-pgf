@@ -115,7 +115,9 @@ bool Law2_ScGeom_ViscElCapPhys_Basic::go(shared_ptr<IGeom>& _geom, shared_ptr<IP
 		phys.liqBridgeCreated = true;
 		phys.liqBridgeActive  = false;
 #ifdef YADE_LIQMIGRATION
-		if (phys.LiqMigrEnabled) { scene2->addIntrs.push_back(I); }
+		if (phys.LiqMigrEnabled) {
+			scene2->addIntrs.push_back(I);
+		}
 #endif
 		Sphere* s1 = dynamic_cast<Sphere*>(bodies[id1]->shape.get());
 		Sphere* s2 = dynamic_cast<Sphere*>(bodies[id2]->shape.get());
@@ -467,8 +469,12 @@ void LiqControl::action()
 			Real Vf1 = 0.0;
 			Real Vf2 = 0.0;
 
-			if ((b1->state->Vmin) < b1->state->Vf) { Vf1 = (b1->state->Vf - b1->state->Vmin) / bI[id1]; }
-			if ((b2->state->Vmin) < b2->state->Vf) { Vf2 = (b2->state->Vf - b2->state->Vmin) / bI[id2]; }
+			if ((b1->state->Vmin) < b1->state->Vf) {
+				Vf1 = (b1->state->Vf - b1->state->Vmin) / bI[id1];
+			}
+			if ((b2->state->Vmin) < b2->state->Vf) {
+				Vf2 = (b2->state->Vf - b2->state->Vmin) / bI[id2];
+			}
 
 			Real Vrup = Vf1 + Vf2;
 
@@ -651,7 +657,9 @@ Real LiqControl::totalLiqVol(int mask2 = 0) const
 	for (const auto& b : *scene2->bodies) {
 		if ((mask2 > 0 && (b->groupMask & mask2) == 0) or (!b)) continue;
 		totalLiqVol += liqVolIterBody(b);
-		if (b->state->Vf > 0) { totalLiqVol += b->state->Vf; }
+		if (b->state->Vf > 0) {
+			totalLiqVol += b->state->Vf;
+		}
 	}
 	return totalLiqVol;
 }

@@ -58,7 +58,9 @@ void setRefSe3()
 		b->state->refPos = b->state->pos;
 		b->state->refOri = b->state->ori;
 	}
-	if (scene->isPeriodic) { scene->cell->refHSize = scene->cell->hSize; }
+	if (scene->isPeriodic) {
+		scene->cell->refHSize = scene->cell->hSize;
+	}
 }
 
 Real PWaveTimeStep() { return Shop::PWaveTimeStep(); };
@@ -336,7 +338,9 @@ Real approxSectionArea(Real coord, int axis)
 		cloud.push_back(c + Vector2r(r / 2., -sqrt3 * r));
 		cloud.push_back(c + Vector2r(-r / 2., sqrt3 * r));
 		cloud.push_back(c + Vector2r(-r / 2., -sqrt3 * r));
-		if (i++ == 0) { mm = c, mx = c; }
+		if (i++ == 0) {
+			mm = c, mx = c;
+		}
 		mm = Vector2r(min(c[0] - r, mm[0]), min(c[1] - r, mm[1]));
 		mx = Vector2r(max(c[0] + r, mx[0]), max(c[1] + r, mx[1]));
 	}
@@ -492,7 +496,9 @@ py::list intrsOfEachBody()
 	}
 	// loop over all interactions and fill the list ret
 	for (const auto& i : *rb->interactions) {
-		if (!i->isReal()) { continue; }
+		if (!i->isReal()) {
+			continue;
+		}
 		temp = py::extract<py::list>(ret[i->getId1()]);
 		temp.append(i);
 		temp = py::extract<py::list>(ret[i->getId2()]);
@@ -924,7 +930,10 @@ try {
 	py::def("TetrahedronCentralInertiaTensor", TetrahedronCentralInertiaTensor, "TODO");
 	py::def("TetrahedronWithLocalAxesPrincipal", TetrahedronWithLocalAxesPrincipal, "TODO");
 	py::def("momentum", Shop::momentum, "Returns total linear momentum of the simulation");
-	py::def("angularMomentum", Shop::angularMomentum, (py::args("origin") = Vector3r(Vector3r::Zero())), "Returns total angular momentum of the simulation, about input point *origin*");
+	py::def("angularMomentum",
+	        Shop::angularMomentum,
+	        (py::args("origin") = Vector3r(Vector3r::Zero())),
+	        "Returns total angular momentum of the simulation, about input point *origin*");
 	py::def("getSpheresVolume2D",
 	        Shop__getSpheresVolume2D,
 	        (py::arg("mask") = -1),

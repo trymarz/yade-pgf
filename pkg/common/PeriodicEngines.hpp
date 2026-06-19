@@ -16,7 +16,7 @@ public:
 		gettimeofday(&tp, NULL);
 		return tp.tv_sec + tp.tv_usec / 1e6;
 	}
-	virtual ~PeriodicEngine() {}; // vtable
+	virtual ~PeriodicEngine() { }; // vtable
 	bool isActivated() override
 	{
 		const Real& virtNow = scene->time;

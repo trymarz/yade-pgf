@@ -196,7 +196,7 @@ PyTypeObject PygtsObjectType = {
 #if PY_MAJOR_VERSION >= 3
 	(richcmpfunc)rich_compare, /* tp_richcompare */
 #else
-	0,                /* tp_richcompare */
+	0, /* tp_richcompare */
 #endif
 	0,              /* tp_weaklistoffset */
 	0,              /* tp_iter */
@@ -247,14 +247,18 @@ GHashTable* obj_table; /* GtsObject key, associated PyObject value */
 
 void pygts_object_register(PygtsObject* o)
 {
-	if (g_hash_table_lookup(obj_table, o->gtsobj) == NULL) { g_hash_table_insert(obj_table, o->gtsobj, o); }
+	if (g_hash_table_lookup(obj_table, o->gtsobj) == NULL) {
+		g_hash_table_insert(obj_table, o->gtsobj, o);
+	}
 }
 
 
 void pygts_object_deregister(PygtsObject* o)
 {
 	if (o->gtsobj != NULL) {
-		if (g_hash_table_lookup(obj_table, o->gtsobj) == o) { g_hash_table_remove(obj_table, o->gtsobj); }
+		if (g_hash_table_lookup(obj_table, o->gtsobj) == o) {
+			g_hash_table_remove(obj_table, o->gtsobj);
+		}
 	}
 }
 

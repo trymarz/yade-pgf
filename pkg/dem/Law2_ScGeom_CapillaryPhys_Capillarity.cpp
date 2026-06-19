@@ -468,8 +468,9 @@ TableauD::TableauD(std::ifstream& file)
 			}
 		}
 	else
-		LOG_ERROR("Problem regarding the capillary file structure (e.g. n_D is not consistent with the actual data), and/or mismatch with the expected "
-		          "structure by the code ! Will segfault");
+		LOG_ERROR(
+		        "Problem regarding the capillary file structure (e.g. n_D is not consistent with the actual data), and/or mismatch with the expected "
+		        "structure by the code ! Will segfault");
 	D = data[i - 1][0];
 }
 
@@ -631,7 +632,9 @@ bool BodiesMenisciiList::remove(const shared_ptr<Interaction>& interaction)
 void BodiesMenisciiList::checkLengthBuffer(const shared_ptr<Interaction>& interaction)
 {
 	Body::id_t maxBodyId = std::max(interaction->getId1(), interaction->getId2());
-	if (unsigned(maxBodyId) >= interactionsOnBody.size()) { interactionsOnBody.resize(maxBodyId + 1); }
+	if (unsigned(maxBodyId) >= interactionsOnBody.size()) {
+		interactionsOnBody.resize(maxBodyId + 1);
+	}
 }
 
 std::list<shared_ptr<Interaction>>& BodiesMenisciiList::operator[](int index) { return interactionsOnBody[index]; }

@@ -30,7 +30,9 @@ Real Law2_ScGeom_FrictPhys_CundallStrack::elasticEnergy()
 	{
 		if (!I->isReal()) continue;
 		FrictPhys* phys = dynamic_cast<FrictPhys*>(I->phys.get());
-		if (phys) { energy += 0.5 * (phys->normalForce.squaredNorm() / phys->kn + phys->shearForce.squaredNorm() / phys->ks); }
+		if (phys) {
+			energy += 0.5 * (phys->normalForce.squaredNorm() / phys->kn + phys->shearForce.squaredNorm() / phys->ks);
+		}
 	}
 	return energy;
 }

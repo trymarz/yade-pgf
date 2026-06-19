@@ -13,8 +13,8 @@ namespace yade { // Cannot have #include directive inside.
 using math::max;
 using math::min; // using inside .cpp file is ok.
 
-YADE_PLUGIN(/* self-contained in hpp: */ (Ig2_Polyhedra_Polyhedra_PolyhedraGeom)(Ig2_Wall_Polyhedra_PolyhedraGeom)(Ig2_Facet_Polyhedra_PolyhedraGeom)(
-        Ig2_Sphere_Polyhedra_ScGeom)(Ig2_Polyhedra_Polyhedra_ScGeom)(Ig2_Polyhedra_Polyhedra_PolyhedraGeomOrScGeom));
+YADE_PLUGIN(/* self-contained in hpp: */ (
+        Ig2_Polyhedra_Polyhedra_PolyhedraGeom)(Ig2_Wall_Polyhedra_PolyhedraGeom)(Ig2_Facet_Polyhedra_PolyhedraGeom)(Ig2_Sphere_Polyhedra_ScGeom)(Ig2_Polyhedra_Polyhedra_ScGeom)(Ig2_Polyhedra_Polyhedra_PolyhedraGeomOrScGeom));
 
 CREATE_LOGGER(Ig2_Polyhedra_Polyhedra_PolyhedraGeom);
 CREATE_LOGGER(Ig2_Wall_Polyhedra_PolyhedraGeom);
@@ -510,7 +510,9 @@ bool Ig2_Sphere_Polyhedra_ScGeom::go(
 		normal /= dst;
 		contactPoint = center + normal * (.5 * radius);
 	} else {
-		if (rel == none) { LOG_FATAL("TODO"); }
+		if (rel == none) {
+			LOG_FATAL("TODO");
+		}
 		Real coeff = rel == edge ? edgeCoeff : (rel == vertex ? vertexCoeff : 1.0);
 		normal     = closest - center;
 		dst        = normal.norm();
@@ -548,7 +550,9 @@ bool Ig2_Polyhedra_Polyhedra_ScGeom::go(
 		Ig2_Polyhedra_Polyhedra_PolyhedraGeom ppGeom = Ig2_Polyhedra_Polyhedra_PolyhedraGeom();
 		ppGeom.interactionDetectionFactor            = interactionDetectionFactor;
 		bool pp                                      = ppGeom.go(shape1, shape2, state2, state1, shift2, force, interaction);
-		if (!pp) { return false; }
+		if (!pp) {
+			return false;
+		}
 		shared_ptr<PolyhedraGeom> pGeom = YADE_PTR_CAST<PolyhedraGeom>(interaction->geom);
 		geom                            = shared_ptr<ScGeom>(new ScGeom());
 		geom->radius1                   = (pGeom->contactPoint - se31.position).norm();
@@ -602,10 +606,14 @@ bool Ig2_Polyhedra_Polyhedra_PolyhedraGeomOrScGeom::go(
 	}
 	//
 	ScGeom* scGeom = dynamic_cast<ScGeom*>(interaction->geom.get());
-	if (scGeom) { return ig2scGeom->go(shape1, shape2, state1, state2, shift2, force, interaction); }
+	if (scGeom) {
+		return ig2scGeom->go(shape1, shape2, state1, state2, shift2, force, interaction);
+	}
 	//
 	PolyhedraGeom* pGeom = dynamic_cast<PolyhedraGeom*>(interaction->geom.get());
-	if (pGeom) { return ig2polyhedraGeom->go(shape1, shape2, state1, state2, shift2, force, interaction); }
+	if (pGeom) {
+		return ig2polyhedraGeom->go(shape1, shape2, state1, state2, shift2, force, interaction);
+	}
 	//
 	LOG_ERROR("TODO, should not happen");
 	return false;

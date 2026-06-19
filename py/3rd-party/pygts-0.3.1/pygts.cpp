@@ -46,7 +46,9 @@ static PyObject* merge(PyObject* self, PyObject* args)
 	PygtsVertex* vertex;
 
 	/* Parse the args */
-	if (!PyArg_ParseTuple(args, "Od", &tuple, &epsilon)) { return NULL; }
+	if (!PyArg_ParseTuple(args, "Od", &tuple, &epsilon)) {
+		return NULL;
+	}
 	if (PyList_Check(tuple)) {
 		tuple = PyList_AsTuple(tuple);
 	} else {
@@ -107,7 +109,9 @@ static PyObject* vertices(PyObject* self, PyObject* args)
 	PygtsVertex* vertex;
 
 	/* Parse the args */
-	if (!PyArg_ParseTuple(args, "O", &tuple)) { return NULL; }
+	if (!PyArg_ParseTuple(args, "O", &tuple)) {
+		return NULL;
+	}
 	if (PyList_Check(tuple)) {
 		tuple = PyList_AsTuple(tuple);
 	} else {
@@ -168,7 +172,9 @@ static PyObject* segments(PyObject* self, PyObject* args)
 	PygtsSegment* segment;
 
 	/* Parse the args */
-	if (!PyArg_ParseTuple(args, "O", &tuple)) { return NULL; }
+	if (!PyArg_ParseTuple(args, "O", &tuple)) {
+		return NULL;
+	}
 	if (PyList_Check(tuple)) {
 		tuple = PyList_AsTuple(tuple);
 	} else {
@@ -253,7 +259,9 @@ static PyObject* triangles(PyObject* self, PyObject* args)
 	PygtsTriangle* triangle;
 
 	/* Parse the args */
-	if (!PyArg_ParseTuple(args, "O", &tuple)) { return NULL; }
+	if (!PyArg_ParseTuple(args, "O", &tuple)) {
+		return NULL;
+	}
 	if (PyList_Check(tuple)) {
 		tuple = PyList_AsTuple(tuple);
 	} else {
@@ -339,7 +347,9 @@ static PyObject* triangle_enclosing(PyObject* self, PyObject* args)
 	PygtsTriangle* triangle;
 
 	/* Parse the args */
-	if (!PyArg_ParseTuple(args, "O", &tuple)) { return NULL; }
+	if (!PyArg_ParseTuple(args, "O", &tuple)) {
+		return NULL;
+	}
 	if (PyList_Check(tuple)) {
 		tuple = PyList_AsTuple(tuple);
 	} else {
@@ -374,7 +384,9 @@ static PyObject* triangle_enclosing(PyObject* self, PyObject* args)
 		return NULL;
 	}
 
-	if ((triangle = pygts_triangle_new(t)) == NULL) { return NULL; }
+	if ((triangle = pygts_triangle_new(t)) == NULL) {
+		return NULL;
+	}
 
 	return (PyObject*)triangle;
 }
@@ -516,8 +528,12 @@ static void isofunc(gdouble** f, GtsCartesianGrid g, guint k, gpointer data)
 }
 
 #define ISO_CLEANUP                                                                                                                                            \
-	if (scalars) { Py_DECREF(scalars); }                                                                                                                   \
-	if (extents) { Py_DECREF(extents); }
+	if (scalars) {                                                                                                                                         \
+		Py_DECREF(scalars);                                                                                                                            \
+	}                                                                                                                                                      \
+	if (extents) {                                                                                                                                         \
+		Py_DECREF(extents);                                                                                                                            \
+	}
 
 static PyObject* isosurface(PyObject* self, PyObject* args, PyObject* kwds)
 {
@@ -531,7 +547,9 @@ static PyObject* isosurface(PyObject* self, PyObject* args, PyObject* kwds)
 
 	static char* kwlist[] = { "scalars", "isoval", "method", "extents", NULL };
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwds, "Od|sO", kwlist, &Oscalars, isoval, &method, &Oextents)) { return NULL; }
+	if (!PyArg_ParseTupleAndKeywords(args, kwds, "Od|sO", kwlist, &Oscalars, isoval, &method, &Oextents)) {
+		return NULL;
+	}
 
 	if (!(scalars = (PyArrayObject*)PyArray_ContiguousFromObject(Oscalars, NPY_DOUBLE, 3, 3))) {
 		ISO_CLEANUP;

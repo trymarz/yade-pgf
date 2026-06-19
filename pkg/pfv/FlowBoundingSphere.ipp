@@ -51,26 +51,26 @@ namespace CGT {
 	template <class Tesselation> FlowBoundingSphere<Tesselation>::FlowBoundingSphere()
 	{
 		xMin = 1000.0, xMax = -10000.0, yMin = 1000.0, yMax = -10000.0, zMin = 1000.0, zMax = -10000.0;
-		currentTes = 0;
-		nOfSpheres = 0;
+		currentTes  = 0;
+		nOfSpheres  = 0;
 		sectionArea = 0, Height = 0, vTotal = 0;
 		vtkInfiniteVertices = 0, vtkInfiniteCells = 0;
-		viscosity = 1;
+		viscosity        = 1;
 		fluidBulkModulus = 0;
-		tessBasedForce = true;
+		tessBasedForce   = true;
 		for (int i = 0; i < 6; i++)
 			boundsIds[i] = 0;
-		minPermLength = 1e-6; // multiplier applied on throat radius to define a minimal throat length (escaping coincident points)
-		slipBoundary = false; //no-slip/symmetry conditions on lateral boundaries
-		tolerance = 1e-07;
-		relax = 1.9;
-		ks = 0;
+		minPermLength      = 1e-6;  // multiplier applied on throat radius to define a minimal throat length (escaping coincident points)
+		slipBoundary       = false; //no-slip/symmetry conditions on lateral boundaries
+		tolerance          = 1e-07;
+		relax              = 1.9;
+		ks                 = 0;
 		distanceCorrection = true;
-		clampKValues = true;
-		meanKStat = true;
-		KOptFactor = 0;
-		noCache = true;
-		pressureChanged = false;
+		clampKValues       = true;
+		meanKStat          = true;
+		KOptFactor         = 0;
+		noCache            = true;
+		pressureChanged    = false;
 		computeAllCells
 		        = true; //might be turned false IF the code is reorganized (we can make a separate function to compute unitForceVectors outside compute_Permeability) AND it really matters for CPU time
 		debugOut = true;
@@ -81,11 +81,11 @@ namespace CGT {
 		        = false; /** if true use the average between the effective radius (inscribed sphere in facet) and the equivalent (circle surface = facet fluid surface) **/
 		// 	areaR2Permeability=true;
 		permeabilityMap = false;
-		computedOnce = false;
-		minKdivKmean = 0.0001;
-		maxKdivKmean = 100.;
-		ompThreads = 1;
-		errorCode = 0;
+		computedOnce    = false;
+		minKdivKmean    = 0.0001;
+		maxKdivKmean    = 100.;
+		ompThreads      = 1;
+		errorCode       = 0;
 		pxpos = ppval = NULL;
 	}
 
@@ -103,19 +103,19 @@ namespace CGT {
 		RTriangulation&     Tri = lastSolution().Triangulation();
 		Point               posAvFacet;
 		Real                facetFlowRate = 0;
-		FiniteCellsIterator cellEnd = Tri.finite_cells_end();
+		FiniteCellsIterator cellEnd       = Tri.finite_cells_end();
 		for (FiniteCellsIterator cell = Tri.finite_cells_begin(); cell != cellEnd; cell++) {
 			if (cell->info().isGhost or cell->info().isAlpha) continue;
 			cell->info().averageVelocity() = CGAL::NULL_VECTOR;
-			Real totFlowRate = 0; //used to acount for influxes in elements where pressure is imposed
+			Real totFlowRate               = 0; //used to acount for influxes in elements where pressure is imposed
 			for (int i = 0; i < 4; i++)
 				if (!Tri.is_infinite(cell->neighbor(i))) {
-					CVector Surfk = cell->info() - cell->neighbor(i)->info();
-					Real    area = sqrt(Surfk.squared_length());
-					Surfk = Surfk / area;
+					CVector Surfk  = cell->info() - cell->neighbor(i)->info();
+					Real    area   = sqrt(Surfk.squared_length());
+					Surfk          = Surfk / area;
 					CVector branch = cell->vertex(facetVertices[i][0])->point().point() - cell->info();
-					posAvFacet = (Point)cell->info() + (branch * Surfk) * Surfk;
-					facetFlowRate = (cell->info().kNorm())[i] * (cell->info().shiftedP() - cell->neighbor(i)->info().shiftedP());
+					posAvFacet     = (Point)cell->info() + (branch * Surfk) * Surfk;
+					facetFlowRate  = (cell->info().kNorm())[i] * (cell->info().shiftedP() - cell->neighbor(i)->info().shiftedP());
 					totFlowRate += facetFlowRate;
 					cell->info().averageVelocity() = cell->info().averageVelocity() + (facetFlowRate) * (posAvFacet - CGAL::ORIGIN);
 				}
@@ -132,14 +132,16 @@ namespace CGT {
 
 	template <class Tesselation> bool FlowBoundingSphere<Tesselation>::isOnSolid(Real X, Real Y, Real Z)
 	{
-		RTriangulation&     Tri = lastSolution().Triangulation();
+		RTriangulation&     Tri     = lastSolution().Triangulation();
 		FiniteCellsIterator cellEnd = Tri.finiteCellsEnd();
 		for (FiniteCellsIterator cell = Tri.finite_cells_begin(); cell != cellEnd; cell++) {
 			for (int i = 0; i < 4; i++) {
 				Real radius = sqrt(cell->vertex(i)->point().weight());
 				if (X < (cell->vertex(i)->point().x() + radius) && X > (cell->vertex(i)->point().x() - radius)) {
 					if (Y < (cell->vertex(i)->point().y() + radius) && Y > (cell->vertex(i)->point().y() - radius)) {
-						if (Z < (cell->vertex(i)->point().z() + radius) && Z > (cell->vertex(i)->point().z() - radius)) { return true; }
+						if (Z < (cell->vertex(i)->point().z() + radius) && Z > (cell->vertex(i)->point().z() - radius)) {
+							return true;
+						}
 					}
 				}
 			}
@@ -149,8 +151,8 @@ namespace CGT {
 	template <class Tesselation> void FlowBoundingSphere<Tesselation>::averageFluidVelocity()
 	{
 		averageRelativeCellVelocity();
-		RTriangulation&        Tri = lastSolution().Triangulation();
-		int                    numVertex = 0;
+		RTriangulation&        Tri         = lastSolution().Triangulation();
+		int                    numVertex   = 0;
 		FiniteVerticesIterator verticesEnd = Tri.finite_vertices_end();
 		for (FiniteVerticesIterator vIt = Tri.finite_vertices_begin(); vIt != verticesEnd; vIt++) {
 			numVertex++;
@@ -163,7 +165,7 @@ namespace CGT {
 
 		for (FiniteVerticesIterator vIt = Tri.finite_vertices_begin(); vIt != verticesEnd; vIt++) {
 			velocityVolumes[vIt->info().id()] = CGAL::NULL_VECTOR;
-			volumes[vIt->info().id()] = 0.f;
+			volumes[vIt->info().id()]         = 0.f;
 		}
 
 		FiniteCellsIterator cellEnd = Tri.finiteCellsEnd();
@@ -184,11 +186,11 @@ namespace CGT {
 		CellHandle    cellula;
 
 		CVector velocity = CGAL::NULL_VECTOR;
-		int     i = 0;
+		int     i        = 0;
 		for (Real X = xMin + Rx; X < xMax; X += Rx) {
 			for (Real Y = yMin + Ry; Y < yMax; Y += Ry) {
 				velocity = CGAL::NULL_VECTOR;
-				i = 0;
+				i        = 0;
 				for (Real Z = zMin + Rz; Z < zMax; Z += Rz) {
 					cellula = Tri.locate(Point(X, Y, Z));
 					for (int y = 0; y < 4; y++) {
@@ -214,7 +216,7 @@ namespace CGT {
 		vector<Real>    result;
 		result.resize(3);
 		velocityVolumes = CGAL::NULL_VECTOR;
-		volumes = 0.f;
+		volumes         = 0.f;
 
 		FiniteCellsIterator cellEnd = Tri.finite_cells_end();
 		for (FiniteCellsIterator cell = Tri.finite_cells_begin(); cell != cellEnd; cell++) {
@@ -222,7 +224,7 @@ namespace CGT {
 				for (unsigned int i = 0; i < 4; i++) {
 					if (cell->vertex(i)->info().id() == Id_sph) {
 						velocityVolumes = velocityVolumes + cell->info().averageVelocity() * math::abs(cell->info().volume());
-						volumes = volumes + math::abs(cell->info().volume());
+						volumes         = volumes + math::abs(cell->info().volume());
 					}
 				}
 			}
@@ -235,21 +237,21 @@ namespace CGT {
 
 	template <class Tesselation> Real FlowBoundingSphere<Tesselation>::getPorePressure(Real X, Real Y, Real Z)
 	{
-		const RTriangulation& Tri = lastSolution().Triangulation();
+		const RTriangulation& Tri  = lastSolution().Triangulation();
 		CellHandle            cell = Tri.locate(CGT::Sphere(X, Y, Z));
 		return cell->info().p();
 	}
 
 	template <class Tesselation> Real FlowBoundingSphere<Tesselation>::getPoreTemperature(Real X, Real Y, Real Z)
 	{
-		const RTriangulation& Tri = lastSolution().Triangulation();
+		const RTriangulation& Tri  = lastSolution().Triangulation();
 		CellHandle            cell = Tri.locate(CGT::Sphere(X, Y, Z));
 		return cell->info().temp();
 	}
 
 	template <class Tesselation> int FlowBoundingSphere<Tesselation>::getCell(Real X, Real Y, Real Z)
 	{
-		RTriangulation& Tri = lastSolution().Triangulation();
+		RTriangulation& Tri  = lastSolution().Triangulation();
 		CellHandle      cell = Tri.locate(CGT::Sphere(X, Y, Z));
 		return cell->info().id;
 	}
@@ -263,13 +265,13 @@ namespace CGT {
 		CellHandle      permeameter;
 		std::ofstream   capture("Pressure_profile", std::ios::app);
 		int             intervals = 5;
-		int             captures = 6;
-		Real            Rz = (zMax - zMin) / intervals;
-		Real            Ry = (WallUpy - WallDowny) / captures;
-		Real            X = (xMax + xMin) / 2;
-		Real            Y = WallDowny;
-		Real            pressure = 0.f;
-		int             cell = 0;
+		int             captures  = 6;
+		Real            Rz        = (zMax - zMin) / intervals;
+		Real            Ry        = (WallUpy - WallDowny) / captures;
+		Real            X         = (xMax + xMin) / 2;
+		Real            Y         = WallDowny;
+		Real            pressure  = 0.f;
+		int             cell      = 0;
 		for (int i = 0; i < captures; i++) {
 			for (Real Z = min(zMin, zMax); Z <= max(zMin, zMax); Z += math::abs(Rz)) {
 				permeameter = Tri.locate(CGT::Sphere(X, Y, Z));
@@ -282,12 +284,12 @@ namespace CGT {
 	}
 	template <class Tesselation> Real FlowBoundingSphere<Tesselation>::averageSlicePressure(Real Y)
 	{
-		RTriangulation& Tri = lastSolution().Triangulation();
+		RTriangulation& Tri   = lastSolution().Triangulation();
 		Real            P_ave = 0.f;
-		int             n = 0;
-		Real            Ry = (yMax - yMin) / 30;
-		Real            Rx = (xMax - xMin) / 30;
-		Real            Rz = (zMax - zMin) / 30;
+		int             n     = 0;
+		Real            Ry    = (yMax - yMin) / 30;
+		Real            Rx    = (xMax - xMin) / 30;
+		Real            Rz    = (zMax - zMin) / 30;
 		for (Real X = xMin; X <= xMax + Ry / 10; X = X + Rx) {
 			for (Real Z = zMin; Z <= zMax + Ry / 10; Z = Z + Rz) {
 				P_ave += Tri.locate(CGT::Sphere(X, Y, Z))->info().p();
@@ -299,7 +301,7 @@ namespace CGT {
 	}
 	template <class Tesselation> Real FlowBoundingSphere<Tesselation>::averagePressure()
 	{
-		RTriangulation& Tri = lastSolution().Triangulation();
+		RTriangulation& Tri   = lastSolution().Triangulation();
 		Real            Ppond = 0.f, Vpond = 0.f;
 		for (FiniteCellsIterator cell = Tri.finite_cells_begin(); cell != Tri.finite_cells_end(); cell++) {
 			Ppond += cell->info().p() * math::abs(cell->info().volume());
@@ -340,29 +342,29 @@ namespace CGT {
 
 				for (int j = 0; j < 4; j++)
 					if (!Tri.is_infinite(cell->neighbor(j))) {
-						neighbourCell = cell->neighbor(j);
+						neighbourCell        = cell->neighbor(j);
 						const CVector& Surfk = cell->info().facetSurfaces[j];
 						//FIXME : later compute that fluidSurf only once in hydraulicRadius, for now keep full surface not modified in cell->info for comparison with other forces schemes
 						//The ratio void surface / facet surface
 						//Area of the facet (i.e. the triangle)
 						Real area = sqrt(Surfk.squared_length());
 						if (area <= 0) cerr << "AREA <= 0!!" << endl;
-						CVector                     facetNormal = Surfk / area;
+						CVector                     facetNormal   = Surfk / area;
 						const std::vector<CVector>& crossSections = cell->info().facetSphereCrossSections;
 						//This is the cross-sectional area of the throat
 						CVector fluidSurfk = cell->info().facetSurfaces[j] * cell->info().facetFluidSurfacesRatio[j];
 						/// handle fictious vertex since we can get the projected surface easily here
 						if (cell->vertex(j)->info().isFictious) {
 							//projection of facet on the boundary
-							Real projSurf = math::abs(Surfk[boundary(cell->vertex(j)->info().id()).coordinate]);
-							tempVect = -projSurf * boundary(cell->vertex(j)->info().id()).normal;
+							Real projSurf                  = math::abs(Surfk[boundary(cell->vertex(j)->info().id()).coordinate]);
+							tempVect                       = -projSurf * boundary(cell->vertex(j)->info().id()).normal;
 							cell->vertex(j)->info().forces = cell->vertex(j)->info().forces + tempVect * cell->info().p();
 							//define the cached value for later use with cache*p
 							cell->info().unitForceVectors[j] = cell->info().unitForceVectors[j] + tempVect;
 						}
 						/// Apply weighted forces f_k=sqRad_k/sumSqRad*f
 						CVector facetUnitForce = -fluidSurfk * cell->info().solidSurfaces[j][3];
-						CVector facetForce = cell->info().p() * facetUnitForce;
+						CVector facetForce     = cell->info().p() * facetUnitForce;
 						for (int y = 0; y < 3; y++) {
 							//1st the drag (viscous) force weighted by surface of spheres in the throat
 							cell->vertex(facetVertices[j][y])->info().forces = cell->vertex(facetVertices[j][y])->info().forces
@@ -406,7 +408,7 @@ namespace CGT {
 #endif
 		for (int vn = 0; vn <= T[currentTes].maxId; vn++) {
 			if (T[currentTes].vertexHandles[vn] == NULL) continue;
-			VertexHandle& v = T[currentTes].vertexHandles[vn];
+			VertexHandle& v  = T[currentTes].vertexHandles[vn];
 			const int&    id = v->info().id();
 			CVector       tf(0, 0, 0);
 			int           k = 0;
@@ -438,7 +440,7 @@ namespace CGT {
 			VCellIterator cellsEnd = Tri.incident_cells(T[currentTes].vertexHandles[yMaxId], cellsIt);
 			for (VCellIterator it = tmpCells.begin(); it != cellsEnd; it++) {
 				if (!Tri.is_infinite(*it)) {
-					Point&      p1 = (*it)->info();
+					Point&      p1   = (*it)->info();
 					CellHandle& cell = *it;
 					if (p1.x() < xMin) cell->info().p() = averagePressure + amplitude;
 					else if (p1.x() > xMax)
@@ -456,9 +458,9 @@ namespace CGT {
 			cerr << "Wrong definition of boundary pressure, check input" << endl;
 			return;
 		}
-		pxpos = &xpos;
-		ppval = &pval;
-		Real       dx = xpos[1] - xpos[0];
+		pxpos            = &xpos;
+		ppval            = &pval;
+		Real       dx    = xpos[1] - xpos[0];
 		Real       xinit = xpos[0];
 		Real       xlast = xpos.back();
 		VectorCell tmpCells;
@@ -466,12 +468,12 @@ namespace CGT {
 		VCellIterator cellsEnd = Tri.incident_cells(T[currentTes].vertexHandles[yMaxId], tmpCells.begin());
 		for (VCellIterator it = tmpCells.begin(); it != cellsEnd; it++) {
 			if (Tri.is_infinite(*it)) continue;
-			Point&      p1 = (*it)->info();
+			Point&      p1   = (*it)->info();
 			CellHandle& cell = *it;
 			if (p1.x() < xinit || p1.x() > xlast) cerr << "udef pressure: cell out of range" << endl;
 			else {
 				Real frac, intg;
-				frac = modf((p1.x() - xinit) / dx, &intg);
+				frac             = modf((p1.x() - xinit) / dx, &intg);
 				cell->info().p() = pval[size_t(intg)] * (1 - frac) + pval[size_t(intg) + 1] * frac;
 			}
 		}
@@ -505,7 +507,7 @@ namespace CGT {
 					center = center + 0.25 * (Tes.vertex(newCell->vertex(k)->info().id())->point().point() - CGAL::ORIGIN);
 			else {
 				Real boundPos = 0;
-				int  coord = 0;
+				int  coord    = 0;
 				for (int k = 0; k < 4; k++) {
 					if (!newCell->vertex(k)->info().isFictious)
 						center = center
@@ -514,10 +516,10 @@ namespace CGT {
 				}
 				for (int k = 0; k < 4; k++) {
 					if (newCell->vertex(k)->info().isFictious) {
-						coord = boundary(newCell->vertex(k)->info().id()).coordinate;
+						coord    = boundary(newCell->vertex(k)->info().id()).coordinate;
 						boundPos = boundary(newCell->vertex(k)->info().id()).p[coord];
-						center = CVector(
-						        coord == 0 ? boundPos : center[0],
+						center   = CVector(
+                                                        coord == 0 ? boundPos : center[0],
 						        coord == 1 ? boundPos : center[1],
 						        coord == 2 ? boundPos : center[2]);
 					}
@@ -541,7 +543,7 @@ namespace CGT {
 		//... then, check distance
 		Real m = (cross_product(v0.point() - v1.point(), v2.point() - v1.point())).squared_length() / v1v2;
 		if (m < v0.weight()) {
-			Real d = 2 * sqrt((v0.weight() - m));
+			Real d    = 2 * sqrt((v0.weight() - m));
 			Real teta = 2 * acos(sqrt(m / v0.weight()));
 			return 0.5 * (teta * v0.weight() - d * sqrt(m)); //this is S0, we use crossSection to avoid computing an "asin"
 			                                                 // 		return crossSection-m*d;
@@ -556,7 +558,7 @@ namespace CGT {
 		else
 			blockedCells.push_back(cell);
 		for (int j = 0; j < 4; j++) {
-			(cell->info().kNorm())[j] = 0;
+			(cell->info().kNorm())[j]                                      = 0;
 			(cell->neighbor(j)->info().kNorm())[Tri.mirror_index(cell, j)] = 0;
 		}
 	}
@@ -578,7 +580,7 @@ namespace CGT {
 		int  surfneg = 0;
 		int  NEG = 0, POS = 0, pass = 0;
 
-		bool ref = Tri.finite_cells_begin()->info().isvisited;
+		bool ref   = Tri.finite_cells_begin()->info().isvisited;
 		Real meanK = 0, STDEV = 0, meanRadius = 0, meanDistance = 0;
 		Real infiniteK = 1e10;
 
@@ -591,16 +593,16 @@ namespace CGT {
 			Point& p1 = cell->info();
 			for (int j = 0; j < 4; j++) {
 				neighbourCell = cell->neighbor(j);
-				Point& p2 = neighbourCell->info();
+				Point& p2     = neighbourCell->info();
 				if (!Tri.is_infinite(neighbourCell) && (neighbourCell->info().isvisited == ref || computeAllCells)) {
 					//compute and store the area of sphere-facet intersections for later use
 					VertexHandle W[3];
 					for (int kk = 0; kk < 3; kk++) {
 						W[kk] = cell->vertex(facetVertices[j][kk]);
 					}
-					Sphere& v0 = W[0]->point();
-					Sphere& v1 = W[1]->point();
-					Sphere& v2 = W[2]->point();
+					Sphere& v0                               = W[0]->point();
+					Sphere& v1                               = W[1]->point();
+					Sphere& v2                               = W[2]->point();
 					cell->info().facetSphereCrossSections[j] = CVector(
 					        W[0]->info().isFictious ? 0
 					                                : 0.5 * v0.weight()
@@ -621,7 +623,7 @@ namespace CGT {
 					// 				if (cell->info().blocked) continue;//We don't need permeability for blocked cells, it will be set to zero anyway
 					pass += 1;
 					CVector l = p1 - p2;
-					distance = sqrt(l.squared_length());
+					distance  = sqrt(l.squared_length());
 					if (!rAverage) radius = 2 * computeHydraulicRadius(cell, j);
 					else
 						radius = (computeEffectiveRadius(cell, j) + computeEquivalentRadius(cell, j)) * 0.5;
@@ -633,11 +635,11 @@ namespace CGT {
 						if (minPermLength > 0 && distanceCorrection) {
 							distance = max(minPermLength * radius, distance);
 						}
-						const CVector& Surfk = cell->info().facetSurfaces[j];
-						Real           area = sqrt(Surfk.squared_length());
+						const CVector& Surfk         = cell->info().facetSurfaces[j];
+						Real           area          = sqrt(Surfk.squared_length());
 						const CVector& crossSections = cell->info().facetSphereCrossSections[j];
-						Real           S0 = 0;
-						S0 = checkSphereFacetOverlap(v0, v1, v2);
+						Real           S0            = 0;
+						S0                           = checkSphereFacetOverlap(v0, v1, v2);
 						if (S0 == 0) S0 = checkSphereFacetOverlap(v1, v2, v0);
 						if (S0 == 0) S0 = checkSphereFacetOverlap(v2, v0, v1);
 						//take absolute value, since in rare cases the surface can be negative (overlaping spheres)
@@ -671,7 +673,7 @@ namespace CGT {
 							     << W[1]->info().id() << " " << W[2]->info().id() << " " << p1 << " " << p2 << " test " << endl;
 						}
 					} else {
-						k = infiniteK;
+						k                       = infiniteK;
 						cell->info().kNorm()[j] = infiniteK;
 					} //Will be corrected in the next loop
 					if (!neighbourCell->info().isGhost)
@@ -699,7 +701,7 @@ namespace CGT {
 			cout << "meanTubesRadius = " << meanRadius << endl;
 			cout << "meanDistance = " << meanDistance << endl;
 		}
-		ref = Tri.finite_cells_begin()->info().isvisited;
+		ref  = Tri.finite_cells_begin()->info().isvisited;
 		pass = 0;
 
 		if (clampKValues)
@@ -720,7 +722,7 @@ namespace CGT {
 		// A loop to compute the standard deviation of the local K distribution, and use it to include/exclude K values higher then (meanK +/- K_opt_factor*STDEV)
 		if (meanKStat) {
 			std::ofstream k_opt_file("k_stdev.txt", std::ios::out);
-			ref = Tri.finite_cells_begin()->info().isvisited;
+			ref  = Tri.finite_cells_begin()->info().isvisited;
 			pass = 0;
 			for (FiniteCellsIterator cell = Tri.finite_cells_begin(); cell != cellEnd; cell++) {
 				for (int j = 0; j < 4; j++) {
@@ -736,7 +738,7 @@ namespace CGT {
 			if (debugOut) cout << "PassSTDEV = " << pass << endl << "STATISTIC K" << endl;
 			Real k_min = 0, k_max = meanK + KOptFactor * STDEV;
 			cout << "Kmoy = " << meanK << " Standard Deviation = " << STDEV << endl << "kmin = " << k_min << " kmax = " << k_max << endl;
-			ref = Tri.finite_cells_begin()->info().isvisited;
+			ref  = Tri.finite_cells_begin()->info().isvisited;
 			pass = 0;
 			for (FiniteCellsIterator cell = Tri.finite_cells_begin(); cell != cellEnd; cell++) {
 				for (int j = 0; j < 4; j++) {
@@ -744,7 +746,7 @@ namespace CGT {
 					if (!Tri.is_infinite(neighbourCell) && neighbourCell->info().isvisited == ref) {
 						pass += 1;
 						if ((cell->info().kNorm())[j] > k_max) {
-							(cell->info().kNorm())[j] = k_max;
+							(cell->info().kNorm())[j]                                  = k_max;
 							(neighbourCell->info().kNorm())[Tri.mirror_index(cell, j)] = (cell->info().kNorm())[j];
 						}
 						k_opt_file << KOptFactor << " " << (cell->info().kNorm())[j] << endl;
@@ -756,8 +758,8 @@ namespace CGT {
 		}
 		if (debugOut) {
 			FiniteVerticesIterator verticesEnd = Tri.finite_vertices_end();
-			Real                   Vgrains = 0;
-			int                    grains = 0;
+			Real                   Vgrains     = 0;
+			int                    grains      = 0;
 			for (FiniteVerticesIterator vIt = Tri.finite_vertices_begin(); vIt != verticesEnd; vIt++) {
 				if (!vIt->info().isFictious && !vIt->info().isGhost) {
 					grains += 1;
@@ -827,7 +829,7 @@ namespace CGT {
 		Real  r[3];   //spheres radius
 		for (int i = 0; i < 3; i++) {
 			pos[i] = cell->vertex(facetVertices[j][i])->point().point();
-			r[i] = sqrt(cell->vertex(facetVertices[j][i])->point().weight());
+			r[i]   = sqrt(cell->vertex(facetVertices[j][i])->point().weight());
 		}
 
 		Real reff = computeEffectiveRadiusByPosRadius(pos[0], r[0], pos[1], r[1], pos[2], r[2]);
@@ -849,7 +851,7 @@ namespace CGT {
 		CVector C = posC - posA;
 		CVector z = CGAL::cross_product(x, C);
 		CVector y = CGAL::cross_product(x, z);
-		y = y / sqrt(y.squared_length());
+		y         = y / sqrt(y.squared_length());
 
 		Real b1[2];
 		b1[0] = B * x;
@@ -863,15 +865,17 @@ namespace CGT {
 		        / (2 * c1[1] - 2 * b1[1] * c1[0] / b1[0]);
 		Real BB = (rA - rC - ((rA - rB) * c1[0] / b1[0])) / (c1[1] - b1[1] * c1[0] / b1[0]);
 		Real CC = (pow(rA, 2) - pow(rB, 2) + pow(b1[0], 2) + pow(b1[1], 2)) / (2 * b1[0]);
-		Real D = (rA - rB) / b1[0];
-		Real E = b1[1] / b1[0];
-		Real F = pow(CC, 2) + pow(E, 2) * pow(A, 2) - 2 * CC * E * A;
+		Real D  = (rA - rB) / b1[0];
+		Real E  = b1[1] / b1[0];
+		Real F  = pow(CC, 2) + pow(E, 2) * pow(A, 2) - 2 * CC * E * A;
 
 		Real c = -F - pow(A, 2) + pow(rA, 2);
 		Real b = 2 * rA - 2 * (D - BB * E) * (CC - E * A) - 2 * A * BB;
 		Real a = 1 - pow((D - BB * E), 2) - pow(BB, 2);
 
-		if ((pow(b, 2) - 4 * a * c) < 0) { cout << "NEGATIVE DETERMINANT" << endl; }
+		if ((pow(b, 2) - 4 * a * c) < 0) {
+			cout << "NEGATIVE DETERMINANT" << endl;
+		}
 		Real reff = (-b + sqrt(pow(b, 2) - 4 * a * c)) / (2 * a);
 		return reff;
 	}
@@ -885,7 +889,7 @@ namespace CGT {
 	{
 		RTriangulation& Tri = T[currentTes].Triangulation();
 		if (Tri.is_infinite(cell->neighbor(j))) return 0;
-		Real Vpore = this->volumePoreVoronoiFraction(cell, j);
+		Real Vpore  = this->volumePoreVoronoiFraction(cell, j);
 		Real Ssolid = this->surfaceSolidThroat(cell, j, slipBoundary, /*reuse the same facet data*/ true);
 		if (Ssolid == 0) return 0; // coincident points
 
@@ -899,7 +903,7 @@ namespace CGT {
 	}
 	template <class Tesselation> void FlowBoundingSphere<Tesselation>::initializePressure(Real pZero)
 	{
-		RTriangulation&     Tri = T[currentTes].Triangulation();
+		RTriangulation&     Tri     = T[currentTes].Triangulation();
 		FiniteCellsIterator cellEnd = Tri.finite_cells_end();
 
 		for (FiniteCellsIterator cell = Tri.finite_cells_begin(); cell != cellEnd; cell++) {
@@ -916,10 +920,10 @@ namespace CGT {
 				if (!bi.flowCondition) {
 					VectorCell tmpCells;
 					tmpCells.resize(10000);
-					VCellIterator cells_it = tmpCells.begin();
+					VCellIterator cells_it  = tmpCells.begin();
 					VCellIterator cells_end = Tri.incident_cells(T[currentTes].vertexHandles[id], cells_it);
 					for (VCellIterator it = tmpCells.begin(); it != cells_end; it++) {
-						(*it)->info().p() = bi.value;
+						(*it)->info().p()        = bi.value;
 						(*it)->info().Pcondition = true;
 						boundingCells[bound].push_back(*it);
 					}
@@ -928,7 +932,7 @@ namespace CGT {
 			}
 		} else {
 			// identify cells incident to alpha vertices and set BCs
-			Tesselation& Tes = T[currentTes];
+			Tesselation& Tes       = T[currentTes];
 			const long   sizeCells = Tes.cellHandles.size();
 			//#ifdef YADE_OPENMP
 			//#pragma omp parallel for
@@ -938,9 +942,9 @@ namespace CGT {
 				for (int j = 0; j < 4; j++) {
 					//	VertexHandle vh = cell->vertex(j);
 					if (cell->vertex(j)->info().isAlpha == true) {
-						cell->info().p() = alphaBoundValue;
+						cell->info().p()        = alphaBoundValue;
 						cell->info().Pcondition = true;
-						cell->info().isAlpha = true;
+						cell->info().isAlpha    = true;
 						alphaBoundingCells.push_back(cell);
 					}
 				}
@@ -960,7 +964,7 @@ namespace CGT {
 					cerr << "Imposed pressure fall in a boundary condition." << endl;
 			}
 			IPCells.push_back(cell);
-			cell->info().p() = imposedP[n].second;
+			cell->info().p()        = imposedP[n].second;
 			cell->info().Pcondition = true;
 		}
 		pressureChanged = false;
@@ -991,7 +995,7 @@ namespace CGT {
 
 	template <class Tesselation> void FlowBoundingSphere<Tesselation>::initializeTemperatures(Real tZero)
 	{
-		RTriangulation&     Tri = T[currentTes].Triangulation();
+		RTriangulation&     Tri     = T[currentTes].Triangulation();
 		FiniteCellsIterator cellEnd = Tri.finite_cells_end();
 
 		for (FiniteCellsIterator cell = Tri.finite_cells_begin(); cell != cellEnd; cell++) {
@@ -1005,10 +1009,10 @@ namespace CGT {
 			if (!bi.fluxCondition) {
 				VectorCell tmpCells;
 				tmpCells.resize(10000);
-				VCellIterator cells_it = tmpCells.begin();
+				VCellIterator cells_it  = tmpCells.begin();
 				VCellIterator cells_end = Tri.incident_cells(T[currentTes].vertexHandles[id], cells_it);
 				for (VCellIterator it = tmpCells.begin(); it != cells_end; it++) {
-					(*it)->info().temp() = bi.value;
+					(*it)->info().temp()     = bi.value;
 					(*it)->info().Tcondition = true;
 					thermalBoundingCells[bound].push_back(*it);
 				}
@@ -1049,14 +1053,14 @@ namespace CGT {
 			Boundary& bi = boundary(id);
 			if (!bi.flowCondition) {
 				for (VCellIterator it = boundingCells[bound].begin(); it != boundingCells[bound].end(); it++) {
-					(*it)->info().p() = bi.value;
+					(*it)->info().p()        = bi.value;
 					(*it)->info().Pcondition = true;
 				}
 			}
 		}
 		if (ppval && pxpos) applyUserDefinedPressure(T[currentTes].Triangulation(), *pxpos, *ppval);
 		for (unsigned int n = 0; n < imposedP.size(); n++) {
-			IPCells[n]->info().p() = imposedP[n].second;
+			IPCells[n]->info().p()        = imposedP[n].second;
 			IPCells[n]->info().Pcondition = true;
 		}
 		pressureChanged = false;
@@ -1070,12 +1074,12 @@ namespace CGT {
 
 		reApplyBoundaryConditions();
 		RTriangulation& Tri = T[currentTes].Triangulation();
-		int             j = 0;
+		int             j   = 0;
 		Real            m, n, dp_max, p_max, sum_p, p_moy, dp;
 		Real            compFlowFactor = 0;
 		vector<Real>    previousP;
 		previousP.resize(Tri.number_of_finite_cells());
-		const int num_threads = 1;
+		const int num_threads  = 1;
 		bool      compressible = (fluidBulkModulus > 0);
 #ifdef GS_OPEN_MP
 		omp_set_num_threads(num_threads);
@@ -1102,10 +1106,10 @@ namespace CGT {
 		{
 			do {
 				int cell2 = 0;
-				dp_max = 0;
-				p_max = 0;
-				p_moy = 0;
-				sum_p = 0;
+				dp_max    = 0;
+				p_max     = 0;
+				p_moy     = 0;
+				sum_p     = 0;
 #ifdef GS_OPEN_MP
 				cell2 = numCells;
 				for (int ii = 0; ii < num_threads; ii++)
@@ -1116,7 +1120,7 @@ namespace CGT {
 					t_sum_p[ii] = 0;
 				for (int ii = 0; ii < num_threads; ii++)
 					t_sum_dp[ii] = 0;
-				int       kk = 0;
+				int       kk        = 0;
 				const int numCells2 = numCells;
 #pragma omp parallel for private(dp, m, n, kk) shared(tolerance, t_sum_dp, t_dp_max, sum_p, cells_its, j, Tri, relax) schedule(dynamic, 1000)
 				for (kk = 0; kk < numCells2; kk++) {
@@ -1129,7 +1133,9 @@ namespace CGT {
 					if (!cell->info().Pcondition && !cell->info().blocked) {
 						cell2++;
 #endif
-						if (compressible && j == 0) { previousP[bb] = cell->info().p(); }
+						if (compressible && j == 0) {
+							previousP[bb] = cell->info().p();
+						}
 						m = 0, n = 0;
 						for (int j2 = 0; j2 < 4; j2++) {
 							if (!Tri.is_infinite(cell->neighbor(j2))) {
@@ -1178,11 +1184,11 @@ namespace CGT {
 						const int tn = omp_get_thread_num();
 						t_sum_dp[tn] += math::abs(dp);
 						t_dp_max[tn] = max(t_dp_max[tn], math::abs(dp));
-						t_p_max[tn] = max(t_p_max[tn], math::abs(cell->info().p()));
+						t_p_max[tn]  = max(t_p_max[tn], math::abs(cell->info().p()));
 						t_sum_p[tn] += math::abs(cell->info().p());
 #else
 						dp_max = max(dp_max, math::abs(dp));
-						p_max = max(p_max, math::abs(cell->info().p()));
+						p_max  = max(p_max, math::abs(cell->info().p()));
 						sum_p += math::abs(cell->info().p());
 #endif
 					}
@@ -1222,7 +1228,7 @@ namespace CGT {
 		if (noCache && T[!currentTes].Max_id() <= 0) return 0;
 		bool            tes = noCache ? (!currentTes) : currentTes;
 		RTriangulation& Tri = T[tes].Triangulation();
-		Real            Q1 = 0;
+		Real            Q1  = 0;
 
 		VectorCell tmpCells;
 		tmpCells.resize(10000);
@@ -1244,7 +1250,7 @@ namespace CGT {
 		if (noCache && T[!currentTes].Max_id() <= 0) return 0;
 		bool            tes = noCache ? (!currentTes) : currentTes;
 		RTriangulation& Tri = T[tes].Triangulation();
-		Real            A = 0;
+		Real            A   = 0;
 
 		VectorCell tmpCells;
 		tmpCells.resize(10000);
@@ -1258,7 +1264,7 @@ namespace CGT {
 			for (int j = 0; j < 4; j++) {
 				if (cell->neighbor(j)->info().isFictious) continue;
 				const CVector& Surfk = cell->info().facetSurfaces[j];
-				Real           area = sqrt(Surfk.squared_length());
+				Real           area  = sqrt(Surfk.squared_length());
 				A += cell->info().facetFluidSurfacesRatio[j] * area;
 			}
 		}
@@ -1287,11 +1293,11 @@ namespace CGT {
 			for (int j = 0; j < 4; j++) {
 				if (cell->neighbor(j)->info().isFictious) continue;
 				const CVector& Surfk = cell->info().facetSurfaces[j];
-				Real           area = sqrt(Surfk.squared_length());
-				vectorVel[0] = cell->info().averageVelocity()[0];
-				vectorVel[1] = cell->info().averageVelocity()[1];
-				vectorVel[2] = cell->info().averageVelocity()[2];
-				vectorVel[3] = cell->info().facetFluidSurfacesRatio[j] * area;
+				Real           area  = sqrt(Surfk.squared_length());
+				vectorVel[0]         = cell->info().averageVelocity()[0];
+				vectorVel[1]         = cell->info().averageVelocity()[1];
+				vectorVel[2]         = cell->info().averageVelocity()[2];
+				vectorVel[3]         = cell->info().facetFluidSurfacesRatio[j] * area;
 				//vectorVel[4] = cell->info().kNorm()[j];
 				velocities.push_back(vectorVel);
 				//avgVel += sqrt(cell->info().averageVelocity().squared_length());
@@ -1306,7 +1312,7 @@ namespace CGT {
 	{
 		Real cavityEdgeFlux = 0;
 		//Real cavityVolume = 0;
-		Tesselation& Tes = T[currentTes];
+		Tesselation& Tes       = T[currentTes];
 		const long   sizeCells = Tes.cellHandles.size();
 #ifdef YADE_OPENMP
 #pragma omp parallel for
@@ -1331,7 +1337,7 @@ namespace CGT {
 		//Real Q1=0;
 		netCavityFlux = 0;
 		//Real cavityVolume = 0;
-		Tesselation& Tes = T[currentTes];
+		Tesselation& Tes       = T[currentTes];
 		const long   sizeCells = Tes.cellHandles.size();
 #ifdef YADE_OPENMP
 #pragma omp parallel for
@@ -1357,10 +1363,10 @@ namespace CGT {
 	{
 		Real totalStep = dt * stepsSinceLastMesh;
 		//Real Q1=0;
-		netCavityFlux = 0;
+		netCavityFlux             = 0;
 		Real         cavityVolume = 0;
-		Tesselation& Tes = T[currentTes];
-		const long   sizeCells = Tes.cellHandles.size();
+		Tesselation& Tes          = T[currentTes];
+		const long   sizeCells    = Tes.cellHandles.size();
 #ifdef YADE_OPENMP
 #pragma omp parallel for
 #endif
@@ -1386,8 +1392,8 @@ namespace CGT {
 		// or use density?
 		else {
 			Real cavityFluidDensityNew = ((cavityFluidDensity * cavityVolume) + (fluidRho * (-netCavityFlux * totalStep))) / (cavityVolume);
-			delP = -(cavityFluidDensity / cavityFluidDensityNew - 1) * 1. / equivalentCompressibility;
-			cavityFluidDensity = cavityFluidDensityNew;
+			delP                       = -(cavityFluidDensity / cavityFluidDensityNew - 1) * 1. / equivalentCompressibility;
+			cavityFluidDensity         = cavityFluidDensityNew;
 		}
 #ifdef YADE_OPENMP
 #pragma omp parallel for
@@ -1404,10 +1410,10 @@ namespace CGT {
 
 	template <class Tesselation> void FlowBoundingSphere<Tesselation>::adjustCavityCompressibility(Real pZero)
 	{
-		Real sumP = 0;
-		int  numCells = 0;
-		netCavityFlux = 0;
-		Tesselation& Tes = T[currentTes];
+		Real sumP              = 0;
+		int  numCells          = 0;
+		netCavityFlux          = 0;
+		Tesselation& Tes       = T[currentTes];
 		const long   sizeCells = Tes.cellHandles.size();
 #ifdef YADE_OPENMP
 #pragma omp parallel for
@@ -1429,9 +1435,9 @@ namespace CGT {
 			cerr << "0 pressure found while trying to account for air compressibility, invalid, setting to atmospheric" << endl;
 			Pa = 1.0135e5;
 		}
-		Real Ca = 1. / Pa;
-		Real phi = phiZero * (pZero / Pa);
-		Real Cw = 1. / fluidBulkModulus;
+		Real Ca                   = 1. / Pa;
+		Real phi                  = phiZero * (pZero / Pa);
+		Real Cw                   = 1. / fluidBulkModulus;
 		equivalentCompressibility = phi * Ca + (1. - phi) * Cw;
 		if (debugOut) cout << "Equivalent compressibility " << equivalentCompressibility << endl;
 
@@ -1502,12 +1508,12 @@ namespace CGT {
 		Real density = 1;
 		//  declaration of ‘viscosity’ shadows a member of ‘yade::CGT::FlowBoundingSphere<_Tesselation>’ [-Werror=shadow]
 		Real viscosity2 = viscosity;
-		Real gravity = 1;
-		Real Vdarcy = Q1 / Section;
-		Real DeltaP = math::abs(PInf - PSup);
-		Real DeltaH = DeltaP / (density * gravity);
-		Real k = viscosity2 * Vdarcy * DeltaY / DeltaP; /**m²**/
-		Real Ks = k * (density * gravity) / viscosity2; /**m/s**/
+		Real gravity    = 1;
+		Real Vdarcy     = Q1 / Section;
+		Real DeltaP     = math::abs(PInf - PSup);
+		Real DeltaH     = DeltaP / (density * gravity);
+		Real k          = viscosity2 * Vdarcy * DeltaY / DeltaP; /**m²**/
+		Real Ks         = k * (density * gravity) / viscosity2;  /**m/s**/
 
 		if (debugOut) {
 			cout << "the maximum superior pressure is = " << p_out_max << " the min is = " << p_out_min << endl;
@@ -1540,15 +1546,19 @@ namespace CGT {
 	}
 	template <class Tesselation> void FlowBoundingSphere<Tesselation>::displayStatistics()
 	{
-		RTriangulation&     Tri = T[currentTes].Triangulation();
+		RTriangulation&     Tri  = T[currentTes].Triangulation();
 		int                 Zero = 0, Inside = 0, Fictious = 0;
 		FiniteCellsIterator cellEnd = Tri.finite_cells_end();
 		for (FiniteCellsIterator cell = Tri.finite_cells_begin(); cell != cellEnd; cell++) {
 			int zeros = 0;
 			for (int j = 0; j != 4; j++) {
-				if ((cell->info().kNorm())[j] == 0) { zeros += 1; }
+				if ((cell->info().kNorm())[j] == 0) {
+					zeros += 1;
+				}
 			}
-			if (zeros == 4) { Zero += 1; }
+			if (zeros == 4) {
+				Zero += 1;
+			}
 			if (!cell->info().fictious()) {
 				Inside += 1;
 			} else {
@@ -1562,8 +1572,8 @@ namespace CGT {
 				real += 1;
 		}
 		long Vertices = Tri.number_of_vertices();
-		long Cells = Tri.number_of_finite_cells();
-		long Facets = Tri.number_of_finite_facets();
+		long Cells    = Tri.number_of_finite_cells();
+		long Facets   = Tri.number_of_finite_facets();
 		if (debugOut) {
 			cout << "zeros = " << Zero << endl;
 			cout << "There are " << Vertices << " vertices, dont " << fict << " fictious et " << real << " reeeeeel" << std::endl;
@@ -1580,7 +1590,7 @@ namespace CGT {
 	template <class Tesselation> void FlowBoundingSphere<Tesselation>::saveVtk(const char* folder, bool withBoundaries)
 	{
 		vector<int>
-		            allIds; //an ordered list of cell ids (from begin() to end(), for vtk table lookup), some ids will appear multiple times since boundary cells are splitted into multiple tetrahedra
+		        allIds; //an ordered list of cell ids (from begin() to end(), for vtk table lookup), some ids will appear multiple times since boundary cells are splitted into multiple tetrahedra
 		vector<int> fictiousN;
 
 
@@ -1593,7 +1603,7 @@ namespace CGT {
 		saveMesh(vtkWrite, withBoundaries, allIds, fictiousN, filename);
 
 		// Right after remeshing "currentTes" points to the new mesh which doesn't contain valid pressure yet, this is detected by noCache=true, in such case get data from previous mesh
-		RTriangulation& Tri = T[noCache ? (!currentTes) : currentTes].Triangulation();
+		RTriangulation& Tri         = T[noCache ? (!currentTes) : currentTes].Triangulation();
 		VectorCell&     cellHandles = T[noCache ? (!currentTes) : currentTes].cellHandles;
 
 		if (permeabilityMap) {
@@ -1636,7 +1646,9 @@ namespace CGT {
 				for (FiniteCellsIterator cell = Tri.finite_cells_begin(); cell != Tri.finite_cells_end(); ++cell) {
 					bool isDrawable = cell->info().isReal() && cell->vertex(0)->info().isReal() && cell->vertex(1)->info().isReal()
 					        && cell->vertex(2)->info().isReal() && cell->vertex(3)->info().isReal();
-					if (isDrawable) { vtkWrite.write_data(cell->info().Tcondition); }
+					if (isDrawable) {
+						vtkWrite.write_data(cell->info().Tcondition);
+					}
 				}
 				vtkWrite.end_data();
 			}
@@ -1645,7 +1657,9 @@ namespace CGT {
 			for (FiniteCellsIterator cell = Tri.finite_cells_begin(); cell != Tri.finite_cells_end(); ++cell) {
 				bool isDrawable = cell->info().isReal() && cell->vertex(0)->info().isReal() && cell->vertex(1)->info().isReal()
 				        && cell->vertex(2)->info().isReal() && cell->vertex(3)->info().isReal();
-				if (isDrawable) { vtkWrite.write_data(cell->info().isCavity); }
+				if (isDrawable) {
+					vtkWrite.write_data(cell->info().isCavity);
+				}
 			}
 			vtkWrite.end_data();
 
@@ -1653,7 +1667,9 @@ namespace CGT {
 			for (FiniteCellsIterator cell = Tri.finite_cells_begin(); cell != Tri.finite_cells_end(); ++cell) {
 				bool isDrawable = cell->info().isReal() && cell->vertex(0)->info().isReal() && cell->vertex(1)->info().isReal()
 				        && cell->vertex(2)->info().isReal() && cell->vertex(3)->info().isReal();
-				if (isDrawable) { vtkWrite.write_data(cell->info().isAlpha); }
+				if (isDrawable) {
+					vtkWrite.write_data(cell->info().isAlpha);
+				}
 			}
 			vtkWrite.end_data();
 
@@ -1661,7 +1677,9 @@ namespace CGT {
 			for (FiniteCellsIterator cell = Tri.finite_cells_begin(); cell != Tri.finite_cells_end(); ++cell) {
 				bool isDrawable = cell->info().isReal() && cell->vertex(0)->info().isReal() && cell->vertex(1)->info().isReal()
 				        && cell->vertex(2)->info().isReal() && cell->vertex(3)->info().isReal();
-				if (isDrawable) { vtkWrite.write_data(cell->info().Pcondition); }
+				if (isDrawable) {
+					vtkWrite.write_data(cell->info().Pcondition);
+				}
 			}
 			vtkWrite.end_data();
 
@@ -1707,7 +1725,7 @@ namespace CGT {
 			cout << "Triangulation does not exist. Sorry." << endl;
 			return;
 		}
-		RTriangulation& Tri = T[noCache ? (!currentTes) : currentTes].Triangulation();
+		RTriangulation& Tri       = T[noCache ? (!currentTes) : currentTes].Triangulation();
 		int             firstReal = -1;
 
 		vector<pair<vector<int>, unsigned>> extraPoly;     //for fictious cells on the boundaries
@@ -1760,7 +1778,7 @@ namespace CGT {
 							extraV += 3;
 						} break;
 						case 2: {
-							unsigned k = 0;
+							unsigned k  = 0;
 							unsigned k1 = 0, k2 = 0, s1 = 0, s2 = 0;
 							for (; k < 4; k++)
 								if (fictV[k]) {
@@ -1787,8 +1805,8 @@ namespace CGT {
 									break;
 								} //find the second real
 
-							CVector c1 = cell->vertex(s1)->point().point() - CGAL::ORIGIN;
-							CVector c2 = cell->vertex(s2)->point().point() - CGAL::ORIGIN;
+							CVector c1  = cell->vertex(s1)->point().point() - CGAL::ORIGIN;
+							CVector c2  = cell->vertex(s2)->point().point() - CGAL::ORIGIN;
 							CVector v11 = cell->vertex(k1)->point().point() - cell->vertex(s1)->point().point();
 							CVector v21 = cell->vertex(k1)->point().point() - cell->vertex(s2)->point().point();
 							CVector v12 = cell->vertex(k2)->point().point() - cell->vertex(s1)->point().point();
@@ -1797,19 +1815,19 @@ namespace CGT {
 							CVector v23;
 
 							Real dist11 = v11.squared_length();
-							dist11 = 1. - sqrt(cell->vertex(k1)->point().weight() / dist11);
-							v11 = v11 * dist11;
+							dist11      = 1. - sqrt(cell->vertex(k1)->point().weight() / dist11);
+							v11         = v11 * dist11;
 							Real dist21 = v21.squared_length();
-							dist21 = 1. - sqrt(cell->vertex(k1)->point().weight() / dist21);
-							v21 = v21 * dist21;
+							dist21      = 1. - sqrt(cell->vertex(k1)->point().weight() / dist21);
+							v21         = v21 * dist21;
 							Real dist12 = v12.squared_length();
-							dist12 = 1. - sqrt(cell->vertex(k2)->point().weight() / dist12);
-							v12 = v12 * dist12;
+							dist12      = 1. - sqrt(cell->vertex(k2)->point().weight() / dist12);
+							v12         = v12 * dist12;
 							Real dist22 = v22.squared_length();
-							dist22 = 1. - sqrt(cell->vertex(k2)->point().weight() / dist22);
-							v22 = v22 * dist22;
-							v13 = v12 + v11;
-							v23 = v22 + v21;
+							dist22      = 1. - sqrt(cell->vertex(k2)->point().weight() / dist22);
+							v22         = v22 * dist22;
+							v13         = v12 + v11;
+							v23         = v22 + v21;
 							vector<int> poly1, poly2; //split the cube in two prisms
 							poly1.push_back(cell->vertex(s1)->info().id());
 							poly2.push_back(cell->vertex(s1)->info().id());
@@ -1844,25 +1862,25 @@ namespace CGT {
 									s1 = k;
 									k++;
 									break;
-								}                  //find the first real
+								} //find the first real
 							k1 = facetVertices[s1][0]; //handy...
 							k3 = facetVertices[s1][1];
 							k2 = facetVertices[s1][2];
 
-							CVector c = cell->vertex(s1)->point().point() - CGAL::ORIGIN;
+							CVector c   = cell->vertex(s1)->point().point() - CGAL::ORIGIN;
 							CVector v11 = cell->vertex(k1)->point().point() - cell->vertex(s1)->point().point();
 							CVector v12 = cell->vertex(k2)->point().point() - cell->vertex(s1)->point().point();
 							CVector v13 = cell->vertex(k3)->point().point() - cell->vertex(s1)->point().point();
 
-							Real dist11 = v11.squared_length();
-							dist11 = 1. - sqrt(cell->vertex(k1)->point().weight() / dist11);
-							v11 = v11 * dist11;
-							Real dist12 = v12.squared_length();
-							dist12 = 1. - sqrt(cell->vertex(k2)->point().weight() / dist12);
-							v12 = v12 * dist12;
-							Real dist13 = v13.squared_length();
-							dist13 = 1. - sqrt(cell->vertex(k3)->point().weight() / dist13);
-							v13 = v13 * dist13;
+							Real dist11  = v11.squared_length();
+							dist11       = 1. - sqrt(cell->vertex(k1)->point().weight() / dist11);
+							v11          = v11 * dist11;
+							Real dist12  = v12.squared_length();
+							dist12       = 1. - sqrt(cell->vertex(k2)->point().weight() / dist12);
+							v12          = v12 * dist12;
+							Real dist13  = v13.squared_length();
+							dist13       = 1. - sqrt(cell->vertex(k3)->point().weight() / dist13);
+							v13          = v13 * dist13;
 							CVector v1v2 = v11 + v12;
 
 							vector<int> poly1, poly2; //split the cube in two prisms
@@ -1918,7 +1936,7 @@ namespace CGT {
 
 		std::map<int, int> vertexIdMap;
 		int                numVertices = 0;
-		unsigned int       minId = 1;
+		unsigned int       minId       = 1;
 
 		vtkfile.begin_vertices();
 		Real x, y, z;
@@ -1929,12 +1947,12 @@ namespace CGT {
 				z = (Real)(v->point().point()[2]);
 				vtkfile.write_point(x, y, z);
 				vertexIdMap[v->info().id() - firstReal] = numVertices;
-				minId = min(minId, v->info().id() - firstReal);
+				minId                                   = min(minId, v->info().id() - firstReal);
 				numVertices += 1;
 			}
 		}
 		// now the extra vertices
-		int extra = -1;
+		int extra          = -1;
 		int numAllVertices = numVertices;
 		for (auto pt = extraVertices.begin(); pt != extraVertices.end(); pt++) {
 			vtkfile.write_point((Real)(*pt)[0], (Real)(*pt)[1], (Real)(*pt)[2]);
@@ -1998,7 +2016,7 @@ namespace CGT {
 	template <class Tesselation> void FlowBoundingSphere<Tesselation>::dessineTriangulation(Vue3D& Vue, RTriangulation& T)
 	{
 		Real* Segments = NULL;
-		long  N_seg = newListeEdges(T, &Segments);
+		long  N_seg    = newListeEdges(T, &Segments);
 		Vue.Dessine_Segment(Segments, N_seg);
 		deleteListeEdges(&Segments, N_seg);
 	}
@@ -2006,7 +2024,7 @@ namespace CGT {
 	{
 		if (!Tes.computed()) Tes.compute();
 		Real* Segments = NULL;
-		long  N_seg = Tes.newListeShortEdges(&Segments);
+		long  N_seg    = Tes.newListeShortEdges(&Segments);
 		Vue.Dessine_Segment(Segments, N_seg);
 		deleteListeEdges(&Segments, N_seg);
 	}
@@ -2014,8 +2032,8 @@ namespace CGT {
 	template <class Tesselation> void FlowBoundingSphere<Tesselation>::generateVoxelFile()
 	{
 		RTriangulation& Tri = T[currentTes].Triangulation();
-		Real            l = 1;
-		int             dx = 200;
+		Real            l   = 1;
+		int             dx  = 200;
 		Real            eps = l / dx;
 
 		std::ofstream voxelfile("MATRIX", std::ios::out);
@@ -2056,13 +2074,13 @@ namespace CGT {
 	template <class Tesselation>
 	Real FlowBoundingSphere<Tesselation>::samplePermeability(Real& xMin2, Real& xMax2, Real& yMin2, Real& yMax2, Real& zMin2, Real& zMax2 /*, string key*/)
 	{
-		Real Section = (xMax2 - xMin2) * (zMax2 - zMin2);
-		Real DeltaY = yMax2 - yMin2;
+		Real Section                   = (xMax2 - xMin2) * (zMax2 - zMin2);
+		Real DeltaY                    = yMax2 - yMin2;
 		boundary(yMinId).flowCondition = 0;
 		boundary(yMaxId).flowCondition = 0;
-		boundary(yMinId).value = 0;
-		boundary(yMaxId).value = 1;
-		Real pZero = math::abs((boundary(yMinId).value - boundary(yMaxId).value) / 2);
+		boundary(yMinId).value         = 0;
+		boundary(yMaxId).value         = 1;
+		Real pZero                     = math::abs((boundary(yMinId).value - boundary(yMaxId).value) / 2);
 		initializePressure(pZero);
 		gaussSeidel();
 		const char* kk = "Permeability";
@@ -2086,9 +2104,9 @@ namespace CGT {
 		std::ofstream consFile(filename, std::ios::out);
 
 		int  intervals = 400;
-		Real Ry = (yMax - yMin) / intervals;
-		Real Rz = (zMax - zMin) / intervals;
-		Real X = 0.5;
+		Real Ry        = (yMax - yMin) / intervals;
+		Real Rz        = (zMax - zMin) / intervals;
+		Real X         = 0.5;
 		for (Real Y = min(yMax, yMin); Y <= max(yMax, yMin); Y = Y + math::abs(Ry)) {
 			for (Real Z = min(zMin, zMax); Z <= max(zMin, zMax); Z = Z + math::abs(Rz)) {
 				permeameter = Tri.locate(Point(X, Y, Z));
@@ -2160,7 +2178,7 @@ namespace CGT {
 	Vector3r FlowBoundingSphere<Tesselation>::computeShearLubricationForce(
 	        const Vector3r& deltaShearV, const Real& dist, const int& /*edge_id*/, const Real& eps, const Real& centerDist, const Real& meanRad)
 	{
-		Real     d = math::max(dist, 0.) + 2. * eps * meanRad;
+		Real     d        = math::max(dist, 0.) + 2. * eps * meanRad;
 		Vector3r viscLubF = 0.5 * Mathr::PI * viscosity * (-2 * meanRad + centerDist * log(centerDist / d)) * deltaShearV;
 		return viscLubF;
 	}
@@ -2169,7 +2187,7 @@ namespace CGT {
 	Vector3r FlowBoundingSphere<Tesselation>::computePumpTorque(
 	        const Vector3r& deltaShearAngV, const Real& dist, const int& /*edge_id*/, const Real& eps, const Real& meanRad)
 	{
-		Real     d = math::max(dist, 0.) + 2. * eps * meanRad;
+		Real     d         = math::max(dist, 0.) + 2. * eps * meanRad;
 		Vector3r viscPumpC = Mathr::PI * viscosity * pow(meanRad, 3) * (3. / 20. * log(meanRad / d) + 63. / 500. * (d / meanRad) * log(meanRad / d))
 		        * deltaShearAngV;
 		return viscPumpC;
@@ -2179,7 +2197,7 @@ namespace CGT {
 	Vector3r FlowBoundingSphere<Tesselation>::computeTwistTorque(
 	        const Vector3r& deltaNormAngV, const Real& dist, const int& /*edge_id*/, const Real& eps, const Real& meanRad)
 	{
-		Real     d = math::max(dist, 0.) + 2. * eps * meanRad;
+		Real     d      = math::max(dist, 0.) + 2. * eps * meanRad;
 		Vector3r twistC = Mathr::PI * viscosity * pow(meanRad, 2) * d * log(meanRad / d) * deltaNormAngV;
 		return twistC;
 	}
@@ -2192,10 +2210,10 @@ namespace CGT {
 		//FIXME: here introduce elasticity
 		Real d = math::max(dist, 0.) + 2. * eps * meanRad; //account for grains roughness
 		if (stiffness > 0) {
-			const Real k = stiffness * meanRad;
-			Real       prevForce = edgeNormalLubF[edge_id];
-			Real       instantVisc = 1.5 * Mathr::PI * pow(meanRad, 2) * viscosity / (d - prevForce / k);
-			Real       normLubF = instantVisc * (deltaNormV + prevForce / (k * dt)) / (1 + instantVisc / (k * dt));
+			const Real k            = stiffness * meanRad;
+			Real       prevForce    = edgeNormalLubF[edge_id];
+			Real       instantVisc  = 1.5 * Mathr::PI * pow(meanRad, 2) * viscosity / (d - prevForce / k);
+			Real       normLubF     = instantVisc * (deltaNormV + prevForce / (k * dt)) / (1 + instantVisc / (k * dt));
 			edgeNormalLubF[edge_id] = normLubF;
 			return normLubF;
 		} else {
@@ -2235,7 +2253,7 @@ namespace CGT {
 
 	template <class Tesselation> std::vector<Real> FlowBoundingSphere<Tesselation>::getCellVelocity(Real X, Real Y, Real Z)
 	{
-		RTriangulation&   Tri = T[noCache ? (!currentTes) : currentTes].Triangulation();
+		RTriangulation&   Tri  = T[noCache ? (!currentTes) : currentTes].Triangulation();
 		CellHandle        cell = Tri.locate(CGT::Sphere(X, Y, Z));
 		std::vector<Real> velocityVector { cell->info().averageVelocity()[0], cell->info().averageVelocity()[1], cell->info().averageVelocity()[2] };
 		return velocityVector;
@@ -2244,7 +2262,7 @@ namespace CGT {
 	template <class Tesselation> Real FlowBoundingSphere<Tesselation>::getCellVolume(Real X, Real Y, Real Z)
 	{
 		if (noCache && T[!currentTes].Max_id() <= 0) return 0; //the engine never solved anything
-		RTriangulation& Tri = T[noCache ? (!currentTes) : currentTes].Triangulation();
+		RTriangulation& Tri  = T[noCache ? (!currentTes) : currentTes].Triangulation();
 		CellHandle      cell = Tri.locate(CGT::Sphere(X, Y, Z));
 		return cell->info().volume(); //sqrt( cell->info().averageVelocity().squared_length());
 	}

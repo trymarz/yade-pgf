@@ -64,7 +64,9 @@ void RockBolt::action()
 			if (b->isClump() == true) continue;
 			PotentialBlock* pb = static_cast<PotentialBlock*>(b->shape.get());
 			if (!pb) continue;
-			if (pb->isBoundary == true || pb->erase == true || pb->isLining == true) { continue; }
+			if (pb->isBoundary == true || pb->erase == true || pb->isLining == true) {
+				continue;
+			}
 			State*   state1 = b->state.get();
 			Vector3r intersectionPt(0, 0, 0);
 			if (installBolts(pb, state1, startingPoint, boltDirection, boltLength, intersectionPt)) {
@@ -240,7 +242,9 @@ void RockBolt::action()
 				Vector3r c1x            = state1->ori * localCoordinates[2 * j - 1] + 0.5 * nodeDistance;
 				nodePosition[j - 1]     = state1->pos + c1x;
 				distanceFrCentre[j - 1] = nodePosition[j - 1].dot(boltDirection);
-				if (j == 1) { displacements = (state1->pos + state1->ori * localCoordinates[0]).dot(boltDirection); }
+				if (j == 1) {
+					displacements = (state1->pos + state1->ori * localCoordinates[0]).dot(boltDirection);
+				}
 				Vector3r c2x = state2->ori * localCoordinates[2 * j] - 0.5 * nodeDistance;
 				scene->forces.addTorque(blockIDs[j - 1], c1x.cross(totalForce));
 				scene->forces.addTorque(blockIDs[j], -c2x.cross(totalForce));
@@ -306,7 +310,9 @@ void RockBolt::action()
 				pid[0]             = boltNode->InsertNextPoint(midPoint);
 				boltNodeCells->InsertNextCell(1, pid);
 				Vector3r plotDirection = boltDirection.cross(Vector3r(0, 1, 0));
-				if (plotDirection.dot(Vector3r(1, 0, 0)) < 0.0) { plotDirection = -plotDirection; }
+				if (plotDirection.dot(Vector3r(1, 0, 0)) < 0.0) {
+					plotDirection = -plotDirection;
+				}
 				plotDirection.normalize();
 				Vector3r nodalForce = forces[i] * plotDirection;
 				float    f[3]       = { (float)nodalForce[0], (float)nodalForce[1], (float)nodalForce[2] };
@@ -388,12 +394,16 @@ Real RockBolt::evaluateFNoSphereVol(const PotentialBlock* s1, const State* state
 	int  insideCount = 0;
 	for (int i = 0; i < planeNo; i++) {
 		Real plane = s1->a[i] * x + s1->b[i] * y + s1->c[i] * z - s1->d[i] - 1.0002 * r; //-pow(10,-10);
-		if (math::sign(plane) * 1.0 < 0.0) { insideCount++; }
+		if (math::sign(plane) * 1.0 < 0.0) {
+			insideCount++;
+		}
 	}
 
 	/* Complete potential particle */
 	Real f = 1.0;
-	if (insideCount == planeNo) { f = -1.0; }
+	if (insideCount == planeNo) {
+		f = -1.0;
+	}
 	return f;
 }
 

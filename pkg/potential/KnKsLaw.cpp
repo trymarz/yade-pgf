@@ -22,7 +22,9 @@ Real Law2_SCG_KnKsPhys_KnKsLaw::ratioSlidingContacts()
 	{
 		if (!I->isReal()) continue;
 		KnKsPhys* phys = dynamic_cast<KnKsPhys*>(I->phys.get()); /* contact physics */
-		if (phys->isSliding) { ratio += 1; }
+		if (phys->isSliding) {
+			ratio += 1;
+		}
 		count++;
 	}
 	ratio /= count;
@@ -304,7 +306,9 @@ bool Law2_SCG_KnKsPhys_KnKsLaw::go(shared_ptr<IGeom>& ig, shared_ptr<IPhys>& ip,
 			phys->isSliding = true;
 			Real ratio      = maxFs / shearForce.norm();
 			shearForce *= ratio;
-			if (allowBreakage == true) { phys->cohesionBroken = true; }
+			if (allowBreakage == true) {
+				phys->cohesionBroken = true;
+			}
 			dampedShearForce   = shearForce; /* no damping when it slides */
 			phys->shearViscous = Vector3r(0, 0, 0);
 		} else {
@@ -319,7 +323,9 @@ bool Law2_SCG_KnKsPhys_KnKsLaw::go(shared_ptr<IGeom>& ig, shared_ptr<IPhys>& ip,
 			Real               ratio      = maxFs / shearForce.norm();
 			/*const*/ Vector3r trialForce = shearForce; //Store prev force for definition of plastic slip
 			shearForce *= ratio;
-			if (allowBreakage == true) { phys->cohesionBroken = true; }
+			if (allowBreakage == true) {
+				phys->cohesionBroken = true;
+			}
 			dampedShearForce   = shearForce; /* no damping when it slides */
 			phys->shearViscous = Vector3r(0, 0, 0);
 

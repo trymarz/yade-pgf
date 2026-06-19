@@ -58,7 +58,7 @@ private:
 public:
 	ThreadRunner() = delete;
 	ThreadRunner(ThreadWorker* c)
-	        : m_thread_worker(c) {};
+	        : m_thread_worker(c) { };
 	~ThreadRunner();
 
 	/// perform ThreadWorker::singleAction() in separate thread

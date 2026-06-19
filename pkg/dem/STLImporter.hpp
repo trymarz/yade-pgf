@@ -6,11 +6,11 @@
 *  GNU General Public License v2 or later. See file LICENSE for details. *
 *************************************************************************/
 #pragma once
-#include <clocale>
-#include <string>
 #include <core/Body.hpp>
 #include <core/BodyContainer.hpp>
 #include <pkg/common/Facet.hpp>
+#include <clocale>
+#include <string>
 
 namespace yade { // Cannot have #include directive inside.
 
@@ -192,7 +192,9 @@ bool STLReader::open_binary(const char* filename, OutV vertices, OutE edges, Out
 {
 	FILE* fp;
 	fp = fopen(filename, "rb");
-	if (fp == NULL) { return false; }
+	if (fp == NULL) {
+		return false;
+	}
 
 	int facenum;
 	fseek(fp, STL_LABEL_SIZE, SEEK_SET);

@@ -8,8 +8,8 @@
 
 namespace yade { // Cannot have #include directive inside.
 
-YADE_PLUGIN((MindlinPhys)(Ip2_FrictMat_FrictMat_MindlinPhys)(Law2_ScGeom_MindlinPhys_MindlinDeresiewitz)(Law2_ScGeom_MindlinPhys_HertzWithLinearShear)(
-        Law2_ScGeom_MindlinPhys_Mindlin)(MindlinCapillaryPhys)(Ip2_FrictMat_FrictMat_MindlinCapillaryPhys));
+YADE_PLUGIN((
+        MindlinPhys)(Ip2_FrictMat_FrictMat_MindlinPhys)(Law2_ScGeom_MindlinPhys_MindlinDeresiewitz)(Law2_ScGeom_MindlinPhys_HertzWithLinearShear)(Law2_ScGeom_MindlinPhys_Mindlin)(MindlinCapillaryPhys)(Ip2_FrictMat_FrictMat_MindlinCapillaryPhys));
 
 Real Law2_ScGeom_MindlinPhys_Mindlin::getfrictionDissipation() const { return (Real)frictionDissipation; }
 Real Law2_ScGeom_MindlinPhys_Mindlin::getshearEnergy() const { return (Real)shearEnergy; }
@@ -180,7 +180,9 @@ void Ip2_FrictMat_FrictMat_MindlinPhys::go(const shared_ptr<Material>& b1, const
 	if (en && vn) { // Velocity-dependent coefficient of restitution
 		Real vstar           = getVstar((*en)(mat1->id, mat2->id));
 		contactPhysics->beta = vstar * vstar * math::pow((*vn)(mat1->id, mat2->id), -0.2); // ^-1/5 = ^-2/10
-		if (es) { std::cout << "Since vn is defined, the shear coefficient of restitution es will not be used." << endl; }
+		if (es) {
+			std::cout << "Since vn is defined, the shear coefficient of restitution es will not be used." << endl;
+		}
 	} else if (en || es) {              // Constant coefficient of restitution
 		const Real h1  = -6.918798; // Fitting coefficients h_i from  Table 2 - Thornton et al. (2013).
 		const Real h2  = -16.41105;
@@ -194,8 +196,12 @@ void Ip2_FrictMat_FrictMat_MindlinPhys::go(const shared_ptr<Material>& b1, const
 		const Real h10 = -1489.915;
 
 		// Consider same coefficient of restitution if only one is given (en or es)
-		if (!en) { en = es; }
-		if (!es) { es = en; }
+		if (!en) {
+			en = es;
+		}
+		if (!es) {
+			es = en;
+		}
 
 		const Real En     = (*en)(mat1->id, mat2->id);
 		const Real Es     = (*es)(mat1->id, mat2->id);
@@ -225,7 +231,9 @@ Real Law2_ScGeom_MindlinPhys_Mindlin::contactsAdhesive() // It is returning some
 	{
 		if (!I->isReal()) continue;
 		MindlinPhys* phys = dynamic_cast<MindlinPhys*>(I->phys.get());
-		if (phys->isAdhesive) { contactsAdhesive += 1; }
+		if (phys->isAdhesive) {
+			contactsAdhesive += 1;
+		}
 	}
 	return contactsAdhesive;
 }
@@ -239,7 +247,9 @@ Real Law2_ScGeom_MindlinPhys_Mindlin::ratioSlidingContacts()
 	{
 		if (!I->isReal()) continue;
 		MindlinPhys* phys = dynamic_cast<MindlinPhys*>(I->phys.get());
-		if (phys->isSliding) { ratio += 1; }
+		if (phys->isSliding) {
+			ratio += 1;
+		}
 		count++;
 	}
 	ratio /= count;
@@ -525,7 +535,9 @@ bool Law2_ScGeom_MindlinPhys_Mindlin::go(shared_ptr<IGeom>& ig, shared_ptr<IPhys
 				phys->normalForce -= phys->normalViscous;
 			}
 		}
-		if (calcEnergy) { normDampDissip += phys->normalViscous.dot(incidentVn * dt); } // calc dissipation of energy due to normal damping
+		if (calcEnergy) {
+			normDampDissip += phys->normalViscous.dot(incidentVn * dt);
+		} // calc dissipation of energy due to normal damping
 	}
 
 
@@ -567,14 +579,14 @@ bool Law2_ScGeom_MindlinPhys_Mindlin::go(shared_ptr<IGeom>& ig, shared_ptr<IPhys
 			us_elastic *= ratio;
 			if (calcEnergy) {
 				frictionDissipation += (us_total - prevUs_tot).dot(shearElastic);
-			}                                     // calculate energy dissipation due to sliding behavior
+			} // calculate energy dissipation due to sliding behavior
 		} else if (useDamping) {                      // add current contact damping if we do not slide and if damping is requested
 			phys->shearViscous = cs * incidentVs; // get shear viscous component
 			phys->shearForce   = shearElastic - phys->shearViscous;
 		} else if (!useDamping) {
 			phys->shearForce = shearElastic;
 		} // update the shear force at the elastic value if no damping is present and if we passed MC
-	} else {  // Mohr-Coulomb formulation adpated due to the presence of adhesion (see Thornton, 1991).
+	} else { // Mohr-Coulomb formulation adpated due to the presence of adhesion (see Thornton, 1991).
 		Real maxFs = phys->tangensOfFrictionAngle * (phys->adhesionForce + Fn); // adhesionForce already included in normalForce (above)
 		if (shearElastic.squaredNorm() > maxFs * maxFs) {
 			phys->isSliding = true;
@@ -585,7 +597,7 @@ bool Law2_ScGeom_MindlinPhys_Mindlin::go(shared_ptr<IGeom>& ig, shared_ptr<IPhys
 			us_elastic *= ratio;
 			if (calcEnergy) {
 				frictionDissipation += (us_total - prevUs_tot).dot(shearElastic);
-			}                                     // calculate energy dissipation due to sliding behavior
+			} // calculate energy dissipation due to sliding behavior
 		} else if (useDamping) {                      // add current contact damping if we do not slide and if damping is requested
 			phys->shearViscous = cs * incidentVs; // get shear viscous component
 			phys->shearForce   = shearElastic - phys->shearViscous;
@@ -612,7 +624,9 @@ bool Law2_ScGeom_MindlinPhys_Mindlin::go(shared_ptr<IGeom>& ig, shared_ptr<IPhys
 
 	if (useDamping) { // get normal viscous component (the shear one is calculated inside Mohr-Coulomb criterion, see above)
 		if (calcEnergy) {
-			if (!noShearDamp) { shearDampDissip += phys->shearViscous.dot(incidentVs * dt); }
+			if (!noShearDamp) {
+				shearDampDissip += phys->shearViscous.dot(incidentVs * dt);
+			}
 		} // calc energy dissipation due to viscous linear damping
 	}
 
@@ -779,8 +793,12 @@ void Ip2_FrictMat_FrictMat_MindlinCapillaryPhys::go(
 		const Real h10 = -1489.915;
 
 		// Consider same coefficient of restitution if only one is given (en or es)
-		if (!en) { en = es; }
-		if (!es) { es = en; }
+		if (!en) {
+			en = es;
+		}
+		if (!es) {
+			es = en;
+		}
 
 		const Real En     = (*en)(mat1->id, mat2->id);
 		const Real Es     = (*es)(mat1->id, mat2->id);

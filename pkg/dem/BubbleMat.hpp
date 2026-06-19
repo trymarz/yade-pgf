@@ -34,7 +34,7 @@ public:
 	void        computeCoeffs(Real pctMaxForce, Real surfaceTension, Real c1);
 	static Real computeForce(Real separation, Real surfaceTension, Real rAvg, int newtonIter, Real newtonTol, Real c1, Real fN, BubblePhys* phys);
 
-	virtual ~BubblePhys() {};
+	virtual ~BubblePhys() { };
 	// clang-format off
 	YADE_CLASS_BASE_DOC_ATTRS_CTOR_PY(BubblePhys,IPhys,"Physics of bubble-bubble interactions, for use with BubbleMat",
 		((Vector3r,normalForce,Vector3r::Zero(),,"Normal force"))

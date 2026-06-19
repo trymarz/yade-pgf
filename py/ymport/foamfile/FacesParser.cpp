@@ -26,7 +26,9 @@ namespace ymport {
 			for (int i = 0; i < m_facesToRead; i++) {
 				n = getInt();
 
-				if (n != 4) { error("Face must contain 4 points, got: %d", n); }
+				if (n != 4) {
+					error("Face must contain 4 points, got: %d", n);
+				}
 
 				expect({ '(' });
 

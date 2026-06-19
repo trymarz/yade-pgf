@@ -26,8 +26,7 @@
 #include <lib/high-precision/Real.hpp>
 
 namespace forCtags {
-struct MathComplexFunctions {
-}; // for ctags
+struct MathComplexFunctions { }; // for ctags
 }
 
 /*************************************************************************/

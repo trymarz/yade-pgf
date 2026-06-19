@@ -112,8 +112,8 @@ private:
 	}
 
 public:
-	FunctorWrapper() {};
-	virtual ~FunctorWrapper() {};
+	FunctorWrapper() { };
+	virtual ~FunctorWrapper() { };
 	virtual string checkOrder() const { return ""; };
 
 	// in following functions a second throw was added - just to bypass compiler warnings - it will never be executed.

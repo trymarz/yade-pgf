@@ -65,7 +65,9 @@ void DragEngine::action()
 				velSphTemp = b->state->vel;
 			}
 
-			if (velSphTemp != Vector3r::Zero()) { dragForce = -0.5 * Rho * A * Cd * velSphTemp.squaredNorm() * velSphTemp.normalized(); }
+			if (velSphTemp != Vector3r::Zero()) {
+				dragForce = -0.5 * Rho * A * Cd * velSphTemp.squaredNorm() * velSphTemp.normalized();
+			}
 			scene->forces.addForce(id, dragForce);
 		}
 	}
@@ -92,7 +94,9 @@ void LinearDragEngine::action()
 
 			Real b2 = 6. * Mathr::PI * nu * sphere->radius;
 
-			if (velSphTemp != Vector3r::Zero()) { dragForce = -b2 * velSphTemp; }
+			if (velSphTemp != Vector3r::Zero()) {
+				dragForce = -b2 * velSphTemp;
+			}
 			scene->forces.addForce(id, dragForce);
 		}
 	}

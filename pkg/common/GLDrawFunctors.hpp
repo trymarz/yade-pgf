@@ -15,16 +15,11 @@
 #include <core/State.hpp>
 
 namespace forCtags { // for ctags, it can't find class inside these macros.
-struct GlBoundFunctor {
-};
-struct GlShapeFunctor {
-};
-struct GlIGeomFunctor {
-};
-struct GlIPhysFunctor {
-};
-struct GlStateFunctor {
-};
+struct GlBoundFunctor { };
+struct GlShapeFunctor { };
+struct GlIGeomFunctor { };
+struct GlIPhysFunctor { };
+struct GlStateFunctor { };
 }
 
 namespace yade { // Cannot have #include directive inside.
@@ -49,7 +44,7 @@ class OpenGLRenderer;
 #define GL_FUNCTOR(Klass, typelist, renderedType)                                                                                                              \
 	class Klass : public Functor1D<renderedType, void, typelist> {                                                                                         \
 	public:                                                                                                                                                \
-		virtual ~Klass() {};                                                                                                                           \
+		virtual ~Klass() { };                                                                                                                          \
 		virtual string renders() const { throw std::runtime_error(#Klass ": unregistered gldraw class.\n"); };                                         \
 		virtual void   initgl() { /*WARNING: it must deal with static members, because it is called from another instance!*/ };                        \
 		YADE_CLASS_BASE_DOC(Klass, Functor, "Abstract functor for rendering :yref:`" #renderedType "` objects.");                                      \

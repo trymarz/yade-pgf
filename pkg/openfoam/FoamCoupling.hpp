@@ -190,7 +190,7 @@ public:
 		minMaxisSet = true;
 	}
 	int domainRank; // rank of the fluid domain.
-	virtual ~FluidDomainBbox() {};
+	virtual ~FluidDomainBbox() { };
 	YADE_CLASS_BASE_DOC_ATTRS_CTOR_PY(
 	        FluidDomainBbox,
 	        Shape,

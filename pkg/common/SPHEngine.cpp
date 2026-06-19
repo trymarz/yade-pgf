@@ -24,7 +24,9 @@ void SPHEngine::action()
 
 void SPHEngine::calculateSPHRho(const shared_ptr<Body>& b)
 {
-	if (b->state->rho0 < 0) { b->state->rho0 = rho0; }
+	if (b->state->rho0 < 0) {
+		b->state->rho0 = rho0;
+	}
 	if (not b->isClump()) {
 		Real rho = 0;
 
@@ -191,7 +193,9 @@ KernelFunction returnKernelFunction(const int a, const typeKernFunctions typeF) 
 
 KernelFunction returnKernelFunction(const int a, const int b, const typeKernFunctions typeF)
 {
-	if (a != b) { throw runtime_error("Kernel types should be equal!"); }
+	if (a != b) {
+		throw runtime_error("Kernel types should be equal!");
+	}
 	if (a == Lucy) {
 		if (typeF == Norm) {
 			return smoothkernelLucy;

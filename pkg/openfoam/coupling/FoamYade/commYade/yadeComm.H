@@ -26,7 +26,7 @@ public:
 	void sendTerminate();
 	void recvTerminate();
 	void castTerminate();
-	~yadeComm() {};
+	~yadeComm() { };
 };
 }
 

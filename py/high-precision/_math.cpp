@@ -248,7 +248,7 @@ template <int N> struct Substitute {
 
 // The 'if constexpr(…)' is not working for C++14. So I have to simulate it using templates. Otherwise the python 'import >>thisModule<<' is really slow.
 template <int, bool> struct IfConstexprForSlowFunctions {
-	static void work(const py::scope&) {};
+	static void work(const py::scope&) { };
 };
 
 template <int N> struct IfConstexprForSlowFunctions<N, true> {
@@ -382,7 +382,9 @@ template <int N, bool registerConverters> struct RegisterRealHPMath {
 
 		// Very important line: Verifies that Real type satisfies all the requirements of RealTypeConcept
 		BOOST_CONCEPT_ASSERT((boost::math::concepts::RealTypeConcept<RealHP<N>>));
-		if (::yade::math::isHP<RealHP<N>> == false) { throw std::runtime_error("::yade::math::isHP<RealHP<N1>> == false, please file a bug report."); };
+		if (::yade::math::isHP<RealHP<N>> == false) {
+			throw std::runtime_error("::yade::math::isHP<RealHP<N1>> == false, please file a bug report.");
+		};
 		if (::yade::math::isHP<ComplexHP<N>> == false) {
 			throw std::runtime_error("::yade::math::isHP<ComplexHP<N1>> == false, please file a bug report.");
 		};
@@ -1005,7 +1007,9 @@ BOOST_PYTHON_MODULE(_math)
 try {
 	YADE_SET_DOCSTRING_OPTS;
 
-	if ((::yade::math::RealHPConfig::getDigits10(1) >= 18) or (::yade::math::levelOrZero<double> == 0)) { std_pair_to_python_converter<double, double>(); }
+	if ((::yade::math::RealHPConfig::getDigits10(1) >= 18) or (::yade::math::levelOrZero<double> == 0)) {
+		std_pair_to_python_converter<double, double>();
+	}
 	// this loop registers all python functions from range defined in YADE_EIGENCGAL_HP, file lib/high-precision/RealHPEigenCgal.hpp
 	// Some functions for large N are extremely slow during python 'import yade.math', so they are not registered, see struct IfConstexprForSlowFunctions
 	::yade::math::detail::registerLoopForHPn<::yade::math::RealHPConfig::SupportedByMinieigen, RegisterRealHPMath>();

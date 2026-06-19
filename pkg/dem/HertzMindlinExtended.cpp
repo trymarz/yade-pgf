@@ -21,8 +21,8 @@
 
 namespace yade { // Cannot have #include directive inside.
 
-YADE_PLUGIN((FrictMatCDM)(MindlinPhysCDM)(Ip2_FrictMatCDM_FrictMatCDM_MindlinPhysCDM)(Ip2_FrictMat_FrictMatCDM_MindlinPhysCDM)(
-        Law2_ScGeom_MindlinPhysCDM_HertzMindlinCDM));
+YADE_PLUGIN((
+        FrictMatCDM)(MindlinPhysCDM)(Ip2_FrictMatCDM_FrictMatCDM_MindlinPhysCDM)(Ip2_FrictMat_FrictMatCDM_MindlinPhysCDM)(Law2_ScGeom_MindlinPhysCDM_HertzMindlinCDM));
 
 CREATE_LOGGER(Ip2_FrictMatCDM_FrictMatCDM_MindlinPhysCDM);
 
@@ -198,7 +198,9 @@ Real Law2_ScGeom_MindlinPhysCDM_HertzMindlinCDM::ratioSlidingContacts()
 	{
 		if (!I->isReal()) continue;
 		const MindlinPhysCDM* phys = dynamic_cast<MindlinPhysCDM*>(I->phys.get());
-		if (phys->isSliding) { ratio += 1; }
+		if (phys->isSliding) {
+			ratio += 1;
+		}
 		count++;
 	}
 	ratio /= count;
@@ -214,7 +216,9 @@ Real Law2_ScGeom_MindlinPhysCDM_HertzMindlinCDM::ratioYieldingContacts()
 	{
 		if (!I->isReal()) continue;
 		const MindlinPhysCDM* phys = dynamic_cast<MindlinPhysCDM*>(I->phys.get());
-		if (phys->isYielding) { ratio += 1; }
+		if (phys->isYielding) {
+			ratio += 1;
+		}
 		count++;
 	}
 	ratio /= count;

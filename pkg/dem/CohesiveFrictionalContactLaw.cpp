@@ -35,7 +35,9 @@ Real Law2_ScGeom6D_CohFrictPhys_CohesionMoment::normElastEnergy()
 	{
 		if (!I->isReal()) continue;
 		CohFrictPhys* phys = YADE_CAST<CohFrictPhys*>(I->phys.get());
-		if (phys) { normEnergy += 0.5 * (phys->normalForce.squaredNorm() / phys->kn); }
+		if (phys) {
+			normEnergy += 0.5 * (phys->normalForce.squaredNorm() / phys->kn);
+		}
 	}
 	return normEnergy;
 }
@@ -46,7 +48,9 @@ Real Law2_ScGeom6D_CohFrictPhys_CohesionMoment::shearElastEnergy()
 	{
 		if (!I->isReal()) continue;
 		CohFrictPhys* phys = YADE_CAST<CohFrictPhys*>(I->phys.get());
-		if (phys) { shearEnergy += 0.5 * (phys->shearForce.squaredNorm() / phys->ks); }
+		if (phys) {
+			shearEnergy += 0.5 * (phys->shearForce.squaredNorm() / phys->ks);
+		}
 	}
 	return shearEnergy;
 }
@@ -58,7 +62,9 @@ Real Law2_ScGeom6D_CohFrictPhys_CohesionMoment::bendingElastEnergy()
 	{
 		if (!I->isReal()) continue;
 		CohFrictPhys* phys = YADE_CAST<CohFrictPhys*>(I->phys.get());
-		if (phys) { bendingEnergy += 0.5 * (phys->moment_bending.squaredNorm() / phys->kr); }
+		if (phys) {
+			bendingEnergy += 0.5 * (phys->moment_bending.squaredNorm() / phys->kr);
+		}
 	}
 	return bendingEnergy;
 }
@@ -70,7 +76,9 @@ Real Law2_ScGeom6D_CohFrictPhys_CohesionMoment::twistElastEnergy()
 	{
 		if (!I->isReal()) continue;
 		CohFrictPhys* phys = YADE_CAST<CohFrictPhys*>(I->phys.get());
-		if (phys) { twistEnergy += 0.5 * (phys->moment_twist.squaredNorm() / phys->ktw); }
+		if (phys) {
+			twistEnergy += 0.5 * (phys->moment_twist.squaredNorm() / phys->ktw);
+		}
 	}
 	return twistEnergy;
 }
@@ -290,8 +298,9 @@ void Law2_ScGeom6D_CohFrictPhys_CohesionMoment::checkConsistency(const shared_pt
 		        "twisting moment is bounded but rolling moment is not (interaction "
 		        << id1 << "-" << id2 << "), check etaRoll and etaTwist of the materials if it is not intentional.");
 	if ((phys->maxRollPl >= 0. or phys->rollingAdhesion >= 0 or phys->maxTwistPl >= 0. or phys->twistingAdhesion >= 0) and not useIncrementalForm)
-		LOG_WARN_ONCE("If :yref:`Law2_ScGeom6D_CohFrictPhys_CohesionMoment::useIncrementalForm` is false, then plasticity will not be applied "
-		              "correctly to torques (the total formulation will not reproduce irreversibility).");
+		LOG_WARN_ONCE(
+		        "If :yref:`Law2_ScGeom6D_CohFrictPhys_CohesionMoment::useIncrementalForm` is false, then plasticity will not be applied "
+		        "correctly to torques (the total formulation will not reproduce irreversibility).");
 	if ((phys->maxRollPl != 0 or phys->maxTwistPl != 0 or phys->rollingAdhesion != 0 or phys->twistingAdhesion != 0) and not phys->momentRotationLaw)
 		LOG_WARN_ONCE(
 		        "Interaction " << id1 << "-" << id2
@@ -350,7 +359,9 @@ bool Law2_ScGeom6D_CohFrictPhys_CohesionMoment::go(shared_ptr<IGeom>& ig, shared
 	bool alive = checkPlasticity(geom, phys, Fn, computeMoment);
 
 	// ____________________  Delete interaction if no contact  ______________________________
-	if (not alive) { return false; }
+	if (not alive) {
+		return false;
+	}
 	//  ____________________  Apply the force _______________________________________________
 	applyForceAtContactPoint(
 	        -phys->normalForce - phys->shearForce,

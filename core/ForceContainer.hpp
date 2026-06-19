@@ -116,7 +116,7 @@ public:
 	void syncSizesOfContainers();
 	void resize(size_t newSize, int threadN);
 #else
-	void       resize(size_t newSize);
+	void resize(size_t newSize);
 #endif
 	/* Sum contributions from all threads, save to _force&_torque.
 		 * Locks globalMutex, since one thread modifies common data (_force&_torque).

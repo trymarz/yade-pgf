@@ -23,7 +23,7 @@ namespace ymport {
 		class Parser {
 		public:
 			Parser(const boost::filesystem::path& path, const std::string& klass, const std::string& object);
-			virtual ~Parser() {};
+			virtual ~Parser() { };
 
 			virtual void parse() = 0;
 

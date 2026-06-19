@@ -515,7 +515,9 @@ public:
 	bool                    hasKey(const string& key)
 	{
 		for (const string& val : mb->tags) {
-			if (boost::algorithm::starts_with(val, key + "=")) { return true; }
+			if (boost::algorithm::starts_with(val, key + "=")) {
+				return true;
+			}
 		}
 		return false;
 	}
@@ -580,8 +582,8 @@ public:
 		}
 		PyErr_SetNone(PyExc_StopIteration);
 		py::throw_error_already_set();
-		throw;  // to avoid compiler warning; never reached
-		        // InteractionContainer::iterator ret=I; ++I; return *ret;
+		throw; // to avoid compiler warning; never reached
+		       // InteractionContainer::iterator ret=I; ++I; return *ret;
 	}
 };
 
@@ -831,7 +833,9 @@ public:
 			rb = OMEGA.getScene();
 		}
 		assert(rb);
-		if (!OMEGA.hasSimulationLoop()) { OMEGA.createSimulationLoop(); }
+		if (!OMEGA.hasSimulationLoop()) {
+			OMEGA.createSimulationLoop();
+		}
 	};
 	/* Create variables in python's __builtin__ namespace that correspond to labeled objects. At this moment, only engines and functors can be labeled (not bodies etc). */
 	void mapLabeledEntitiesToVariables()
@@ -844,17 +848,23 @@ public:
 			}
 #endif
 		for (const auto& e : OMEGA.getScene()->engines) {
-			if (!e->label.empty()) { pyRunString("__builtins__." + e->label + "=Omega().labeledEngine('" + e->label + "')"); }
+			if (!e->label.empty()) {
+				pyRunString("__builtins__." + e->label + "=Omega().labeledEngine('" + e->label + "')");
+			}
 #define _DO_FUNCTORS(functors, FunctorT)                                                                                                                       \
 	{                                                                                                                                                      \
 		for (const auto& f : functors) {                                                                                                               \
-			if (!f->label.empty()) { pyRunString("__builtins__." + f->label + "=Omega().labeledEngine('" + f->label + "')"); }                     \
+			if (!f->label.empty()) {                                                                                                               \
+				pyRunString("__builtins__." + f->label + "=Omega().labeledEngine('" + f->label + "')");                                        \
+			}                                                                                                                                      \
 		}                                                                                                                                              \
 	}
 #define _TRY_DISPATCHER(DispatcherT)                                                                                                                           \
 	{                                                                                                                                                      \
 		DispatcherT* d = dynamic_cast<DispatcherT*>(e.get());                                                                                          \
-		if (d) { _DO_FUNCTORS(d->functors, DispatcherT::FunctorType); }                                                                                \
+		if (d) {                                                                                                                                       \
+			_DO_FUNCTORS(d->functors, DispatcherT::FunctorType);                                                                                   \
+		}                                                                                                                                              \
 	}
 			_TRY_DISPATCHER(BoundDispatcher);
 			_TRY_DISPATCHER(IGeomDispatcher);
@@ -867,13 +877,17 @@ public:
 				_DO_FUNCTORS(id->lawDispatcher->functors, LawFunctor);
 			}
 			Collider* coll = dynamic_cast<Collider*>(e.get());
-			if (coll) { _DO_FUNCTORS(coll->boundDispatcher->functors, BoundFunctor); }
+			if (coll) {
+				_DO_FUNCTORS(coll->boundDispatcher->functors, BoundFunctor);
+			}
 #undef _DO_FUNCTORS
 #undef _TRY_DISPATCHER
 			CombinedKinematicEngine* cke = dynamic_cast<CombinedKinematicEngine*>(e.get());
 			if (cke) {
 				for (const auto& ke : cke->comb) {
-					if (!ke->label.empty()) { pyRunString("__builtins__." + ke->label + "=Omega().labeledEngine('" + ke->label + "')"); }
+					if (!ke->label.empty()) {
+						pyRunString("__builtins__." + ke->label + "=Omega().labeledEngine('" + ke->label + "')");
+					}
 				}
 			}
 		}
@@ -890,9 +904,13 @@ public:
 #define _TRY_DISPATCHER(DispatcherT)                                                                                                                           \
 	{                                                                                                                                                      \
 		DispatcherT* d = dynamic_cast<DispatcherT*>(e.get());                                                                                          \
-		if (d) { _DO_FUNCTORS(d->functors, DispatcherT::FunctorType); }                                                                                \
+		if (d) {                                                                                                                                       \
+			_DO_FUNCTORS(d->functors, DispatcherT::FunctorType);                                                                                   \
+		}                                                                                                                                              \
 	}
-			if (e->label == label) { return py::object(e); }
+			if (e->label == label) {
+				return py::object(e);
+			}
 			_TRY_DISPATCHER(BoundDispatcher);
 			_TRY_DISPATCHER(IGeomDispatcher);
 			_TRY_DISPATCHER(IPhysDispatcher);
@@ -904,7 +922,9 @@ public:
 				_DO_FUNCTORS(id->lawDispatcher->functors, LawFunctor);
 			}
 			Collider* coll = dynamic_cast<Collider*>(e.get());
-			if (coll) { _DO_FUNCTORS(coll->boundDispatcher->functors, BoundFunctor); }
+			if (coll) {
+				_DO_FUNCTORS(coll->boundDispatcher->functors, BoundFunctor);
+			}
 #undef _DO_FUNCTORS
 #undef _TRY_DISPATCHER
 			CombinedKinematicEngine* cke = dynamic_cast<CombinedKinematicEngine*>(e.get());
@@ -1127,8 +1147,7 @@ public:
 
 #ifdef YADE_MPI
 //return vector<int> as contiguous bytes, skipping conversion to python list
-PyObject*
-intrsctToBytes(const shared_ptr<Subdomain>& subD, unsigned rank, bool mirror)
+PyObject* intrsctToBytes(const shared_ptr<Subdomain>& subD, unsigned rank, bool mirror)
 {
 	if (subD->intersections.size() <= rank) LOG_ERROR("rank too large");
 	if (not mirror) return PyBytes_FromStringAndSize((char*)&(subD->intersections[rank][0]), subD->intersections[rank].size() * sizeof(Body::id_t));

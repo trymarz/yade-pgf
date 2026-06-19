@@ -13,7 +13,7 @@ public:
 	{
 		createIndex();
 	}
-	virtual ~Sphere() {};
+	virtual ~Sphere() { };
 	Real getVolume() override { return (4 / 3.) * Mathr::PI * pow(radius, 3); }
 	// clang-format off
 	YADE_CLASS_BASE_DOC_ATTRS_CTOR_PY(Sphere,Shape,"Geometry of spherical particle.",

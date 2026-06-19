@@ -7,8 +7,8 @@
 
 namespace yade { // Cannot have #include directive inside.
 
-YADE_PLUGIN((KinematicEngine)(CombinedKinematicEngine)(TranslationEngine)(HarmonicMotionEngine)(RotationEngine)(HelixEngine)(InterpolatingHelixEngine)(
-        HarmonicRotationEngine)(ServoPIDController)(BicyclePedalEngine));
+YADE_PLUGIN((
+        KinematicEngine)(CombinedKinematicEngine)(TranslationEngine)(HarmonicMotionEngine)(RotationEngine)(HelixEngine)(InterpolatingHelixEngine)(HarmonicRotationEngine)(ServoPIDController)(BicyclePedalEngine));
 
 CREATE_LOGGER(KinematicEngine);
 CREATE_LOGGER(ServoPIDController);
@@ -200,7 +200,9 @@ void ServoPIDController::apply(const vector<Body::id_t>& ids2)
 
 		curVel = (pTerm + iTerm + dTerm); // Calculate current velocity
 
-		if (math::abs(curVel) > math::abs(maxVelocity)) { curVel *= math::abs(maxVelocity) / math::abs(curVel); }
+		if (math::abs(curVel) > math::abs(maxVelocity)) {
+			curVel *= math::abs(maxVelocity) / math::abs(curVel);
+		}
 
 		iterPrevStart = scene->iter;
 		current       = tmpForce;

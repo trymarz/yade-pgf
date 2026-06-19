@@ -42,8 +42,12 @@ void VESupportEngine::action()
 
 		// compute future 'viscous part of displacement'
 		const auto fII = f - uc2[counter] * k2;
-		if (c1 > 0) { uc1[counter] = uc1[counter] + dt * f / c1; }
-		if (c2 > 0) { uc2[counter] = uc2[counter] + dt * fII / c2; }
+		if (c1 > 0) {
+			uc1[counter] = uc1[counter] + dt * f / c1;
+		}
+		if (c2 > 0) {
+			uc2[counter] = uc2[counter] + dt * fII / c2;
+		}
 	}
 }
 } // namespace yade
