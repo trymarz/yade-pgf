@@ -10,6 +10,20 @@ Installation
 
 * 64 bit Operating Systems required; no support for 32 bit (i386).
 
+.. _supported-distros:
+
+Supported distributions and end-of-life policy
+-------------------------------------------------
+
+Yade follows the upstream support windows of Ubuntu and Debian: a release is dropped from our
+packages, Docker images and CI as soon as its *standard* (non-LTS-extension) support ends upstream.
+
+* Ubuntu release cycle and support end dates: https://ubuntu.com/about/release-cycle
+* Debian releases and their support status: https://www.debian.org/releases/
+
+In practice this currently means Ubuntu releases older than 22.04 and Debian releases older than
+13 (trixie) are no longer packaged, built as Docker images, or tested in CI.
+
 .. toctree::
   :maxdepth: 2
 
@@ -48,29 +62,15 @@ For their installation, you need to add the yade-dem.org/packages repository to 
 /etc/apt/sources.list.
 
 
-- Debian 11 **bullseye**::
-
-	sudo bash -c 'echo "deb http://www.yade-dem.org/packages/ bullseye main" >> /etc/apt/sources.list.d/yadedaily.list'
-
-
-- Debian 12 **bookworm** also with :ref:`high precision<highPrecisionReal>` ``long double``, ``float128`` and ``mpfr150`` packages::
-
-	sudo bash -c 'echo "deb http://www.yade-dem.org/packages/ bookworm main" >> /etc/apt/sources.list.d/yadedaily.list'
-
-
 - Debian 13 **trixie** also with :ref:`high precision<highPrecisionReal>` ``long double``, ``float128`` and ``mpfr150`` packages::
 
 	sudo bash -c 'echo "deb http://www.yade-dem.org/packages/ trixie main" >> /etc/apt/sources.list.d/yadedaily.list'
 
 
-- Debian 14 **forky** also with :ref:`high precision<highPrecisionReal>` ``long double``, ``float128`` and ``mpfr150`` packages::
+- Debian 14 **forky** (current debian testing suite) also with :ref:`high precision<highPrecisionReal>` ``long double``, ``float128`` and ``mpfr150`` packages::
 
 	sudo bash -c 'echo "deb http://www.yade-dem.org/packages/ forky main" >> /etc/apt/sources.list.d/yadedaily.list'
 
-
-- Ubuntu 20.04 **focal**::
-
-	sudo bash -c 'echo "deb http://www.yade-dem.org/packages/ focal main" >> /etc/apt/sources.list.d/yadedaily.list'
 
 - Ubuntu 22.04 **jammy** also with :ref:`high precision<highPrecisionReal>` ``long double``, ``float128`` and ``mpfr150`` packages::
 
@@ -122,22 +122,10 @@ Images contain both stable and daily versions of packages, except for Ubuntu 24.
 Docker images are based on supported distributions:
 
 
-- Debian 11 **bullseye**::
-
-	docker run -it registry.gitlab.com/yade-dev/docker-prod:debian-bullseye
-
-- Debian 12 **bookworm**::
-
-	docker run -it registry.gitlab.com/yade-dev/docker-prod:debian-bookworm
-
 - Debian 13 **trixie**::
 
 	docker run -it registry.gitlab.com/yade-dev/docker-prod:debian-trixie
 
-
-- Ubuntu 20.04 **focal**::
-
-	docker run -it registry.gitlab.com/yade-dev/docker-prod:ubuntu20.04
 
 - Ubuntu 22.04 **jammy**::
 
@@ -227,7 +215,7 @@ Following dependencies are for instance mandatory:
 
 They can be installed from the command line of your Linux distribution, assuming you have root privileges.
 
-**For Ubuntu 20.04, 22.04, 24.04**, **Debian 11, 12, 13** and their derivatives, just copy&paste to the terminal the following code block for installing all mandatory and optional dependencies (better avoid installing python packages with pip or conda)::
+**For Ubuntu 22.04, 24.04, 26.04**, **Debian 13** and their derivatives, just copy&paste to the terminal the following code block for installing all mandatory and optional dependencies (better avoid installing python packages with pip or conda)::
 
 		sudo apt install cmake git freeglut3-dev libboost-all-dev fakeroot \
 		dpkg-dev build-essential g++ python3-dev python3-ipython python3-matplotlib \
@@ -250,8 +238,6 @@ If you maintain your own dependency list for trixie/forky replace ``python3-pyqt
 
 	python3-pyqt5.qtwebengine
 
-
-Note: on Ubuntu 20.04, the VTK library should be ``libvtk6-dev`` instead of ``libvtk9-dev``.
 
 If you are using other distributions than Debian or its derivatives you should
 install by yourself the software packages listed above. Their names in other distributions can differ from the
@@ -384,10 +370,17 @@ Supported linux releases
 
 `Currently supported <https://gitlab.com/yade-dev/trunk/pipelines?scope=branches>`_ [#buildLog]_ linux releases for source code installation and their respective `docker <https://docs.docker.com/>`_ `files <https://docs.docker.com/engine/reference/builder/>`_ are:
 
-* `Ubuntu 20.04 <https://gitlab.com/yade-dev/docker-yade/blob/ubuntu20.04/Dockerfile>`_
-* `Ubuntu 22.04 <https://gitlab.com/yade-dev/docker-yade/blob/ubuntu22.04/Dockerfile>`_
-* `Ubuntu 24.04 <https://gitlab.com/yade-dev/docker-yade/blob/ubuntu24.04/Dockerfile>`_
-* `openSUSE 15 <https://gitlab.com/yade-dev/docker-yade/blob/suse15/Dockerfile>`_
+* `Ubuntu 22.04 <https://gitlab.com/yade-dev/docker-yade/blob/master/dockerfiles/ubuntu22.04/Dockerfile>`_
+* `Ubuntu 24.04 <https://gitlab.com/yade-dev/docker-yade/blob/master/dockerfiles/ubuntu24.04/Dockerfile>`_
+* `Ubuntu 26.04 <https://gitlab.com/yade-dev/docker-yade/blob/master/dockerfiles/ubuntu26.04/Dockerfile>`_
+* `Debian 13 trixie <https://gitlab.com/yade-dev/docker-yade/blob/master/dockerfiles/debian13-trixie/Dockerfile>`_
+* `Debian 14 forky (current testing) <https://gitlab.com/yade-dev/docker-yade/blob/master/dockerfiles/debian14-forky/Dockerfile>`_
+* `openSUSE 15 <https://gitlab.com/yade-dev/docker-yade/blob/master/dockerfiles/suse15/Dockerfile>`_
+* `Arch Linux <https://gitlab.com/yade-dev/docker-yade/blob/master/dockerfiles/archlinux-current/Dockerfile>`_
+
+Ubuntu and Debian releases older than the ones listed above are dropped once their upstream
+standard support ends; see :ref:`supported-distros` for the policy and links to the upstream
+release schedules.
 
 The above links include the bash commands used to prepare the linux distribution and environment for installing and testing Yade.
 During Yade development workflow, these instructions are automatically performed using the `gitlab continuous integration <https://docs.gitlab.com/ee/ci/quick_start/>`_ service after

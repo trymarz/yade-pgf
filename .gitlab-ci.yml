@@ -1,24 +1,21 @@
-# The previously used image:
-# image: registry.gitlab.com/yade-dev/docker-yade
-#
-# Five new images:
-# image: registry.gitlab.com/yade-dev/docker-yade:ubuntu18.04
-# image: registry.gitlab.com/yade-dev/docker-yade:ubuntu18.04_nogui
-# image: registry.gitlab.com/yade-dev/docker-yade:ubuntu18.04_foam
-# image: registry.gitlab.com/yade-dev/docker-yade:ubuntu20.04
+# Currently used images (see https://gitlab.com/yade-dev/docker-yade):
 # image: registry.gitlab.com/yade-dev/docker-yade:ubuntu22.04
+# image: registry.gitlab.com/yade-dev/docker-yade:ubuntu22.04_foam2312
 # image: registry.gitlab.com/yade-dev/docker-yade:ubuntu24.04
 # image: registry.gitlab.com/yade-dev/docker-yade:ubuntu26.04
-# image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye
-# image: registry.gitlab.com/yade-dev/docker-yade:debian-bookworm
-# image: registry.gitlab.com/yade-dev/docker-yade:debian-trixie
-# image: registry.gitlab.com/yade-dev/docker-yade:debian-forky
+# image: registry.gitlab.com/yade-dev/docker-yade:debian13-trixie
+# image: registry.gitlab.com/yade-dev/docker-yade:debian14-forky # current debian testing suite; will become the stable image once released
+# image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
+# image: registry.gitlab.com/yade-dev/docker-yade:debian-testing-nogui
+# image: registry.gitlab.com/yade-dev/docker-yade:debian-testing-arm64
 # image: registry.gitlab.com/yade-dev/docker-yade:suse15
-# image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye-mips64el # crashes, as predicted by warnings -Wcast-align
-# image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye-ppc64el
-# image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye-arm64
-# image: registry.gitlab.com/yade-dev/docker-yade:debian-bookworm-arm64
 # image: registry.gitlab.com/yade-dev/docker-yade:archlinux-current
+#
+# Support policy: we drop CI/packaging support for an Ubuntu or Debian release once that
+# release's upstream standard support has ended.
+#   Ubuntu release cycle: https://ubuntu.com/about/release-cycle
+#   Debian releases:      https://www.debian.org/releases/
+# Ubuntu < 22.04 and Debian bullseye/bookworm have been dropped on this basis.
 #
 # Useful link to validator: https://gitlab.com/yade-dev/trunk/-/ci/lint
 
@@ -237,12 +234,6 @@ variables:
 
 # 2.1 build stage
 
-make_20_04:
-  <<: *make_definition
-  <<: *artifacts_definition
-  <<: *skip_WIP_and_Draft
-  image: registry.gitlab.com/yade-dev/docker-yade:ubuntu20.04
-
 make_22_04:
   <<: *make_definition
   <<: *artifacts_definition
@@ -274,32 +265,22 @@ make_26_04:
     expire_in: 2 weeks
   image: registry.gitlab.com/yade-dev/docker-yade:ubuntu26.04
 
-make_bullseye:
-  <<: *make_definition
-  <<: *artifacts_definition
-  <<: *skip_WIP_and_Draft
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye
-
-make_bookworm:
-  <<: *make_definition
-  <<: *artifacts_definition
-  <<: *skip_WIP_and_Draft
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bookworm
-
 make_trixie:
   <<: *make_definition
   <<: *artifacts_definition
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-trixie
+  image: registry.gitlab.com/yade-dev/docker-yade:debian13-trixie
   artifacts:
     paths:
       - install
       - build
     expire_in: 2 weeks
 
+# forky is the current debian testing suite; once it is released as stable it
+# will get promoted the same way trixie was, and this job will track it directly.
 make_forky:
   <<: *make_definition
   <<: *artifacts_definition
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-forky
+  image: registry.gitlab.com/yade-dev/docker-yade:debian14-forky
 
 make_archlinux:
   <<: *make_definition
@@ -312,29 +293,11 @@ make_archlinux:
   image: registry.gitlab.com/yade-dev/docker-yade:archlinux-current
 # allow_failure: true
 
-mk_bll_ppc64el:
+mk_testing_arm64:
   <<: *make_definition
   <<: *artifacts_definition
   <<: *skip_WIP_and_Draft
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye-ppc64el
-  tags:
-    - fast
-    - qemu
-
-mk_bll_arm64:
-  <<: *make_definition
-  <<: *artifacts_definition
-  <<: *skip_WIP_and_Draft
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye-arm64
-  tags:
-    - fast
-    - qemu
-
-mk_bookw_arm64:
-  <<: *make_definition
-  <<: *artifacts_definition
-  <<: *skip_WIP_and_Draft
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bookworm-arm64
+  image: registry.gitlab.com/yade-dev/docker-yade:debian-testing-arm64
   tags:
     - fast
     - qemu
@@ -346,7 +309,7 @@ make_no_mpi:
   before_script:
     - export EXTRA_CMAKE_ARGS="-DENABLE_MPI=OFF $EXTRA_CMAKE_ARGS"
     - echo $EXTRA_CMAKE_ARGS
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye
+  image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
 
 make_no_vtk:
   <<: *make_definition
@@ -355,7 +318,7 @@ make_no_vtk:
   before_script:
     - export EXTRA_CMAKE_ARGS="-DENABLE_VTK=OFF $EXTRA_CMAKE_ARGS"
     - echo $EXTRA_CMAKE_ARGS
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye
+  image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
 
 # using -Ofast native must be tested on the same CPU where it was compiled. So build & test must be in a single job.
 make_fast:
@@ -370,7 +333,7 @@ make_fast:
     - export TESTS_AFTER_MAKE="TESTS_AFTER_MAKE"
     - export EXTRA_CMAKE_ARGS="-DENABLE_FAST_NATIVE=ON $EXTRA_CMAKE_ARGS"
     - echo $EXTRA_CMAKE_ARGS
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye
+  image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
 
 make_debug:
   <<: *make_definition
@@ -385,7 +348,7 @@ make_debug:
     - export EXTRA_CMAKE_ARGS="-DDEBUG=ON $EXTRA_CMAKE_ARGS"
     - echo $EXTRA_CMAKE_ARGS
     - export CXXFLAGS="-O2 $CXXFLAGS"
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye
+  image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
 
 make_asan:
   <<: *make_definition
@@ -396,7 +359,7 @@ make_asan:
     - export EXTRA_CMAKE_ARGS="-DENABLE_USEFUL_ERRORS=0 -DENABLE_ASAN=1 $EXTRA_CMAKE_ARGS"
     - echo $EXTRA_CMAKE_ARGS
     - export ASAN_OPTIONS=detect_leaks=0:log_path=stdout:verify_asan_link_order=false
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-forky
+  image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
   tags:
     - debug
   artifacts:
@@ -432,7 +395,7 @@ make_asan_HP:
     - export EXTRA_CMAKE_ARGS="-DENABLE_USEFUL_ERRORS=0 -DENABLE_ASAN=1 -DREAL_DECIMAL_PLACES=$TEST_DECIMAL_PLACES -DENABLE_MPFR=$TEST_USE_MPFR $EXTRA_CMAKE_ARGS"
     - echo $EXTRA_CMAKE_ARGS
     - export ASAN_OPTIONS=detect_leaks=0:log_path=stdout:verify_asan_link_order=false
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-forky
+  image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
   tags:
     - debug
   artifacts:
@@ -449,7 +412,7 @@ make_minimal:
     - export EXTRA_CMAKE_ARGS="-DENABLE_VTK=OFF -DENABLE_MPI=OFF -DENABLE_GUI=OFF -DENABLE_GTS=OFF -DENABLE_TWOPHASEFLOW=OFF -DENABLE_PARTIALSAT=OFF -DENABLE_CGAL=OFF -DENABLE_FEMLIKE=OFF -DENABLE_LBMFLOW=OFF -DENABLE_POTENTIAL_BLOCKS=OFF -DENABLE_POTENTIAL_PARTICLES=OFF -DENABLE_GL2PS=OFF -DENABLE_LOGGER=OFF -DENABLE_OPENMP=OFF -DENABLE_THERMAL=OFF -DENABLE_LS_DEM=OFF $EXTRA_CMAKE_ARGS"
     - echo $EXTRA_CMAKE_ARGS
     - export CHECK_FORMAT="CHECK_FORMAT"
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye
+  image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
 
 make_unity:
   <<: *make_definition
@@ -468,7 +431,7 @@ make_opposite:
   before_script:
     - export EXTRA_CMAKE_ARGS="-DENABLE_LOGGER=OFF -DENABLE_MASK_ARBITRARY=ON -DENABLE_COMPLEX_MP=OFF -DENABLE_OPENMP=OFF -DENABLE_LIQMIGRATION=ON -DENABLE_PROFILING=ON -DENABLE_SPH=ON -DENABLE_DEFORM=ON $EXTRA_CMAKE_ARGS"
     - echo $EXTRA_CMAKE_ARGS
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye
+  image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
 
 make_suse15:
   <<: *make_definition
@@ -479,15 +442,14 @@ make_suse15:
     - echo $CXXFLAGS
   image: registry.gitlab.com/yade-dev/docker-yade:suse15
 
-# TODO: prepare linux image for some newer distribution to do the *_nogui tests. And then remove the -DENABLE_CGAL=OFF flag.
-make_18_04_nogui:
+make_nogui:
   <<: *make_definition
   <<: *artifacts_definition
   <<: *skip_WIP_and_Draft
   before_script:
-    - export EXTRA_CMAKE_ARGS="-DENABLE_GUI=OFF -DENABLE_CGAL=OFF $EXTRA_CMAKE_ARGS"
+    - export EXTRA_CMAKE_ARGS="-DENABLE_GUI=OFF $EXTRA_CMAKE_ARGS"
     - echo $EXTRA_CMAKE_ARGS
-  image: registry.gitlab.com/yade-dev/docker-yade:ubuntu18.04_nogui
+  image: registry.gitlab.com/yade-dev/docker-yade:debian-testing-nogui
 
 make_clang:
   <<: *make_definition
@@ -498,9 +460,9 @@ make_clang:
     - export CXX="/usr/bin/clang++"
     # We should escape disabling features for the clang-build. Clang should work exactly like gcc.
     - export EXTRA_CMAKE_ARGS="-DENABLE_USEFUL_ERRORS=0 -DENABLE_MPFR=1 $EXTRA_CMAKE_ARGS"
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-forky
+  image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
 
-## High precision - testing debian bullseye
+## High precision - testing debian-testing
 
 mkHP_float:
   <<: *make_definition
@@ -509,7 +471,7 @@ mkHP_float:
   before_script:
     - export EXTRA_CMAKE_ARGS="-DREAL_DECIMAL_PLACES=6 $EXTRA_CMAKE_ARGS"
     - echo $EXTRA_CMAKE_ARGS
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye
+  image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
 
 mkHP_long_double:
   <<: *make_definition
@@ -518,7 +480,7 @@ mkHP_long_double:
   before_script:
     - export EXTRA_CMAKE_ARGS="-DREAL_DECIMAL_PLACES=18 $EXTRA_CMAKE_ARGS"
     - echo $EXTRA_CMAKE_ARGS
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye
+  image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
 
 mkHP_float128:
   <<: *make_definition
@@ -527,7 +489,7 @@ mkHP_float128:
   before_script:
     - export EXTRA_CMAKE_ARGS="-DREAL_DECIMAL_PLACES=33 $EXTRA_CMAKE_ARGS"
     - echo $EXTRA_CMAKE_ARGS
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye
+  image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
 
 mkHP_mpfr150:
   <<: *make_definition
@@ -536,7 +498,7 @@ mkHP_mpfr150:
   before_script:
     - export EXTRA_CMAKE_ARGS="-DREAL_DECIMAL_PLACES=150 -DENABLE_MPFR=ON $EXTRA_CMAKE_ARGS"
     - echo $EXTRA_CMAKE_ARGS
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye
+  image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
 
 mkHP_bf45:
   <<: *make_definition
@@ -545,7 +507,7 @@ mkHP_bf45:
   before_script:
     - export EXTRA_CMAKE_ARGS="-DREAL_DECIMAL_PLACES=45 -DENABLE_MPFR=OFF $EXTRA_CMAKE_ARGS"
     - echo $EXTRA_CMAKE_ARGS
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye
+  image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
 
 ## High precision - all tests done.
 
@@ -556,7 +518,7 @@ make_SSE:
   before_script:
     - export EXTRA_CMAKE_ARGS="-DVECTORIZE=ON $EXTRA_CMAKE_ARGS"
     - echo $EXTRA_CMAKE_ARGS
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye
+  image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
 
 # 3.1. test stage
 .test_template: &test_definition
@@ -593,14 +555,6 @@ make_SSE:
     paths:
       - screenshots
 
-test_20_04:
-  <<: *test_definition
-  <<: *skip_WIP_and_Draft
-  image: registry.gitlab.com/yade-dev/docker-yade:ubuntu20.04
-  dependencies:
-    - make_20_04
-  needs: ["make_20_04"]
-
 test_22_04:
   <<: *test_definition
   <<: *skip_WIP_and_Draft
@@ -623,32 +577,16 @@ test_26_04:
     - make_26_04
   needs: ["make_26_04"]
 
-test_bullseye:
-  <<: *test_definition
-  <<: *skip_WIP_and_Draft
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye
-  dependencies:
-    - make_bullseye
-  needs: ["make_bullseye"]
-
-test_bookworm:
-  <<: *test_definition
-  <<: *skip_WIP_and_Draft
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bookworm
-  dependencies:
-    - make_bookworm
-  needs: ["make_bookworm"]
-
 test_trixie:
   <<: *test_definition
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-trixie
+  image: registry.gitlab.com/yade-dev/docker-yade:debian13-trixie
   dependencies:
     - make_trixie
   needs: ["make_trixie"]
 
 test_forky:
   <<: *test_definition
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-forky
+  image: registry.gitlab.com/yade-dev/docker-yade:debian14-forky
   dependencies:
     - make_forky
   needs: ["make_forky"]
@@ -662,35 +600,13 @@ test_archlinux:
     - make_archlinux
   needs: ["make_archlinux"]
 
-tst_bll_ppc64el:
+tst_testing_arm64:
   <<: *test_definition
   <<: *skip_WIP_and_Draft
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye-ppc64el
+  image: registry.gitlab.com/yade-dev/docker-yade:debian-testing-arm64
   dependencies:
-    - mk_bll_ppc64el
-  needs: ["mk_bll_ppc64el"]
-  tags:
-    - qemu
-  timeout: 55 minutes
-
-tst_bll_arm64:
-  <<: *test_definition
-  <<: *skip_WIP_and_Draft
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye-arm64
-  dependencies:
-    - mk_bll_arm64
-  needs: ["mk_bll_arm64"]
-  tags:
-    - qemu
-  timeout: 55 minutes
-
-tst_bookw_arm64:
-  <<: *test_definition
-  <<: *skip_WIP_and_Draft
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bookworm-arm64
-  dependencies:
-    - mk_bookw_arm64
-  needs: ["mk_bookw_arm64"]
+    - mk_testing_arm64
+  needs: ["mk_testing_arm64"]
   tags:
     - qemu
   timeout: 55 minutes
@@ -698,7 +614,7 @@ tst_bookw_arm64:
 test_no_mpi:
   <<: *test_definition
   <<: *skip_WIP_and_Draft
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye
+  image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
   dependencies:
     - make_no_mpi
   needs: ["make_no_mpi"]
@@ -706,7 +622,7 @@ test_no_mpi:
 test_no_vtk:
   <<: *test_definition
   <<: *skip_WIP_and_Draft
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye
+  image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
   dependencies:
     - make_no_vtk
   needs: ["make_no_vtk"]
@@ -715,7 +631,7 @@ test_minimal:
   <<: *test_definition
   <<: *skip_GUI_TEST
   <<: *skip_WIP_and_Draft
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye
+  image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
   dependencies:
     - make_minimal
   needs: ["make_minimal"]
@@ -723,7 +639,7 @@ test_minimal:
 test_opposite:
   <<: *test_definition
   <<: *skip_WIP_and_Draft
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye
+  image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
   dependencies:
     - make_opposite
   needs: ["make_opposite"]
@@ -737,29 +653,29 @@ test_suse15:
     - make_suse15
   needs: ["make_suse15"]
 
-test_18_04_nogui:
+test_nogui:
   <<: *test_definition
   <<: *skip_GUI_TEST
   <<: *skip_WIP_and_Draft
-  image: registry.gitlab.com/yade-dev/docker-yade:ubuntu18.04_nogui
+  image: registry.gitlab.com/yade-dev/docker-yade:debian-testing-nogui
   dependencies:
-    - make_18_04_nogui
-  needs: ["make_18_04_nogui"]
+    - make_nogui
+  needs: ["make_nogui"]
 
 test_clang:
   <<: *test_definition
   <<: *skip_WIP_and_Draft
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-forky
+  image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
   dependencies:
     - make_clang
   needs: ["make_clang"]
 
-## High precision - testing debian bullseye
+## High precision - testing debian-testing
 
 tstHP_long_double:
   <<: *test_definition
   <<: *skip_WIP_and_Draft
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye
+  image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
   dependencies:
     - mkHP_long_double
   needs: ["mkHP_long_double"]
@@ -768,7 +684,7 @@ tstHP_long_double:
 tstHP_float128:
   <<: *test_definition
   <<: *skip_WIP
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye
+  image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
   dependencies:
     - mkHP_float128
   needs: ["mkHP_float128"]
@@ -777,7 +693,7 @@ tstHP_float128:
 tstHP_mpfr150:
   <<: *test_definition
   <<: *skip_WIP_and_Draft
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye
+  image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
   dependencies:
     - mkHP_mpfr150
   needs: ["mkHP_mpfr150"]
@@ -786,7 +702,7 @@ tstHP_mpfr150:
 tstHP_bf45:
   <<: *test_definition
   <<: *skip_WIP_and_Draft
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye
+  image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
   dependencies:
     - mkHP_bf45
   needs: ["mkHP_bf45"]
@@ -797,7 +713,7 @@ tstHP_bf45:
 test_SSE:
   <<: *test_definition
   <<: *skip_WIP_and_Draft
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye
+  image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
   dependencies:
     - make_SSE
   needs: ["make_SSE"]
@@ -990,14 +906,6 @@ test_22_foam10:
     - if grep -q "Arch Linux" /etc/lsb-release; then /usr/sbin/uname -m; else  /usr/bin/dpkg --print-architecture ; fi
   timeout: 35 minutes
 
-check_20_04:
-  <<: *check_definition
-  <<: *skip_WIP_and_Draft
-  image: registry.gitlab.com/yade-dev/docker-yade:ubuntu20.04
-  dependencies:
-    - make_20_04
-  needs: ["make_20_04"]
-
 check_22_04:
   <<: *check_definition
   <<: *skip_WIP_and_Draft
@@ -1020,32 +928,16 @@ check_26_04:
     - make_26_04
   needs: ["make_26_04"]
 
-check_bullseye:
-  <<: *check_definition
-  <<: *skip_WIP_and_Draft
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye
-  dependencies:
-    - make_bullseye
-  needs: ["make_bullseye"]
-
-check_bookworm:
-  <<: *check_definition
-  <<: *skip_WIP_and_Draft
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bookworm
-  dependencies:
-    - make_bookworm
-  needs: ["make_bookworm"]
-
 check_trixie:
   <<: *check_definition
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-trixie
+  image: registry.gitlab.com/yade-dev/docker-yade:debian13-trixie
   dependencies:
     - make_trixie
   needs: ["make_trixie"]
 
 check_forky:
   <<: *check_definition
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-forky
+  image: registry.gitlab.com/yade-dev/docker-yade:debian14-forky
   dependencies:
     - make_forky
   needs: ["make_forky"]
@@ -1059,35 +951,13 @@ check_archlinux:
     - make_archlinux
   needs: ["make_archlinux"]
 
-ck_bll_ppc64el:
+ck_testing_arm64:
   <<: *check_definition
   <<: *skip_WIP_and_Draft
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye-ppc64el
+  image: registry.gitlab.com/yade-dev/docker-yade:debian-testing-arm64
   dependencies:
-    - mk_bll_ppc64el
-  needs: ["mk_bll_ppc64el"]
-  tags:
-    - qemu
-  timeout: 3 hours
-
-ck_bll_arm64:
-  <<: *check_definition
-  <<: *skip_WIP_and_Draft
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye-arm64
-  dependencies:
-    - mk_bll_arm64
-  needs: ["mk_bll_arm64"]
-  tags:
-    - qemu
-  timeout: 3 hours
-
-ck_bookw_arm64:
-  <<: *check_definition
-  <<: *skip_WIP_and_Draft
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bookworm-arm64
-  dependencies:
-    - mk_bookw_arm64
-  needs: ["mk_bookw_arm64"]
+    - mk_testing_arm64
+  needs: ["mk_testing_arm64"]
   tags:
     - qemu
   timeout: 3 hours
@@ -1095,7 +965,7 @@ ck_bookw_arm64:
 check_no_mpi:
   <<: *check_definition
   <<: *skip_WIP_and_Draft
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye
+  image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
   dependencies:
     - make_no_mpi
   needs: ["make_no_mpi"]
@@ -1103,7 +973,7 @@ check_no_mpi:
 check_no_vtk:
   <<: *check_definition
   <<: *skip_WIP_and_Draft
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye
+  image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
   dependencies:
     - make_no_vtk
   needs: ["make_no_vtk"]
@@ -1111,7 +981,7 @@ check_no_vtk:
 check_minimal:
   <<: *check_definition
   <<: *skip_WIP_and_Draft
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye
+  image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
   dependencies:
     - make_minimal
   needs: ["make_minimal"]
@@ -1119,7 +989,7 @@ check_minimal:
 check_opposite:
   <<: *check_definition
   <<: *skip_WIP_and_Draft
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye
+  image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
   dependencies:
     - make_opposite
   needs: ["make_opposite"]
@@ -1135,17 +1005,17 @@ check_suse15:
 check_clang:
   <<: *check_definition
   <<: *skip_WIP_and_Draft
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-forky
+  image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
   dependencies:
     - make_clang
   needs: ["make_clang"]
 
-## High precision - testing debian bullseye
+## High precision - testing debian-testing
 
 ckHP_long_double:
   <<: *check_definition
   <<: *skip_WIP_and_Draft
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye
+  image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
   dependencies:
     - mkHP_long_double
   needs: ["mkHP_long_double"]
@@ -1154,7 +1024,7 @@ ckHP_long_double:
 ckHP_float128:
   <<: *check_definition
   <<: *skip_WIP
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye
+  image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
   dependencies:
     - mkHP_float128
   needs: ["mkHP_float128"]
@@ -1163,7 +1033,7 @@ ckHP_float128:
 ckHP_mpfr150:
   <<: *check_definition
   <<: *skip_WIP_and_Draft
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye
+  image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
   dependencies:
     - mkHP_mpfr150
   needs: ["mkHP_mpfr150"]
@@ -1172,7 +1042,7 @@ ckHP_mpfr150:
 ckHP_bf45:
   <<: *check_definition
   <<: *skip_WIP_and_Draft
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye
+  image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
   dependencies:
     - mkHP_bf45
   needs: ["mkHP_bf45"]
@@ -1183,7 +1053,7 @@ ckHP_bf45:
 check_SSE:
   <<: *check_definition
   <<: *skip_WIP_and_Draft
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye
+  image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
   dependencies:
     - make_SSE
   needs: ["make_SSE"]
@@ -1206,14 +1076,14 @@ doc_trixie:
   <<: *doc_definition
   <<: *skip_WIP
   <<: *gitlab_runner_retry_definition
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-trixie
+  image: registry.gitlab.com/yade-dev/docker-yade:debian13-trixie
   dependencies:
     - make_trixie
   needs: ["make_trixie"]
 
 # 5. pages stage; uploads documentation to the website
 pages:
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-trixie
+  image: registry.gitlab.com/yade-dev/docker-yade:debian13-trixie
   stage: pages
   <<: *gitlab_runner_retry_definition
   only:
@@ -1272,50 +1142,9 @@ pages:
   tags:
     - fast
 
-deb_bullseye:
-  <<: *deb_definition
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bullseye
-  before_script:
-    - rm -rf ./deb
-    - ./scripts/ppa_ci/builddeb.py -d "bullseye"
-
-deb_bookworm:
-  <<: *deb_definition
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bookworm
-  before_script:
-    - rm -rf ./deb
-    - ./scripts/ppa_ci/builddeb.py -d "bookworm"
-
-### Enable but without CGAL, see https://gitlab.com/yade-dev/trunk/-/issues/382
-deb_bookworm_long_double:
-  <<: *deb_definition
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bookworm
-  allow_failure: true
-  before_script:
-    - rm -rf ./deb
-    - export PREC_NAME="-long-double"
-    - ./scripts/ppa_ci/builddeb.py -d "bookworm" -p "long-double"
-
-deb_bookworm_float128:
-  <<: *deb_definition
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bookworm
-  before_script:
-    - rm -rf ./deb
-    - export PREC_NAME="-float128"
-    - ./scripts/ppa_ci/builddeb.py -d "bookworm" -p "float128"
-
-deb_bookworm_mpfr150:
-  <<: *deb_definition
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-bookworm
-  before_script:
-    - rm -rf ./deb
-    - export PREC_NAME="-mpfr150"
-    - ./scripts/ppa_ci/builddeb.py -d "bookworm" -p "mpfr150"
-  timeout: 9 hours
-
 deb_trixie:
   <<: *deb_definition
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-trixie
+  image: registry.gitlab.com/yade-dev/docker-yade:debian13-trixie
   before_script:
     - rm -rf ./deb
     - ./scripts/ppa_ci/builddeb.py -d "trixie"
@@ -1323,7 +1152,7 @@ deb_trixie:
 ### Enable but without CGAL, see https://gitlab.com/yade-dev/trunk/-/issues/382
 deb_trixie_long_double:
   <<: *deb_definition
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-trixie
+  image: registry.gitlab.com/yade-dev/docker-yade:debian13-trixie
   allow_failure: true
   before_script:
     - rm -rf ./deb
@@ -1332,7 +1161,7 @@ deb_trixie_long_double:
 
 deb_trixie_float128:
   <<: *deb_definition
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-trixie
+  image: registry.gitlab.com/yade-dev/docker-yade:debian13-trixie
   before_script:
     - rm -rf ./deb
     - export PREC_NAME="-float128"
@@ -1340,7 +1169,7 @@ deb_trixie_float128:
 
 deb_trixie_mpfr150:
   <<: *deb_definition
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-trixie
+  image: registry.gitlab.com/yade-dev/docker-yade:debian13-trixie
   before_script:
     - rm -rf ./deb
     - export PREC_NAME="-mpfr150"
@@ -1349,7 +1178,7 @@ deb_trixie_mpfr150:
 
 deb_forky:
   <<: *deb_definition
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-forky
+  image: registry.gitlab.com/yade-dev/docker-yade:debian14-forky
   before_script:
     - rm -rf ./deb
     - ./scripts/ppa_ci/builddeb.py -d "forky"
@@ -1357,7 +1186,7 @@ deb_forky:
 ### Enable but without CGAL, see https://gitlab.com/yade-dev/trunk/-/issues/382
 deb_forky_long_double:
   <<: *deb_definition
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-forky
+  image: registry.gitlab.com/yade-dev/docker-yade:debian14-forky
   allow_failure: true
   before_script:
     - rm -rf ./deb
@@ -1366,7 +1195,7 @@ deb_forky_long_double:
 
 deb_forky_float128:
   <<: *deb_definition
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-forky
+  image: registry.gitlab.com/yade-dev/docker-yade:debian14-forky
   before_script:
     - rm -rf ./deb
     - export PREC_NAME="-float128"
@@ -1374,19 +1203,12 @@ deb_forky_float128:
 
 deb_forky_mpfr150:
   <<: *deb_definition
-  image: registry.gitlab.com/yade-dev/docker-yade:debian-forky
+  image: registry.gitlab.com/yade-dev/docker-yade:debian14-forky
   before_script:
     - rm -rf ./deb
     - export PREC_NAME="-mpfr150"
     - ./scripts/ppa_ci/builddeb.py -d "forky" -p "mpfr150"
   timeout: 9 hours
-
-deb_focal:
-  <<: *deb_definition
-  image: registry.gitlab.com/yade-dev/docker-yade:ubuntu20.04
-  before_script:
-    - rm -rf ./deb
-    - ./scripts/ppa_ci/builddeb.py -d "focal"
 
 deb_jammy:
   <<: *deb_definition
