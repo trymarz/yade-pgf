@@ -240,7 +240,12 @@ template <typename Type1, typename Type2, typename Type3, typename Type4> inline
 {
 	glClearColor(GLclampf(static_cast<double>(a)), GLclampf(static_cast<double>(b)), GLclampf(static_cast<double>(c)), GLclampf(static_cast<double>(d)));
 }
+#if not (YADE_REAL_BIT == 32)
+// When YADE_REAL_BIT == 32, yade::Real is plain float, identical to GLfloat: this overload
+// would redeclare (and infinitely recurse into) the real OpenGL glLineWidth(GLfloat) itself.
+// The genuine GLfloat overload below already accepts such calls directly, so skip it here.
 inline void glLineWidth(yade::Real a) { glLineWidth(GLfloat(static_cast<double>(a))); }
+#endif
 
 #if (YADE_REAL_BIT == 32)
 // this is only testing compilation with Real as float. To avoid ambiguous function calls int↔float, int↔double. Such low precision Real is not useful at all. Except for testing builds ;)

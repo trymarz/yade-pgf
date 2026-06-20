@@ -32,9 +32,9 @@ def getAllowedError(viewName, scrNumber, testName):
 	if ((viewName == 'view') and (scrNumber == 3)):
 		return (skipCheck, 'Start View ')
 
-	# the dialog boxes which are full of text are rendered differently in make_asan_HP test. Skip it
-	# alternative: upload screenshots. But they may be different for each precision, while make_asan_HP picks precision randomly.
-	if (os.environ['CI_JOB_NAME'] == "make_asan_HP"):
+	# the dialog boxes which are full of text are rendered differently in make_HP_asan test. Skip it
+	# alternative: upload screenshots. But they may be different for each precision, while make_HP_asan picks precision randomly.
+	if (os.environ['CI_JOB_NAME'] == "make_HP_asan"):
 		if ((viewName == 'cont') and (scrNumber in [10, 11])):
 			return (skipCheck, 'ASAN Cont ')
 		if ((viewName == 'insp') and (scrNumber == 7)):

@@ -265,7 +265,7 @@ make_26_04:
     expire_in: 2 weeks
   image: registry.gitlab.com/yade-dev/docker-yade:ubuntu26.04
 
-make_trixie:
+make_debian_trixie:
   <<: *make_definition
   <<: *artifacts_definition
   image: registry.gitlab.com/yade-dev/docker-yade:debian13-trixie
@@ -277,7 +277,7 @@ make_trixie:
 
 # forky is the current debian testing suite; once it is released as stable it
 # will get promoted the same way trixie was, and this job will track it directly.
-make_forky:
+make_debian_forky:
   <<: *make_definition
   <<: *artifacts_definition
   image: registry.gitlab.com/yade-dev/docker-yade:debian14-forky
@@ -293,7 +293,7 @@ make_archlinux:
   image: registry.gitlab.com/yade-dev/docker-yade:archlinux-current
 # allow_failure: true
 
-make_testing_arm64:
+make_debian_testing_arm64:
   <<: *make_definition
   <<: *artifacts_definition
   <<: *skip_WIP_and_Draft
@@ -367,7 +367,7 @@ make_asan:
     paths:
       - screenshots
 
-make_asan_HP:
+make_HP_asan:
   <<: *make_definition
   <<: *skip_WIP_and_Draft
   before_script:
@@ -464,7 +464,7 @@ make_clang:
 
 ## High precision - testing debian-testing
 
-mkHP_float:
+make_HP_float:
   <<: *make_definition
   <<: *artifacts_definition
   <<: *skip_WIP_and_Draft
@@ -473,7 +473,7 @@ mkHP_float:
     - echo $EXTRA_CMAKE_ARGS
   image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
 
-mkHP_long_double:
+make_HP_long_double:
   <<: *make_definition
   <<: *artifacts_definition
   <<: *skip_WIP_and_Draft
@@ -482,7 +482,7 @@ mkHP_long_double:
     - echo $EXTRA_CMAKE_ARGS
   image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
 
-mkHP_float128:
+make_HP_float128:
   <<: *make_definition
   <<: *artifacts_definition
   <<: *skip_WIP
@@ -491,7 +491,7 @@ mkHP_float128:
     - echo $EXTRA_CMAKE_ARGS
   image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
 
-mkHP_mpfr150:
+make_HP_mpfr150:
   <<: *make_definition
   <<: *artifacts_definition
   <<: *skip_WIP_and_Draft
@@ -500,7 +500,7 @@ mkHP_mpfr150:
     - echo $EXTRA_CMAKE_ARGS
   image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
 
-mkHP_bf45:
+make_HP_bf45:
   <<: *make_definition
   <<: *artifacts_definition
   <<: *skip_WIP_and_Draft
@@ -577,19 +577,19 @@ test_26_04:
     - make_26_04
   needs: ["make_26_04"]
 
-test_trixie:
+test_debian_trixie:
   <<: *test_definition
   image: registry.gitlab.com/yade-dev/docker-yade:debian13-trixie
   dependencies:
-    - make_trixie
-  needs: ["make_trixie"]
+    - make_debian_trixie
+  needs: ["make_debian_trixie"]
 
-test_forky:
+test_debian_forky:
   <<: *test_definition
   image: registry.gitlab.com/yade-dev/docker-yade:debian14-forky
   dependencies:
-    - make_forky
-  needs: ["make_forky"]
+    - make_debian_forky
+  needs: ["make_debian_forky"]
 
 test_archlinux:
   <<: *test_definition
@@ -600,13 +600,13 @@ test_archlinux:
     - make_archlinux
   needs: ["make_archlinux"]
 
-test_testing_arm64:
+test_debian_testing_arm64:
   <<: *test_definition
   <<: *skip_WIP_and_Draft
   image: registry.gitlab.com/yade-dev/docker-yade:debian-testing-arm64
   dependencies:
-    - make_testing_arm64
-  needs: ["make_testing_arm64"]
+    - make_debian_testing_arm64
+  needs: ["make_debian_testing_arm64"]
   tags:
     - qemu
   timeout: 55 minutes
@@ -672,40 +672,40 @@ test_clang:
 
 ## High precision - testing debian-testing
 
-tstHP_long_double:
+test_HP_long_double:
   <<: *test_definition
   <<: *skip_WIP_and_Draft
   image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
   dependencies:
-    - mkHP_long_double
-  needs: ["mkHP_long_double"]
+    - make_HP_long_double
+  needs: ["make_HP_long_double"]
   timeout: 4 hours
 
-tstHP_float128:
+test_HP_float128:
   <<: *test_definition
   <<: *skip_WIP
   image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
   dependencies:
-    - mkHP_float128
-  needs: ["mkHP_float128"]
+    - make_HP_float128
+  needs: ["make_HP_float128"]
   timeout: 4 hours
 
-tstHP_mpfr150:
+test_HP_mpfr150:
   <<: *test_definition
   <<: *skip_WIP_and_Draft
   image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
   dependencies:
-    - mkHP_mpfr150
-  needs: ["mkHP_mpfr150"]
+    - make_HP_mpfr150
+  needs: ["make_HP_mpfr150"]
   timeout: 4 hours
 
-tstHP_bf45:
+test_HP_bf45:
   <<: *test_definition
   <<: *skip_WIP_and_Draft
   image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
   dependencies:
-    - mkHP_bf45
-  needs: ["mkHP_bf45"]
+    - make_HP_bf45
+  needs: ["make_HP_bf45"]
   timeout: 4 hours
 
 ## High precision - all tests done.
@@ -928,19 +928,19 @@ check_26_04:
     - make_26_04
   needs: ["make_26_04"]
 
-check_trixie:
+check_debian_trixie:
   <<: *check_definition
   image: registry.gitlab.com/yade-dev/docker-yade:debian13-trixie
   dependencies:
-    - make_trixie
-  needs: ["make_trixie"]
+    - make_debian_trixie
+  needs: ["make_debian_trixie"]
 
-check_forky:
+check_debian_forky:
   <<: *check_definition
   image: registry.gitlab.com/yade-dev/docker-yade:debian14-forky
   dependencies:
-    - make_forky
-  needs: ["make_forky"]
+    - make_debian_forky
+  needs: ["make_debian_forky"]
 
 check_archlinux:
   <<: *check_definition
@@ -951,13 +951,13 @@ check_archlinux:
     - make_archlinux
   needs: ["make_archlinux"]
 
-check_testing_arm64:
+check_debian_testing_arm64:
   <<: *check_definition
   <<: *skip_WIP_and_Draft
   image: registry.gitlab.com/yade-dev/docker-yade:debian-testing-arm64
   dependencies:
-    - make_testing_arm64
-  needs: ["make_testing_arm64"]
+    - make_debian_testing_arm64
+  needs: ["make_debian_testing_arm64"]
   tags:
     - qemu
   timeout: 3 hours
@@ -1012,40 +1012,40 @@ check_clang:
 
 ## High precision - testing debian-testing
 
-ckHP_long_double:
+check_HP_long_double:
   <<: *check_definition
   <<: *skip_WIP_and_Draft
   image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
   dependencies:
-    - mkHP_long_double
-  needs: ["mkHP_long_double"]
+    - make_HP_long_double
+  needs: ["make_HP_long_double"]
   timeout: 5 hours
 
-ckHP_float128:
+check_HP_float128:
   <<: *check_definition
   <<: *skip_WIP
   image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
   dependencies:
-    - mkHP_float128
-  needs: ["mkHP_float128"]
+    - make_HP_float128
+  needs: ["make_HP_float128"]
   timeout: 5 hours
 
-ckHP_mpfr150:
+check_HP_mpfr150:
   <<: *check_definition
   <<: *skip_WIP_and_Draft
   image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
   dependencies:
-    - mkHP_mpfr150
-  needs: ["mkHP_mpfr150"]
+    - make_HP_mpfr150
+  needs: ["make_HP_mpfr150"]
   timeout: 9 hours
 
-ckHP_bf45:
+check_HP_bf45:
   <<: *check_definition
   <<: *skip_WIP_and_Draft
   image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
   dependencies:
-    - mkHP_bf45
-  needs: ["mkHP_bf45"]
+    - make_HP_bf45
+  needs: ["make_HP_bf45"]
   timeout: 9 hours
 
 ## High precision - all tests done.
@@ -1072,14 +1072,14 @@ check_SSE:
 
 # 4. doc stage
 
-doc_trixie:
+doc_debian_trixie:
   <<: *doc_definition
   <<: *skip_WIP
   <<: *gitlab_runner_retry_definition
   image: registry.gitlab.com/yade-dev/docker-yade:debian13-trixie
   dependencies:
-    - make_trixie
-  needs: ["make_trixie"]
+    - make_debian_trixie
+  needs: ["make_debian_trixie"]
 
 # 5. pages stage; uploads documentation to the website
 pages:
@@ -1093,8 +1093,8 @@ pages:
     - mv install/share/doc/yade-ci/Yade.pdf public
     - mv install/share/doc/yade-ci/Yade.epub public
   dependencies:
-    - doc_trixie
-  needs: ["doc_trixie"]
+    - doc_debian_trixie
+  needs: ["doc_debian_trixie"]
   artifacts:
     paths:
       - public
@@ -1142,7 +1142,7 @@ pages:
   tags:
     - fast
 
-deb_trixie:
+deb_debian_trixie:
   <<: *deb_definition
   image: registry.gitlab.com/yade-dev/docker-yade:debian13-trixie
   before_script:
@@ -1150,7 +1150,7 @@ deb_trixie:
     - ./scripts/ppa_ci/builddeb.py -d "trixie"
 
 ### Enable but without CGAL, see https://gitlab.com/yade-dev/trunk/-/issues/382
-deb_trixie_long_double:
+deb_debian_trixie_long_double:
   <<: *deb_definition
   image: registry.gitlab.com/yade-dev/docker-yade:debian13-trixie
   allow_failure: true
@@ -1159,7 +1159,7 @@ deb_trixie_long_double:
     - export PREC_NAME="-long-double"
     - ./scripts/ppa_ci/builddeb.py -d "trixie" -p "long-double"
 
-deb_trixie_float128:
+deb_debian_trixie_float128:
   <<: *deb_definition
   image: registry.gitlab.com/yade-dev/docker-yade:debian13-trixie
   before_script:
@@ -1167,7 +1167,7 @@ deb_trixie_float128:
     - export PREC_NAME="-float128"
     - ./scripts/ppa_ci/builddeb.py -d "trixie" -p "float128"
 
-deb_trixie_mpfr150:
+deb_debian_trixie_mpfr150:
   <<: *deb_definition
   image: registry.gitlab.com/yade-dev/docker-yade:debian13-trixie
   before_script:
@@ -1176,7 +1176,7 @@ deb_trixie_mpfr150:
     - ./scripts/ppa_ci/builddeb.py -d "trixie" -p "mpfr150"
   timeout: 9 hours
 
-deb_forky:
+deb_debian_forky:
   <<: *deb_definition
   image: registry.gitlab.com/yade-dev/docker-yade:debian14-forky
   before_script:
@@ -1184,7 +1184,7 @@ deb_forky:
     - ./scripts/ppa_ci/builddeb.py -d "forky"
 
 ### Enable but without CGAL, see https://gitlab.com/yade-dev/trunk/-/issues/382
-deb_forky_long_double:
+deb_debian_forky_long_double:
   <<: *deb_definition
   image: registry.gitlab.com/yade-dev/docker-yade:debian14-forky
   allow_failure: true
@@ -1193,7 +1193,7 @@ deb_forky_long_double:
     - export PREC_NAME="-long-double"
     - ./scripts/ppa_ci/builddeb.py -d "forky" -p "long-double"
 
-deb_forky_float128:
+deb_debian_forky_float128:
   <<: *deb_definition
   image: registry.gitlab.com/yade-dev/docker-yade:debian14-forky
   before_script:
@@ -1201,7 +1201,7 @@ deb_forky_float128:
     - export PREC_NAME="-float128"
     - ./scripts/ppa_ci/builddeb.py -d "forky" -p "float128"
 
-deb_forky_mpfr150:
+deb_debian_forky_mpfr150:
   <<: *deb_definition
   image: registry.gitlab.com/yade-dev/docker-yade:debian14-forky
   before_script:

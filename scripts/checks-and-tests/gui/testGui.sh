@@ -107,7 +107,7 @@ done
 sleep 1
 echo -e "******************************************\n*** Checking screenshots now ***\n******************************************\n"
 echo "This is CI job: ${CI_JOB_NAME}"
-if [[ ${CI_JOB_NAME} == tstHP* || ${CI_JOB_NAME} == make_asan_HP || ${CI_JOB_NAME} == test_opposite || ${CI_JOB_NAME} == test_SSE ]]; then
+if [[ ${CI_JOB_NAME} == test_HP* || ${CI_JOB_NAME} == make_HP_asan || ${CI_JOB_NAME} == test_opposite || ${CI_JOB_NAME} == test_SSE ]]; then
 	# FIXME : high precision tests produce different output in terminal. This is related to https://gitlab.com/yade-dev/trunk/-/issues/203
 	#         for now I temporarily use higher xterm tolerance for this test. Remember to remove this once #203 is fixed.
 	# NOTE  : The test_opposite prints different messages in the terminal. We could add different reference screenshots. For now let's just use higher xterm tolerance.
@@ -127,11 +127,11 @@ else
 		if [[ ${CI_JOB_NAME} == test_26_04 ]]; then
 		python3 ${GUI_TESTS_PATH}/helper/compareScreenshotsParts.py ${REFERENCE_SCREENSHOTS}/ubuntu26_04 ${CREATE_NEW_SCREENSHOTS}  5 || { sleep 1 ; exit 1; }
 		else
-		if [[ ${CI_JOB_NAME} == test_trixie ]]; then
+		if [[ ${CI_JOB_NAME} == test_debian_trixie ]]; then
 		python3 ${GUI_TESTS_PATH}/helper/compareScreenshotsParts.py ${REFERENCE_SCREENSHOTS}/trixie ${CREATE_NEW_SCREENSHOTS}  5 || { sleep 1 ; exit 1; }
 		else
 		# All these jobs run on the debian-testing image (rolling testing suite, closest to forky).
-		if [[ ${CI_JOB_NAME} == test_forky || ${CI_JOB_NAME} == test_clang || ${CI_JOB_NAME} == make_asan || ${CI_JOB_NAME} == make_asan_HP || ${CI_JOB_NAME} == make_fast || ${CI_JOB_NAME} == make_debug || ${CI_JOB_NAME} == test_no_mpi || ${CI_JOB_NAME} == test_no_vtk ]]; then
+		if [[ ${CI_JOB_NAME} == test_debian_forky || ${CI_JOB_NAME} == test_clang || ${CI_JOB_NAME} == make_asan || ${CI_JOB_NAME} == make_HP_asan || ${CI_JOB_NAME} == make_fast || ${CI_JOB_NAME} == make_debug || ${CI_JOB_NAME} == test_no_mpi || ${CI_JOB_NAME} == test_no_vtk ]]; then
 		python3 ${GUI_TESTS_PATH}/helper/compareScreenshotsParts.py ${REFERENCE_SCREENSHOTS}/forky ${CREATE_NEW_SCREENSHOTS}  5 || { sleep 1 ; exit 1; }
 		else
 		# Smallest xterm tolerance is 5, enough for different session cookie and some small variation in messages.

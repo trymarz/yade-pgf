@@ -670,9 +670,10 @@ class SimpleTests(unittest.TestCase):
 				# DONE: file a bug report about higher precision versions of these two functions. They have large error: log2(300000000)≈28.1 incorrect bits.
 				#       https://github.com/boostorg/multiprecision/issues/262
 				#       https://github.com/boostorg/multiprecision/issues/264
-				# when it's fixed we can check boost version and skip this line below.
-				if ((func in ["complex tan real", "complex tanh imag"]) and (boostVer < (1, 76, 0))):
-					# for older boost there's nothing we can do. We have a large error: 1e38 ULP
+				# This huge-ULP error still reproduces on much newer boost (seen again on debian-testing), so
+				# the upper bound was removed: ignore it for any boost version until upstream actually fixes it.
+				if (func in ["complex tan real", "complex tanh imag"]):
+					# nothing we can do on the yade side. We have seen errors as large as 1e38 ULP.
 					pass
 				elif ((func == "fmod") and (boostVer <= (1, 90, 0)) and (boostVer >= (1, 86, 0))):
 					# that's a known bug: https://github.com/boostorg/multiprecision/issues/764
