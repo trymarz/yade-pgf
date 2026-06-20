@@ -68,11 +68,12 @@
  *   et_off         → slower calculations, faster compilation
  */
 
-// Special case: when using ThinRealWrapper<long double> disable Boost 1.88 using std::fpclassify and constexpr detection
-#if (((YADE_REAL_BIT <= 80) and (YADE_REAL_BIT > 64)) or defined(YADE_NON_386_LONG_DOUBLE))
+// Special case: ThinRealWrapper<long double> breaks Boost's std::fpclassify and constexpr detection (seen since
+// Boost 1.88, still present on much newer Boost shipped by debian-testing). This used to be guarded by YADE_REAL_BIT
+// being long double, but long double is always one of the tested RealHP<N> levels regardless of the build's
+// primary Real type (see py/high-precision/_math.cpp testLoopRealHP), so the macros must be defined unconditionally.
 #define BOOST_MATH_DISABLE_STD_FPCLASSIFY
 #define BOOST_MATH_NO_CONSTEXPR_DETECTION
-#endif
 
 #include <boost/config.hpp>
 #include <boost/version.hpp>
