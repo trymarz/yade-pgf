@@ -541,6 +541,10 @@ inheritance_node_attrs = {'height': 0.5, 'fontsize': 12, 'shape': 'oval'}
 inheritance_edge_attrs = {}
 
 my_latex_preamble = r'''
+% Silence Underfull/Overfull \hbox|\vbox warnings: they flood CI logs (which get
+% truncated by GitLab's per-job size cap) without indicating any real problem.
+\hbadness=10000
+\vbadness=10000
 \usepackage{euler} % must be loaded before fontspec for the whole doc (below); this must be kept for pngmath, however
 \usepackage{hyperref}
 \usepackage{amsmath}
