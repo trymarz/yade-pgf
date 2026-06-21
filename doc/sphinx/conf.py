@@ -509,6 +509,15 @@ extensions = [
         'sphinx.ext.todo'
 ]
 
+# Sphinx >= 9's autodoc signature formatter raises "list assignment index out of range"
+# for essentially every Boost.Python-wrapped class/function (a Sphinx-side regression,
+# not something fixable from yadeSphinx.py's autodoc-process-signature hook below, since
+# that hook only runs *after* this internal formatting step already failed). Each
+# occurrence becomes a "WARNING: error while formatting signature for ..." line; with
+# ~6000 wrapped symbols emitted across the html+latex+epub builds, this alone can be
+# tens of thousands of lines and blow past CI's per-job log size limit. Suppress it.
+suppress_warnings = ['autodoc']
+
 if yade.runtime.ipython_version < 12:
 	extensions.append('ipython_directive')
 else:
