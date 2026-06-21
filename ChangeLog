@@ -4,6 +4,7 @@ Sun, Aug 04 20:05:00 2024 +0100
 
 Bug Fixes
 *********
+  Fix infinite recursion in OpenGLWrapper's glLineWidth() for 32-bit float Real builds, caught by GCC 15's -Werror=infinite-recursion
 
 Breaking Changes
 *********
@@ -77,10 +78,14 @@ Small Enhancements
 Testing & Continuous Integration
 ********************************
   Fix GUI tests, they were sometimes unreliable
+  Rename CI jobs for consistency: full make/test/check names, HP as a consistent prefix, and debian_ prefix on trixie/forky/testing-arm64 jobs so the OS is clear from the job name
+  Use forky reference screenshots for jobs running on the debian-testing image
 
 High precision RealHP<N> ComplexHP<N>
 *************************************
   Fix #401 (for Boost 1.88): when using ThinRealWrapper<long double> disable std::fpclassify and constexpr detection (!1156)
+  Apply the above fpclassify/constexpr-detection fix unconditionally: long double is always tested as a RealHP<N> level regardless of the build's primary Real type, so the fix must not depend on YADE_REAL_BIT
+  Ignore the known huge-ULP error in complex tan/tanh (boostorg/multiprecision#262, #264) regardless of Boost version, since it still reproduces on much newer Boost
 
 ==================================================
 yade-2026.1.0
