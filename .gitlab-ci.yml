@@ -234,7 +234,7 @@ variables:
 
 # 2.1 build stage
 
-make_ubuntu_22_04:
+make_ubuntu_2204_jammy:
   <<: *make_definition
   <<: *artifacts_definition
   <<: *skip_WIP_and_Draft
@@ -245,7 +245,7 @@ make_ubuntu_22_04:
     expire_in: 2 weeks
   image: registry.gitlab.com/yade-dev/docker-yade:ubuntu22.04
 
-make_ubuntu_24_04:
+make_ubuntu_2404_noble:
   <<: *make_definition
   <<: *artifacts_definition
   artifacts:
@@ -255,7 +255,7 @@ make_ubuntu_24_04:
     expire_in: 2 weeks
   image: registry.gitlab.com/yade-dev/docker-yade:ubuntu24.04
 
-make_ubuntu_26_04:
+make_ubuntu_2604_resolute:
   <<: *make_definition
   <<: *artifacts_definition
   artifacts:
@@ -265,7 +265,7 @@ make_ubuntu_26_04:
     expire_in: 2 weeks
   image: registry.gitlab.com/yade-dev/docker-yade:ubuntu26.04
 
-make_debian_trixie:
+make_debian_13_trixie:
   <<: *make_definition
   <<: *artifacts_definition
   image: registry.gitlab.com/yade-dev/docker-yade:debian13-trixie
@@ -277,7 +277,7 @@ make_debian_trixie:
 
 # forky is the current debian testing suite; once it is released as stable it
 # will get promoted the same way trixie was, and this job will track it directly.
-make_debian_forky:
+make_debian_14_forky:
   <<: *make_definition
   <<: *artifacts_definition
   image: registry.gitlab.com/yade-dev/docker-yade:debian14-forky
@@ -560,41 +560,41 @@ make_SSE:
     paths:
       - screenshots
 
-test_ubuntu_22_04:
+test_ubuntu_2204_jammy:
   <<: *test_definition
   <<: *skip_WIP_and_Draft
   image: registry.gitlab.com/yade-dev/docker-yade:ubuntu22.04
   dependencies:
-    - make_ubuntu_22_04
-  needs: ["make_ubuntu_22_04"]
+    - make_ubuntu_2204_jammy
+  needs: ["make_ubuntu_2204_jammy"]
 
-test_ubuntu_24_04:
+test_ubuntu_2404_noble:
   <<: *test_definition
   image: registry.gitlab.com/yade-dev/docker-yade:ubuntu24.04
   dependencies:
-    - make_ubuntu_24_04
-  needs: ["make_ubuntu_24_04"]
+    - make_ubuntu_2404_noble
+  needs: ["make_ubuntu_2404_noble"]
 
-test_ubuntu_26_04:
+test_ubuntu_2604_resolute:
   <<: *test_definition
   image: registry.gitlab.com/yade-dev/docker-yade:ubuntu26.04
   dependencies:
-    - make_ubuntu_26_04
-  needs: ["make_ubuntu_26_04"]
+    - make_ubuntu_2604_resolute
+  needs: ["make_ubuntu_2604_resolute"]
 
-test_debian_trixie:
+test_debian_13_trixie:
   <<: *test_definition
   image: registry.gitlab.com/yade-dev/docker-yade:debian13-trixie
   dependencies:
-    - make_debian_trixie
-  needs: ["make_debian_trixie"]
+    - make_debian_13_trixie
+  needs: ["make_debian_13_trixie"]
 
-test_debian_forky:
+test_debian_14_forky:
   <<: *test_definition
   image: registry.gitlab.com/yade-dev/docker-yade:debian14-forky
   dependencies:
-    - make_debian_forky
-  needs: ["make_debian_forky"]
+    - make_debian_14_forky
+  needs: ["make_debian_14_forky"]
 
 test_archlinux:
   <<: *test_definition
@@ -726,15 +726,15 @@ test_SSE:
 
 ## 3.1.2 Yade-OFoam sub-section (for clarity) - there is room for template magic in the "script" part
 
-test_ubuntu_22_foam2312:
+test_ubuntu_2204_jammy_foam2312:
   <<: *platforms_definition
   <<: *gitlab_runner_retry_definition
   <<: *skip_WIP_and_Draft
   stage: test
   image: registry.gitlab.com/yade-dev/docker-yade:ubuntu22.04_foam2312
   dependencies:
-    - make_ubuntu_22_04
-  needs: ["make_ubuntu_22_04"]
+    - make_ubuntu_2204_jammy
+  needs: ["make_ubuntu_2204_jammy"]
   timeout: 25 minutes
   script:
     - export PYTHONUNBUFFERED=1
@@ -743,15 +743,15 @@ test_ubuntu_22_foam2312:
     - pwd
     - scripts/checks-and-tests/testOpenFoam.sh
 
-test_ubuntu_22_foam2306:
+test_ubuntu_2204_jammy_foam2306:
   <<: *platforms_definition
   <<: *gitlab_runner_retry_definition
   <<: *skip_WIP_and_Draft
   stage: test
   image: registry.gitlab.com/yade-dev/docker-yade:ubuntu22.04_foam2312
   dependencies:
-    - make_ubuntu_22_04
-  needs: ["make_ubuntu_22_04"]
+    - make_ubuntu_2204_jammy
+  needs: ["make_ubuntu_2204_jammy"]
   timeout: 4 hours
   # sometimes downloading openfoam fails, and it's not a problem with yade.
   allow_failure: true
@@ -763,15 +763,15 @@ test_ubuntu_22_foam2306:
     - apt-get update && apt-get install -y openfoam2306-default
     - source /usr/lib/openfoam/openfoam2306/etc/bashrc && scripts/checks-and-tests/testOpenFoam.sh
 
-test_ubuntu_22_foam2212:
+test_ubuntu_2204_jammy_foam2212:
   <<: *platforms_definition
   <<: *gitlab_runner_retry_definition
   <<: *skip_WIP_and_Draft
   stage: test
   image: registry.gitlab.com/yade-dev/docker-yade:ubuntu22.04_foam2312
   dependencies:
-    - make_ubuntu_22_04
-  needs: ["make_ubuntu_22_04"]
+    - make_ubuntu_2204_jammy
+  needs: ["make_ubuntu_2204_jammy"]
   timeout: 25 minutes
   script:
     - export PYTHONUNBUFFERED=1
@@ -785,15 +785,15 @@ test_ubuntu_22_foam2212:
     - ls /usr/lib/openfoam/
     - scripts/checks-and-tests/testOpenFoam.sh
 
-test_ubuntu_22_foam2112:
+test_ubuntu_2204_jammy_foam2112:
   <<: *platforms_definition
   <<: *gitlab_runner_retry_definition
   <<: *skip_WIP_and_Draft
   stage: test
   image: registry.gitlab.com/yade-dev/docker-yade:ubuntu22.04_foam2312
   dependencies:
-    - make_ubuntu_22_04
-  needs: ["make_ubuntu_22_04"]
+    - make_ubuntu_2204_jammy
+  needs: ["make_ubuntu_2204_jammy"]
   timeout: 25 minutes
   # sometimes downloading openfoam fails, and it's not a problem with yade.
   allow_failure: true
@@ -807,15 +807,15 @@ test_ubuntu_22_foam2112:
     - pwd
     - source /usr/lib/openfoam/openfoam2112/etc/bashrc && scripts/checks-and-tests/testOpenFoam.sh
 
-test_ubuntu_22_foam2006:
+test_ubuntu_2204_jammy_foam2006:
   <<: *platforms_definition
   <<: *gitlab_runner_retry_definition
   <<: *skip_WIP_and_Draft
   stage: test
   image: registry.gitlab.com/yade-dev/docker-yade:ubuntu22.04_foam2312
   dependencies:
-    - make_ubuntu_22_04
-  needs: ["make_ubuntu_22_04"]
+    - make_ubuntu_2204_jammy
+  needs: ["make_ubuntu_2204_jammy"]
   timeout: 25 minutes
   # sometimes downloading openfoam fails, and it's not a problem with yade.
   allow_failure: true
@@ -829,15 +829,15 @@ test_ubuntu_22_foam2006:
     - pwd
     - source /usr/lib/openfoam/openfoam2006/etc/bashrc && scripts/checks-and-tests/testOpenFoam.sh
 
-test_ubuntu_22_foam11:
+test_ubuntu_2204_jammy_foam11:
   <<: *platforms_definition
   <<: *gitlab_runner_retry_definition
   <<: *skip_WIP_and_Draft
   stage: test
   image: registry.gitlab.com/yade-dev/docker-yade:ubuntu22.04_foam2312
   dependencies:
-    - make_ubuntu_22_04
-  needs: ["make_ubuntu_22_04"]
+    - make_ubuntu_2204_jammy
+  needs: ["make_ubuntu_2204_jammy"]
   timeout: 25 minutes
   # sometimes downloading openfoam fails, and it's not a problem with yade.
   allow_failure: true
@@ -853,15 +853,15 @@ test_ubuntu_22_foam11:
     - pwd
     - source /opt/openfoam11/etc/bashrc && scripts/checks-and-tests/testOpenFoam.sh
 
-test_ubuntu_22_foam10:
+test_ubuntu_2204_jammy_foam10:
   <<: *platforms_definition
   <<: *gitlab_runner_retry_definition
   <<: *skip_WIP_and_Draft
   stage: test
   image: registry.gitlab.com/yade-dev/docker-yade:ubuntu22.04_foam2312
   dependencies:
-    - make_ubuntu_22_04
-  needs: ["make_ubuntu_22_04"]
+    - make_ubuntu_2204_jammy
+  needs: ["make_ubuntu_2204_jammy"]
   timeout: 4 hours
   # sometimes downloading openfoam fails, and it's not a problem with yade.
   allow_failure: true
@@ -912,41 +912,41 @@ test_ubuntu_22_foam10:
     - if grep -q "Arch Linux" /etc/lsb-release; then /usr/sbin/uname -m; else  /usr/bin/dpkg --print-architecture ; fi
   timeout: 35 minutes
 
-check_ubuntu_22_04:
+check_ubuntu_2204_jammy:
   <<: *check_definition
   <<: *skip_WIP_and_Draft
   image: registry.gitlab.com/yade-dev/docker-yade:ubuntu22.04
   dependencies:
-    - make_ubuntu_22_04
-  needs: ["make_ubuntu_22_04"]
+    - make_ubuntu_2204_jammy
+  needs: ["make_ubuntu_2204_jammy"]
 
-check_ubuntu_24_04:
+check_ubuntu_2404_noble:
   <<: *check_definition
   image: registry.gitlab.com/yade-dev/docker-yade:ubuntu24.04
   dependencies:
-    - make_ubuntu_24_04
-  needs: ["make_ubuntu_24_04"]
+    - make_ubuntu_2404_noble
+  needs: ["make_ubuntu_2404_noble"]
 
-check_ubuntu_26_04:
+check_ubuntu_2604_resolute:
   <<: *check_definition
   image: registry.gitlab.com/yade-dev/docker-yade:ubuntu26.04
   dependencies:
-    - make_ubuntu_26_04
-  needs: ["make_ubuntu_26_04"]
+    - make_ubuntu_2604_resolute
+  needs: ["make_ubuntu_2604_resolute"]
 
-check_debian_trixie:
+check_debian_13_trixie:
   <<: *check_definition
   image: registry.gitlab.com/yade-dev/docker-yade:debian13-trixie
   dependencies:
-    - make_debian_trixie
-  needs: ["make_debian_trixie"]
+    - make_debian_13_trixie
+  needs: ["make_debian_13_trixie"]
 
-check_debian_forky:
+check_debian_14_forky:
   <<: *check_definition
   image: registry.gitlab.com/yade-dev/docker-yade:debian14-forky
   dependencies:
-    - make_debian_forky
-  needs: ["make_debian_forky"]
+    - make_debian_14_forky
+  needs: ["make_debian_14_forky"]
 
 check_archlinux:
   <<: *check_definition
@@ -1079,14 +1079,14 @@ check_SSE:
 
 # 4. doc stage
 
-doc_debian_trixie:
+doc_debian_13_trixie:
   <<: *doc_definition
   <<: *skip_WIP
   <<: *gitlab_runner_retry_definition
   image: registry.gitlab.com/yade-dev/docker-yade:debian13-trixie
   dependencies:
-    - make_debian_trixie
-  needs: ["make_debian_trixie"]
+    - make_debian_13_trixie
+  needs: ["make_debian_13_trixie"]
 
 # 5. pages stage; uploads documentation to the website
 pages:
@@ -1100,8 +1100,8 @@ pages:
     - mv install/share/doc/yade-ci/Yade.pdf public
     - mv install/share/doc/yade-ci/Yade.epub public
   dependencies:
-    - doc_debian_trixie
-  needs: ["doc_debian_trixie"]
+    - doc_debian_13_trixie
+  needs: ["doc_debian_13_trixie"]
   artifacts:
     paths:
       - public
@@ -1152,7 +1152,7 @@ pages:
   tags:
     - fast
 
-deb_debian_trixie:
+deb_debian_13_trixie:
   <<: *deb_definition
   image: registry.gitlab.com/yade-dev/docker-yade:debian13-trixie
   before_script:
@@ -1160,7 +1160,7 @@ deb_debian_trixie:
     - ./scripts/ppa_ci/builddeb.py -d "trixie"
 
 ### Enable but without CGAL, see https://gitlab.com/yade-dev/trunk/-/issues/382
-deb_debian_trixie_long_double:
+deb_debian_13_trixie_long_double:
   <<: *deb_definition
   image: registry.gitlab.com/yade-dev/docker-yade:debian13-trixie
   allow_failure: true
@@ -1169,7 +1169,7 @@ deb_debian_trixie_long_double:
     - export PREC_NAME="-long-double"
     - ./scripts/ppa_ci/builddeb.py -d "trixie" -p "long-double"
 
-deb_debian_trixie_float128:
+deb_debian_13_trixie_float128:
   <<: *deb_definition
   image: registry.gitlab.com/yade-dev/docker-yade:debian13-trixie
   before_script:
@@ -1177,7 +1177,7 @@ deb_debian_trixie_float128:
     - export PREC_NAME="-float128"
     - ./scripts/ppa_ci/builddeb.py -d "trixie" -p "float128"
 
-deb_debian_trixie_mpfr150:
+deb_debian_13_trixie_mpfr150:
   <<: *deb_definition
   image: registry.gitlab.com/yade-dev/docker-yade:debian13-trixie
   before_script:
@@ -1186,7 +1186,7 @@ deb_debian_trixie_mpfr150:
     - ./scripts/ppa_ci/builddeb.py -d "trixie" -p "mpfr150"
   timeout: 9 hours
 
-deb_debian_forky:
+deb_debian_14_forky:
   <<: *deb_definition
   image: registry.gitlab.com/yade-dev/docker-yade:debian14-forky
   before_script:
@@ -1194,7 +1194,7 @@ deb_debian_forky:
     - ./scripts/ppa_ci/builddeb.py -d "forky"
 
 ### Enable but without CGAL, see https://gitlab.com/yade-dev/trunk/-/issues/382
-deb_debian_forky_long_double:
+deb_debian_14_forky_long_double:
   <<: *deb_definition
   image: registry.gitlab.com/yade-dev/docker-yade:debian14-forky
   allow_failure: true
@@ -1203,7 +1203,7 @@ deb_debian_forky_long_double:
     - export PREC_NAME="-long-double"
     - ./scripts/ppa_ci/builddeb.py -d "forky" -p "long-double"
 
-deb_debian_forky_float128:
+deb_debian_14_forky_float128:
   <<: *deb_definition
   image: registry.gitlab.com/yade-dev/docker-yade:debian14-forky
   before_script:
@@ -1211,7 +1211,7 @@ deb_debian_forky_float128:
     - export PREC_NAME="-float128"
     - ./scripts/ppa_ci/builddeb.py -d "forky" -p "float128"
 
-deb_debian_forky_mpfr150:
+deb_debian_14_forky_mpfr150:
   <<: *deb_definition
   image: registry.gitlab.com/yade-dev/docker-yade:debian14-forky
   before_script:
@@ -1220,7 +1220,7 @@ deb_debian_forky_mpfr150:
     - ./scripts/ppa_ci/builddeb.py -d "forky" -p "mpfr150"
   timeout: 9 hours
 
-deb_jammy:
+deb_ubuntu_2204_jammy:
   <<: *deb_definition
   image: registry.gitlab.com/yade-dev/docker-yade:ubuntu22.04
   before_script:
@@ -1228,7 +1228,7 @@ deb_jammy:
     - ./scripts/ppa_ci/builddeb.py -d "jammy"
 
 ### Enable but without CGAL, see https://gitlab.com/yade-dev/trunk/-/issues/382
-deb_jammy_long_double:
+deb_ubuntu_2204_jammy_long_double:
   <<: *deb_definition
   image: registry.gitlab.com/yade-dev/docker-yade:ubuntu22.04
   allow_failure: true
@@ -1237,7 +1237,7 @@ deb_jammy_long_double:
     - export PREC_NAME="-long-double"
     - ./scripts/ppa_ci/builddeb.py -d "jammy" -p "long-double"
 
-deb_jammy_float128:
+deb_ubuntu_2204_jammy_float128:
   <<: *deb_definition
   image: registry.gitlab.com/yade-dev/docker-yade:ubuntu22.04
   before_script:
@@ -1245,7 +1245,7 @@ deb_jammy_float128:
     - export PREC_NAME="-float128"
     - ./scripts/ppa_ci/builddeb.py -d "jammy" -p "float128"
 
-deb_jammy_mpfr150:
+deb_ubuntu_2204_jammy_mpfr150:
   <<: *deb_definition
   image: registry.gitlab.com/yade-dev/docker-yade:ubuntu22.04
   before_script:
@@ -1254,14 +1254,14 @@ deb_jammy_mpfr150:
     - ./scripts/ppa_ci/builddeb.py -d "jammy" -p "mpfr150"
   timeout: 9 hours
 
-deb_noble:
+deb_ubuntu_2404_noble:
   <<: *deb_definition
   image: registry.gitlab.com/yade-dev/docker-yade:ubuntu24.04
   before_script:
     - rm -rf ./deb
     - ./scripts/ppa_ci/builddeb.py -d "noble"
 
-deb_resolute:
+deb_ubuntu_2604_resolute:
   <<: *deb_definition
   image: registry.gitlab.com/yade-dev/docker-yade:ubuntu26.04
   before_script:

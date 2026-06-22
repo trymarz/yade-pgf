@@ -118,20 +118,20 @@ else
 	if [[ ${CI_JOB_NAME} == test_archlinux ]]; then
 	python3 ${GUI_TESTS_PATH}/helper/compareScreenshotsParts.py ${REFERENCE_SCREENSHOTS}/archlinux ${CREATE_NEW_SCREENSHOTS} 30 || { sleep 1 ; exit 1; }
 	else
-		if [[ ${CI_JOB_NAME} == test_ubuntu_22_04 || ${CI_JOB_NAME} == test_bookworm ]]; then
+		if [[ ${CI_JOB_NAME} == test_ubuntu_2204_jammy || ${CI_JOB_NAME} == test_bookworm ]]; then
 		python3 ${GUI_TESTS_PATH}/helper/compareScreenshotsParts.py ${REFERENCE_SCREENSHOTS}/ubuntu22_04 ${CREATE_NEW_SCREENSHOTS}  5 || { sleep 1 ; exit 1; }
 		else
-		if [[ ${CI_JOB_NAME} == test_ubuntu_24_04 ]]; then
+		if [[ ${CI_JOB_NAME} == test_ubuntu_2404_noble ]]; then
 		python3 ${GUI_TESTS_PATH}/helper/compareScreenshotsParts.py ${REFERENCE_SCREENSHOTS}/ubuntu24_04 ${CREATE_NEW_SCREENSHOTS}  5 || { sleep 1 ; exit 1; }
 		else
-		if [[ ${CI_JOB_NAME} == test_ubuntu_26_04 ]]; then
+		if [[ ${CI_JOB_NAME} == test_ubuntu_2604_resolute ]]; then
 		python3 ${GUI_TESTS_PATH}/helper/compareScreenshotsParts.py ${REFERENCE_SCREENSHOTS}/ubuntu26_04 ${CREATE_NEW_SCREENSHOTS}  5 || { sleep 1 ; exit 1; }
 		else
-		if [[ ${CI_JOB_NAME} == test_debian_trixie ]]; then
+		if [[ ${CI_JOB_NAME} == test_debian_13_trixie ]]; then
 		python3 ${GUI_TESTS_PATH}/helper/compareScreenshotsParts.py ${REFERENCE_SCREENSHOTS}/trixie ${CREATE_NEW_SCREENSHOTS}  5 || { sleep 1 ; exit 1; }
 		else
 		# All these jobs run on the debian-testing image (rolling testing suite, closest to forky).
-		if [[ ${CI_JOB_NAME} == test_debian_forky || ${CI_JOB_NAME} == test_clang || ${CI_JOB_NAME} == make_asan || ${CI_JOB_NAME} == make_HP_asan || ${CI_JOB_NAME} == make_fast || ${CI_JOB_NAME} == make_debug || ${CI_JOB_NAME} == test_no_mpi || ${CI_JOB_NAME} == test_no_vtk ]]; then
+		if [[ ${CI_JOB_NAME} == test_debian_14_forky || ${CI_JOB_NAME} == test_clang || ${CI_JOB_NAME} == make_asan || ${CI_JOB_NAME} == make_HP_asan || ${CI_JOB_NAME} == make_fast || ${CI_JOB_NAME} == make_debug || ${CI_JOB_NAME} == test_no_mpi || ${CI_JOB_NAME} == test_no_vtk ]]; then
 		python3 ${GUI_TESTS_PATH}/helper/compareScreenshotsParts.py ${REFERENCE_SCREENSHOTS}/forky ${CREATE_NEW_SCREENSHOTS}  5 || { sleep 1 ; exit 1; }
 		else
 		# Smallest xterm tolerance is 5, enough for different session cookie and some small variation in messages.
