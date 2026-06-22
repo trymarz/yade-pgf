@@ -66,7 +66,12 @@ AEdata = np.loadtxt('moments_.txt', skiprows=1)
 cracksdata = np.loadtxt('cracks_.txt', skiprows=1)
 
 if (yade.math.getDigits10(1) == 15):
-	if not len(cracksdata) == sum(AEdata[:, 5]):  # number of cracks should be equivalent to sum of cluster counts
+	# With ENABLE_FAST_NATIVE (-Ofast -march=native), a moment magnitude can land on the
+	# other side of the clustering threshold due to FP differences across CPU/compiler,
+	# flipping the cluster count by one event; tolerate that the same way the higher
+	# precision branch below already does (see issue #174).
+	maxDiff = 1 if ('FAST_NATIVE' in yade.config.features) else 0
+	if abs(len(cracksdata) - sum(AEdata[:, 5])) > maxDiff:  # number of cracks should be equivalent to sum of cluster counts
 		raise YadeCheckError(
 		        'JCFpm checktest: cracks or AE clustering algorithm incorrect: len(cracksdata)=' + str(len(cracksdata)) + ', sum(AEdata[:,5])=' +
 		        str(sum(AEdata[:, 5]))
