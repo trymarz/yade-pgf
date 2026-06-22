@@ -1110,8 +1110,11 @@ pages:
 .deb_template: &deb_definition
   stage: deb
   <<: *gitlab_runner_retry_definition
+  # TEMPORARY: also run on merge_request to fully validate this MR (including deb packaging)
+  # before merging. Revert to "only: - master" before/when merging.
   only:
     - master
+    - merge_request
   script:
     - export PYTHONUNBUFFERED=1
     - apt-get update && apt-get install -y debhelper-compat
