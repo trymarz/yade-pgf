@@ -118,13 +118,13 @@ else
 	if [[ ${CI_JOB_NAME} == test_archlinux ]]; then
 	python3 ${GUI_TESTS_PATH}/helper/compareScreenshotsParts.py ${REFERENCE_SCREENSHOTS}/archlinux ${CREATE_NEW_SCREENSHOTS} 30 || { sleep 1 ; exit 1; }
 	else
-		if [[ ${CI_JOB_NAME} == test_22_04 || ${CI_JOB_NAME} == test_bookworm ]]; then
+		if [[ ${CI_JOB_NAME} == test_ubuntu_22_04 || ${CI_JOB_NAME} == test_bookworm ]]; then
 		python3 ${GUI_TESTS_PATH}/helper/compareScreenshotsParts.py ${REFERENCE_SCREENSHOTS}/ubuntu22_04 ${CREATE_NEW_SCREENSHOTS}  5 || { sleep 1 ; exit 1; }
 		else
-		if [[ ${CI_JOB_NAME} == test_24_04 ]]; then
+		if [[ ${CI_JOB_NAME} == test_ubuntu_24_04 ]]; then
 		python3 ${GUI_TESTS_PATH}/helper/compareScreenshotsParts.py ${REFERENCE_SCREENSHOTS}/ubuntu24_04 ${CREATE_NEW_SCREENSHOTS}  5 || { sleep 1 ; exit 1; }
 		else
-		if [[ ${CI_JOB_NAME} == test_26_04 ]]; then
+		if [[ ${CI_JOB_NAME} == test_ubuntu_26_04 ]]; then
 		python3 ${GUI_TESTS_PATH}/helper/compareScreenshotsParts.py ${REFERENCE_SCREENSHOTS}/ubuntu26_04 ${CREATE_NEW_SCREENSHOTS}  5 || { sleep 1 ; exit 1; }
 		else
 		if [[ ${CI_JOB_NAME} == test_debian_trixie ]]; then
