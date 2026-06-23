@@ -190,8 +190,9 @@ if ('PFVFLOW' in features):
 										for gg in range(4):
 											if gg <= len(flow.getNeighbors(jj)) - 1:
 												if flow.getCellPImposed(flow.getNeighbors(jj)[gg]) == True:
-													if (-totalflux[flow.getNeighbors(jj)[gg]]
-													   ) < initialvol[flow.getNeighbors(jj)[gg]]:
+													if (-totalflux[flow.getNeighbors(jj)[gg]
+													              ]) < initialvol[flow.getNeighbors(jj)[gg]
+													                             ]:
 														neigh2[kk2] = flow.getNeighbors(jj)[gg]
 														kk2 = kk2 + 1
 								if kk2 == 0:

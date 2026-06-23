@@ -126,9 +126,9 @@ for i in O.interactions:
 					O.bodies[i.id2].state.jointNormal3 = nRef
 				elif nRef.dot(normalFacetSphere) < 0:
 					O.bodies[i.id2].state.jointNormal3 = -nRef
-			elif O.bodies[i.id2].state.joint == 3 and ((O.bodies[i.id2].state.jointNormal1.cross(nRef)).norm() > 0.05) and (
-			        (O.bodies[i.id2].state.jointNormal2.cross(nRef)).norm() > 0.05
-			) and ((O.bodies[i.id2].state.jointNormal3.cross(nRef)).norm() > 0.05):
+			elif O.bodies[i.id2].state.joint == 3 and ((O.bodies[i.id2].state.jointNormal1.cross(nRef)).norm()
+			                                           > 0.05) and ((O.bodies[i.id2].state.jointNormal2.cross(nRef)).norm()
+			                                                        > 0.05) and ((O.bodies[i.id2].state.jointNormal3.cross(nRef)).norm() > 0.05):
 				O.bodies[i.id2].state.joint = 4
 				O.bodies[i.id2].shape.color = jointcolor5
 
@@ -158,9 +158,8 @@ for j in O.interactions:
 					) and ((O.bodies[n.id2].state.jointNormal3.cross(jointNormalRef)).norm() > 0.05):
 						O.bodies[n.id2].state.joint = 4
 						O.bodies[n.id2].shape.color = jointcolor5
-					elif O.bodies[n.id2].state.joint == 2 and (
-					        (O.bodies[n.id2].state.jointNormal1.cross(jointNormalRef)).norm() > 0.05
-					) and ((O.bodies[n.id2].state.jointNormal2.cross(jointNormalRef)).norm() > 0.05):
+					elif O.bodies[n.id2].state.joint == 2 and ((O.bodies[n.id2].state.jointNormal1.cross(jointNormalRef)).norm(
+					) > 0.05) and ((O.bodies[n.id2].state.jointNormal2.cross(jointNormalRef)).norm() > 0.05):
 						O.bodies[n.id2].state.joint = 3
 						if facetSphereDir.dot(jointNormalRef) >= 0:
 							O.bodies[n.id2].state.jointNormal3 = jointNormalRef
@@ -189,9 +188,8 @@ for j in O.interactions:
 					) and ((O.bodies[n.id1].state.jointNormal3.cross(jointNormalRef)).norm() > 0.05):
 						O.bodies[n.id1].state.joint = 4
 						O.bodies[n.id1].shape.color = jointcolor5
-					elif O.bodies[n.id1].state.joint == 2 and (
-					        (O.bodies[n.id1].state.jointNormal1.cross(jointNormalRef)).norm() > 0.05
-					) and ((O.bodies[n.id1].state.jointNormal2.cross(jointNormalRef)).norm() > 0.05):
+					elif O.bodies[n.id1].state.joint == 2 and ((O.bodies[n.id1].state.jointNormal1.cross(jointNormalRef)).norm(
+					) > 0.05) and ((O.bodies[n.id1].state.jointNormal2.cross(jointNormalRef)).norm() > 0.05):
 						O.bodies[n.id1].state.joint = 3
 						if facetSphereDir.dot(jointNormalRef) >= 0:
 							O.bodies[n.id1].state.jointNormal3 = jointNormalRef

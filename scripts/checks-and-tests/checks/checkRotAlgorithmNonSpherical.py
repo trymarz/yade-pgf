@@ -40,7 +40,7 @@ def setTorque():
 
 def sol_w(t):
 	'''Theoretical value for angular velocity vector at given time *t*, see Eq. (11) of delValle2024'''
-	A = (Ix - Iy) * (Iz - Ix) / (Iy * Iz) # this is < 0 (approx. - 0.25)
+	A = (Ix - Iy) * (Iz - Ix) / (Iy * Iz)  # this is < 0 (approx. - 0.25)
 	B = Iy / (Iz - Ix)
 	sqrt_A = mth.sqrt(-A)
 	E = mth.Real("2.0") * tx * B / Ix
@@ -69,7 +69,9 @@ def setup():
 
 	# Make it non spherical and put it to spin
 	Body.aspherical = True
-	Body.state.ori = mne.Quaternion(1.0, 0.0, 0.0, 0.0) # the script does not seem to accomodate sthg else than identity. Failure with, e.g., Quaternion(3**(-0.5)*Vector3.Ones,pi/6) on version 58738755
+	Body.state.ori = mne.Quaternion(
+	        1.0, 0.0, 0.0, 0.0
+	)  # the script does not seem to accomodate sthg else than identity. Failure with, e.g., Quaternion(3**(-0.5)*Vector3.Ones,pi/6) on version 58738755
 	Body.state.inertia = mne.Vector3(Ix, Iy, Iz)
 	Body.state.angVel = sol_w(mth.Real("0.0"))
 	Body.state.angMom = mne.Matrix3(Body.state.inertia) * mne.Vector3(wx0, wy0, wz0)

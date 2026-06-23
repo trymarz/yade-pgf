@@ -490,7 +490,7 @@ def levelSetBody(
         dynamic=True,
         material=-1,
         starLike=False,
-        color=Vector3(1,1,1)
+        color=Vector3(1, 1, 1)
 ):
 	"""Creates a :yref:`LevelSet` shaped body through various workflows: one can choose to define the discrete distance field from pre-defined shapes (through *shape* and related arguments), or to mimick a :yref:`Clump` instance (*clump* argument, for comparison purposes), or directly assign the discrete distance field on some grid (*distField* and *grid* arguments). Surface nodes can also be either ray traced (see *nSurfNodes*, *nodesPath* and *nodesTol*) or directly assigned (see *surfNodes*)
 

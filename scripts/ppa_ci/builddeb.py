@@ -67,7 +67,12 @@ with fileinput.FileInput(dirpathyade + '/debian/rules', inplace=True) as file:
 if args.dist in ('forky', 'resolute'):
 	with fileinput.FileInput(dirpathyade + '/debian/rules', inplace=True) as file:
 		for line in file:
-			print(line.replace('\t$(tmpInstall)/usr/bin/yadedaily --checkall', '\tYADE_SKIP_MPI_CHECKS=1 $(tmpInstall)/usr/bin/yadedaily --checkall'), end='')
+			print(
+			        line.replace(
+			                '\t$(tmpInstall)/usr/bin/yadedaily --checkall', '\tYADE_SKIP_MPI_CHECKS=1 $(tmpInstall)/usr/bin/yadedaily --checkall'
+			        ),
+			        end=''
+			)
 
 # python3-pyqt5.qtwebkit binary packages were dropped from the Debian archive starting with
 # trixie (and are not present in forky either); see doc/sphinx/installation.rst.
