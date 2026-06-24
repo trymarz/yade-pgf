@@ -69,8 +69,8 @@ Packaging & Build Improvements
   Restore useful warnings about the code for Archlinux build with g++ 16.1.1 (!1172)
   Drop python3-pyqt5.qtwebkit dependency for forky/resolute (package no longer available) (!1176)
   Set Draft to use a lot less CI pipeline jobs, remember to do a full run before merging! (!1180)
-  Drop CI/packaging support for Ubuntu < 22.04, Debian bullseye/bookworm and ppc64el
-  Fix CGAL/C++17 compatibility: only fall back to C++14 for old coinutils when CGAL is disabled, since CGAL hard-requires C++17
+  Drop CI/packaging support for Ubuntu < 22.04, Debian bullseye/bookworm and ppc64el (!1184)
+  Fix CGAL/C++17 compatibility: only fall back to C++14 for old coinutils when CGAL is disabled, since CGAL hard-requires C++17 (!1184)
 
 Small Enhancements
 ******************
@@ -79,18 +79,18 @@ Small Enhancements
 Testing & Continuous Integration
 ********************************
   Fix GUI tests, they were sometimes unreliable
-  Rename CI jobs for consistency: full make/test/check names, HP as a consistent prefix, and ubuntu_NNNN_codename / debian_NN_codename naming so the OS and version are clear from the job name alone
-  Fix aptly packaging-publish scripts (update_repos_initial.sh, update_repos_next.sh), which were still fetching CI artifacts using the old deb_jammy/deb_trixie/... job names
-  Use forky reference screenshots for jobs running on the debian-testing image; regenerate stale ubuntu_24_04 GUI reference screenshots (Mesa/Zink warning lines no longer appear, shifting all terminal output by 4 lines)
-  Suppress Sphinx autodoc-signature and LaTeX hbox/vbox warnings in the doc build: they were flooding make_fast/make_debug/make_asan*'s combined build+test log past GitLab's per-job size limit, hiding the real test failures underneath
-  Disable debian-testing-arm64 CI jobs for now
-  Relax checkJCFpm/checkMultiScGeom tolerances specifically for ENABLE_FAST_NATIVE builds: both checks are already documented as sensitive to compilation-options/CPU-dependent floating point differences
+  Rename CI jobs for consistency: full make/test/check names, HP as a consistent prefix, and ubuntu_NNNN_codename / debian_NN_codename naming so the OS and version are clear from the job name alone (!1184)
+  Fix aptly packaging-publish scripts (update_repos_initial.sh, update_repos_next.sh), which were still fetching CI artifacts using the old deb_jammy/deb_trixie/... job names (!1184)
+  Use forky reference screenshots for jobs running on the debian-testing image; regenerate stale ubuntu_24_04 GUI reference screenshots (Mesa/Zink warning lines no longer appear, shifting all terminal output by 4 lines) (!1184)
+  Suppress Sphinx autodoc-signature and LaTeX hbox/vbox warnings in the doc build: they were flooding make_fast/make_debug/make_asan*'s combined build+test log past GitLab's per-job size limit, hiding the real test failures underneath (!1184)
+  Disable debian-testing-arm64 CI jobs for now (!1184)
+  Relax checkJCFpm/checkMultiScGeom tolerances specifically for ENABLE_FAST_NATIVE builds: both checks are already documented as sensitive to compilation-options/CPU-dependent floating point differences (!1184)
 
 High precision RealHP<N> ComplexHP<N>
 *************************************
   Fix #401 (for Boost 1.88): when using ThinRealWrapper<long double> disable std::fpclassify and constexpr detection (!1156)
-  Apply the above fpclassify/constexpr-detection fix unconditionally: long double is always tested as a RealHP<N> level regardless of the build's primary Real type, so the fix must not depend on YADE_REAL_BIT
-  Ignore the known huge-ULP error in complex tan/tanh (boostorg/multiprecision#262, #264) regardless of Boost version, since it still reproduces on much newer Boost
+  Apply the above fpclassify/constexpr-detection fix unconditionally: long double is always tested as a RealHP<N> level regardless of the build's primary Real type, so the fix must not depend on YADE_REAL_BIT (!1184)
+  Ignore the known huge-ULP error in complex tan/tanh (boostorg/multiprecision#262, #264) regardless of Boost version, since it still reproduces on much newer Boost (!1184)
 
 ==================================================
 yade-2026.1.0
