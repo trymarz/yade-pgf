@@ -85,6 +85,7 @@ Testing & Continuous Integration
   Suppress Sphinx autodoc-signature and LaTeX hbox/vbox warnings in the doc build: they were flooding make_fast/make_debug/make_asan*'s combined build+test log past GitLab's per-job size limit, hiding the real test failures underneath (!1184)
   Disable debian-testing-arm64 CI jobs for now (!1184)
   Relax checkJCFpm/checkMultiScGeom tolerances specifically for ENABLE_FAST_NATIVE builds: both checks are already documented as sensitive to compilation-options/CPU-dependent floating point differences (!1184)
+  Fix CI problem with data submodule sometimes not properly initialized. (!1185)
 
 High precision RealHP<N> ComplexHP<N>
 *************************************
