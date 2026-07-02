@@ -53,6 +53,22 @@ if QT_API == "PyQt6":
 	else:
 		QDialogButtonBox = QtWidgets.QDialogButtonBox
 
+	for _name in ("NoFrame", "Box", "Panel", "StyledPanel", "HLine", "VLine", "WinPanel"):
+		if not hasattr(QtWidgets.QFrame, _name):
+			setattr(QtWidgets.QFrame, _name, getattr(QtWidgets.QFrame.Shape, _name))
+	for _name in ("Plain", "Raised", "Sunken"):
+		if not hasattr(QtWidgets.QFrame, _name):
+			setattr(QtWidgets.QFrame, _name, getattr(QtWidgets.QFrame.Shadow, _name))
+	for _name in ("LabelRole", "FieldRole", "SpanningRole"):
+		if not hasattr(QtWidgets.QFormLayout, _name):
+			setattr(QtWidgets.QFormLayout, _name, getattr(QtWidgets.QFormLayout.ItemRole, _name))
+	for _name in ("AdjustToContents", "AdjustToContentsOnFirstShow", "AdjustToMinimumContentsLengthWithIcon"):
+		if not hasattr(QtWidgets.QComboBox, _name):
+			setattr(QtWidgets.QComboBox, _name, getattr(QtWidgets.QComboBox.SizeAdjustPolicy, _name))
+	for _name in ("Clipboard", "Selection", "FindBuffer"):
+		if not hasattr(QtGui.QClipboard, _name):
+			setattr(QtGui.QClipboard, _name, getattr(QtGui.QClipboard.Mode, _name))
+
 	if not hasattr(QtWidgets.QSizePolicy, "Expanding"):
 		class QSizePolicy(QtWidgets.QSizePolicy):
 			Expanding = QtWidgets.QSizePolicy.Policy.Expanding
