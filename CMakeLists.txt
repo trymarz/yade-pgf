@@ -393,12 +393,12 @@ if(ENABLE_USEFUL_ERRORS)
   #   (2) numpy    ver. < 1.13  : -Wunused-function
   # The impossible to fix warnings are stored in ${WORKAROUND_LIBRARY_WARNINGS}
   SET(WORKAROUND_LIBRARY_WARNINGS " ")
-  IF(CMAKE_CXX_COMPILER_VERSION VERSION_LESS 15.2.1)
-    MESSAGE(STATUS   "g++ version " ${CMAKE_CXX_COMPILER_VERSION} " < 15.2.1, cannot report -Wmaybe-uninitialized variables, setting -Wno-error=maybe-uninitialized")
-    SET(WORKAROUND_LIBRARY_WARNINGS "${WORKAROUND_LIBRARY_WARNINGS} -Wno-error=maybe-uninitialized") # g++ older than 15.2.1 has many false positives, so disable it.
+  IF(CMAKE_CXX_COMPILER_VERSION VERSION_LESS 15.3.1)
+    MESSAGE(STATUS   "g++ version " ${CMAKE_CXX_COMPILER_VERSION} " < 15.3.1, cannot report -Wmaybe-uninitialized variables, setting -Wno-error=maybe-uninitialized")
+    SET(WORKAROUND_LIBRARY_WARNINGS "${WORKAROUND_LIBRARY_WARNINGS} -Wno-error=maybe-uninitialized") # g++ older than 15.3.1 has many false positives, so disable it.
   ELSE()
-    MESSAGE(STATUS   "g++ version " ${CMAKE_CXX_COMPILER_VERSION} " >= 15.2.1 can report -Wmaybe-uninitialized variables.")
-    # However, with LTO enabled, there are still many false positives in g++ 15.2.1
+    MESSAGE(STATUS   "g++ version " ${CMAKE_CXX_COMPILER_VERSION} " >= 15.3.1 can report -Wmaybe-uninitialized variables.")
+    # However, with LTO enabled, there are still many false positives in g++ 15.3.1
     IF(CMAKE_CXX_FLAGS MATCHES "-flto")
       MESSAGE(STATUS   "LTO is enabled, setting -Wno-error=maybe-uninitialized due to false positives in LTO mode")
       SET(WORKAROUND_LIBRARY_WARNINGS "${WORKAROUND_LIBRARY_WARNINGS} -Wno-error=maybe-uninitialized")
