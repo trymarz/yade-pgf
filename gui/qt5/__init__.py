@@ -106,6 +106,7 @@ class ControllerClass(QWidget, Ui_Controller):
 	def __init__(self, parent=None):
 		QWidget.__init__(self)
 		self.setupUi(self)
+		self.connectComboSignals()
 		self.generator = None  # updated automatically
 		self.renderer = Renderer()  # only hold one instance, managed by OpenGLManager
 		self.addPreprocessors()
@@ -119,6 +120,14 @@ class ControllerClass(QWidget, Ui_Controller):
 		self.iterTimes, self.iterValues, self.iterPerSec = [], [], 0  # arrays to keep track of the simulation speed
 		self.dtEditUpdate = True  # to avoid updating while being edited
 		# show off with this one as well now
+	def connectComboSignals(self):
+		self.generatorCombo.currentTextChanged.connect(self.generatorComboSlot)
+		self.displayCombo.currentTextChanged.connect(self.displayComboSlot)
+		if hasattr(self.pythonCombo, 'textActivated'):
+			self.pythonCombo.textActivated.connect(self.pythonComboSlot)
+		else:
+			self.pythonCombo.activated[str].connect(self.pythonComboSlot)
+
 	def addPreprocessors(self):
 		self.generatorCombo.addItem('TriaxialTest')  # this generator is the first one (reproducible screenshot), and is always present.
 		for c in yade.system.childClasses('FileGenerator'):

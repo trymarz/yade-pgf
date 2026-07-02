@@ -979,54 +979,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>generatorCombo</sender>
-   <signal>currentIndexChanged(QString)</signal>
-   <receiver>Controller</receiver>
-   <slot>generatorComboSlot()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>101</x>
-     <y>60</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>284</x>
-     <y>130</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>displayCombo</sender>
-   <signal>currentIndexChanged(QString)</signal>
-   <receiver>Controller</receiver>
-   <slot>displayComboSlot()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>101</x>
-     <y>45</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>284</x>
-     <y>108</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pythonCombo</sender>
-   <signal>activated(QString)</signal>
-   <receiver>Controller</receiver>
-   <slot>pythonComboSlot()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>107</x>
-     <y>66</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>284</x>
-     <y>68</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>inspectButton</sender>
    <signal>clicked()</signal>
    <receiver>Controller</receiver>
