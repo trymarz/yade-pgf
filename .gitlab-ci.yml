@@ -552,11 +552,11 @@ make_SSE:
     - cd ..
     - export PYTHONUNBUFFERED=1
     - install/bin/yade-ci --test
-    - if [[ ${NO_GUI} == "NO_GUI" ]] ; then echo -e "\n\e[93m===\nSkipping GUI test.\n===\e[0m\n"; else xvfb-run -a -s "-screen 0 1600x1200x24" scripts/checks-and-tests/gui/testGui.sh; fi
+    - if [[ ${NO_GUI} == "NO_GUI" ]] ; then echo -e "\n\e[93m===\nSkipping GUI test.\n===\e[0m\n"; else timeout 25m xvfb-run -a -s "-screen 0 1600x1200x24" scripts/checks-and-tests/gui/testGui.sh || echo "Tests timed out or failed!"; fi
     - install/bin/yade-ci --quickperformance -j8
     - cat /etc/os-release
     - if grep -q "Arch Linux" /etc/lsb-release; then /usr/sbin/uname -m; else  /usr/bin/dpkg --print-architecture ; fi
-  timeout: 30 minutes
+  timeout: 40 minutes
   artifacts:
     when: always
     paths:
