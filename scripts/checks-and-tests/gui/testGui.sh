@@ -1,6 +1,8 @@
 #!/bin/bash
-# This check is to be called inside xvfb-run, so that it has a working Xserver in which a simple yade GUI session can be started,
-# the simplest of those checks, testGuiEmpty.py or testGuiSimple.py are only a slightly modified simple-scene-energy-tracking.py example.
+# This check needs a working graphical session. The CI wrapper runGuiTest.sh starts either xvfb-run
+# for the X11 backend or a headless Weston compositor for the Qt-native Wayland backend.
+# The simplest checks, testGuiEmpty.py or testGuiSimple.py, are only slightly modified
+# simple-scene-energy-tracking.py examples.
 # The screenshots are taken inside yade session, while the GUI windows are open, by calling scrot from helper/testGuiHelper.py
 
 YADE_EXECUTABLE=install/bin/yade-ci
@@ -112,7 +114,7 @@ for FileName in ${GUI_TESTS_PATH}/testGui*py; do
 	if [[ ${YADE_TESTGUI_BACKEND} == "x11" ]] ; then
 		time /usr/bin/xterm -l -xrm "XTerm*logFile:${LOGFILE}" -geometry 100x48+5+560  -e /bin/bash -c "${YADE_EXECUTABLE} ${GUI_TESTS_PATH}/testGui${TestFile}.py"
 	else
-		time /usr/bin/script -q -e -f -c "${YADE_EXECUTABLE} ${GUI_TESTS_PATH}/testGui${TestFile}.py" "${LOGFILE}"
+		time env LC_ALL=C LANG=C LANGUAGE=C /usr/bin/script -q -e -f -c "${YADE_EXECUTABLE} ${GUI_TESTS_PATH}/testGui${TestFile}.py" "${LOGFILE}"
 	fi
 
 	# The idea here is to have a screenshot from outside of yade. But taking a screenshot after it finished (crashed, or by normal exit)
