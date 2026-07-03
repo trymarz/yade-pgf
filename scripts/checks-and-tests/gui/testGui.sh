@@ -21,7 +21,22 @@ export SOURCE_DATE_EPOCH=1777811637
 #
 # or just this command (to see it happening on your desktop):
 #   scripts/checks-and-tests/gui/testGui.sh
+#
+# The default backend is the historical X11 desktop-automation path. A Qt-native
+# backend is also available for native Wayland sessions:
+#   YADE_TESTGUI_BACKEND=qt QT_QPA_PLATFORM=wayland scripts/checks-and-tests/gui/testGui.sh
 
+YADE_TESTGUI_BACKEND=${YADE_TESTGUI_BACKEND:-x11}
+YADE_TESTGUI_COMPARE_SCREENSHOTS=${YADE_TESTGUI_COMPARE_SCREENSHOTS:-0}
+export YADE_TESTGUI_BACKEND
+
+case "${YADE_TESTGUI_BACKEND}" in
+	x11|qt) ;;
+	*)
+		echo "ERROR: unsupported YADE_TESTGUI_BACKEND=${YADE_TESTGUI_BACKEND}; use x11 or qt."
+		exit 1
+		;;
+esac
 
 # This function checks if necessary tools are installed.
 testTool () {
@@ -52,13 +67,19 @@ testTool () {
 	fi
 }
 
-testTool "xterm"   "/usr/bin/xterm"   "/usr/sbin/xterm"
-testTool "scrot"   "/usr/bin/scrot"   "/usr/sbin/scrot"
-testTool "xdotool" "/usr/bin/xdotool" "/usr/sbin/xdotool"
+if [[ ${YADE_TESTGUI_BACKEND} == "x11" ]] ; then
+	testTool "xterm"   "/usr/bin/xterm"   "/usr/sbin/xterm"
+	testTool "scrot"   "/usr/bin/scrot"   "/usr/sbin/scrot"
+	testTool "xdotool" "/usr/bin/xdotool" "/usr/sbin/xdotool"
+fi
 testTool "bash"    "/bin/bash"        "/usr/bin/bash"     "/usr/sbin/bash"
 testTool "gdb"     "/usr/bin/gdb"     "ERROR_OK"
 
-echo -e "\n\n=== Will now test inside xterm, all useful output, including gdb crash backtrace ===\n=== will be on screenshots and in the xterm logs: /screenshots/*.txt             ===\n\n"
+if [[ ${YADE_TESTGUI_BACKEND} == "x11" ]] ; then
+	echo -e "\n\n=== Will now test inside xterm, all useful output, including gdb crash backtrace ===\n=== will be on screenshots and in the xterm logs: /screenshots/*.txt             ===\n\n"
+else
+	echo -e "\n\n=== Will now test with Qt-native GUI automation backend ===\n=== useful output will be in the xterm-compatible logs: /screenshots/*.txt ===\n\n"
+fi
 
 mkdir -p ${CREATE_NEW_SCREENSHOTS} # screenshots
 
@@ -82,7 +103,11 @@ for FileName in ${GUI_TESTS_PATH}/testGui*py; do
 
 	echo -e "******************************************\n*** Testing file testGui${TestFile}.py ***\n******************************************\nLog in file: ${LOGFILE}\ntail pid:${TAIL_PID}\n"
 
-	time /usr/bin/xterm -l -xrm "XTerm*logFile:${LOGFILE}" -geometry 100x48+5+560  -e /bin/bash -c "${YADE_EXECUTABLE} ${GUI_TESTS_PATH}/testGui${TestFile}.py"
+	if [[ ${YADE_TESTGUI_BACKEND} == "x11" ]] ; then
+		time /usr/bin/xterm -l -xrm "XTerm*logFile:${LOGFILE}" -geometry 100x48+5+560  -e /bin/bash -c "${YADE_EXECUTABLE} ${GUI_TESTS_PATH}/testGui${TestFile}.py"
+	else
+		time /bin/bash -c "${YADE_EXECUTABLE} ${GUI_TESTS_PATH}/testGui${TestFile}.py" > ${LOGFILE} 2>&1
+	fi
 
 	# The idea here is to have a screenshot from outside of yade. But taking a screenshot after it finished (crashed, or by normal exit)
 	# will just produce an empty screenshot. It has to be done by calling scrot -z from inside scripts/checks-and-tests/gui/helper/testGuiHelper.py
@@ -103,6 +128,11 @@ for FileName in ${GUI_TESTS_PATH}/testGui*py; do
 		echo -e "*** OK ***\nStatus:\033[92m success\033[0m"
 	fi
 done
+
+if [[ ${YADE_TESTGUI_BACKEND} != "x11" && ${YADE_TESTGUI_COMPARE_SCREENSHOTS} != "1" ]] ; then
+	echo -e "******************************************\n*** Skipping legacy desktop screenshot comparison for Qt-native backend. ***\n*** Set YADE_TESTGUI_COMPARE_SCREENSHOTS=1 to compare against matching references. ***\n******************************************\n"
+	exit 0
+fi
 
 sleep 1
 echo -e "******************************************\n*** Checking screenshots now ***\n******************************************\n"
@@ -144,4 +174,3 @@ else
 	fi
 fi
 echo -e "******************************************\n*** Checking screenshots finished ***\n******************************************\n"
-

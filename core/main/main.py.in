@@ -52,7 +52,7 @@ par.add_argument('--nice',help='Increase nice level (i.e. decrease priority) by 
 par.add_argument('-x',help='Exit when the script finishes',dest='exitAfter',action='store_true')
 par.add_argument('-f',help=('Set "Default" filter for logging https://yade-dem.org/doc/prog.html#logging, default is -f3 for all classes.'+
                 ('' if 'LOGGER' in features else " (Since this build doesn't use boost::log this option is unavailable, use cmake option -DENABLE_LOGGER=ON to enable)")),dest='verbosity',type=int)
-par.add_argument('-n',help="Run without graphical interface (equivalent to unsetting the DISPLAY environment variable)",dest='nogui',action='store_true')
+par.add_argument('-n',help="Run without graphical interface (equivalent to unsetting the DISPLAY and WAYLAND_DISPLAY environment variables)",dest='nogui',action='store_true')
 par.add_argument('--test',help="Run regression test suite and exit; the exists status is 0 if all tests pass, 1 if a test fails and 2 for an unspecified exception.",dest="test",action='store_true')
 par.add_argument('--check',help='Run a quick series of user-defined check tests as described in /yade/scripts/checks-and-tests/checks/README and https://yade-dem.org/doc/prog.html#regression-tests',dest='check',action='store_true')
 par.add_argument('--checkall',help='Run a full series of user-defined check tests as described in /yade/scripts/checks-and-tests/checks/README and https://yade-dem.org/doc/prog.html#regression-tests',dest='checkall',action='store_true')
@@ -356,19 +356,32 @@ if 'QT5' in features: gui='qt5'
 if 'QT6' in features: gui='qt6'
 if opts.nogui or opts.mpi_mode: gui=None
 if gui:
-	import Xlib.display
-	# PyQt4's QApplication does exit(1) if it is unable to connect to the display
-	# we however want to handle this gracefully, therefore
-	# we test the connection with bare xlib first, which merely raises DisplayError
-	try:
-		# contrary to display.Display, _BaseDisplay does not check for extensions and that avoids spurious message "Xlib.protocol.request.QueryExtension" (bug?)
-		Xlib.display._BaseDisplay();
-		yade.runtime.hasDisplay=True
-	except:
-		# usually Xlib.error.DisplayError, but there can be Xlib.error.XauthError etc as well
-		# let's just pretend any exception means the display would not work
+	import os
+	def hasXDisplay():
+		if not os.environ.get('DISPLAY'):
+			return False
+		try:
+			import Xlib.display
+			# contrary to display.Display, _BaseDisplay does not check for extensions and that avoids spurious message "Xlib.protocol.request.QueryExtension" (bug?)
+			Xlib.display._BaseDisplay();
+			return True
+		except:
+			# usually Xlib.error.DisplayError, but there can be Xlib.error.XauthError etc as well
+			# let's just pretend any exception means the display would not work
+			return False
+	qtPlatform = os.environ.get('QT_QPA_PLATFORM', '').split(':', 1)[0]
+	hasWaylandDisplay = (gui in ('qt5', 'qt6')) and bool(os.environ.get('WAYLAND_DISPLAY'))
+	if qtPlatform.startswith('wayland'):
+		yade.runtime.hasDisplay = hasWaylandDisplay
+	elif qtPlatform == 'xcb':
+		yade.runtime.hasDisplay = hasXDisplay()
+	else:
+		# PyQt4's QApplication does exit(1) if it is unable to connect to the display.
+		# We still test X with bare xlib first, but Qt5/Qt6 may also run on native Wayland without DISPLAY.
+		yade.runtime.hasDisplay = hasXDisplay() or hasWaylandDisplay
+	if not yade.runtime.hasDisplay:
 		gui=None
-		print('Warning: no X rendering available (see https://bbs.archlinux.org/viewtopic.php?id=13189)')
+		print('Warning: no Qt rendering display available (checked DISPLAY and WAYLAND_DISPLAY)')
 
 # run remote access things, before actually starting the user session (not while imported by other python application)
 if __name__ == "__main__" and not opts.mpi_mode:
