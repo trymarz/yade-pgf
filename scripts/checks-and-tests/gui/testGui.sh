@@ -71,6 +71,8 @@ if [[ ${YADE_TESTGUI_BACKEND} == "x11" ]] ; then
 	testTool "xterm"   "/usr/bin/xterm"   "/usr/sbin/xterm"
 	testTool "scrot"   "/usr/bin/scrot"   "/usr/sbin/scrot"
 	testTool "xdotool" "/usr/bin/xdotool" "/usr/sbin/xdotool"
+else
+	testTool "script"  "/usr/bin/script"  "/usr/sbin/script"
 fi
 testTool "bash"    "/bin/bash"        "/usr/bin/bash"     "/usr/sbin/bash"
 testTool "gdb"     "/usr/bin/gdb"     "ERROR_OK"
@@ -83,10 +85,14 @@ fi
 
 mkdir -p ${CREATE_NEW_SCREENSHOTS} # screenshots
 
-# Set XDG_RUNTIME_DIR so that Yade warnings in the console do not trigger random extra warning about XDG_RUNTIME_DIR not set
-export XDG_RUNTIME_DIR=/tmp/runtime-root
-mkdir -p $XDG_RUNTIME_DIR
-chmod 0700 $XDG_RUNTIME_DIR
+# Set XDG_RUNTIME_DIR for the X11 backend so that Yade warnings in the console do not trigger random
+# extra warning about XDG_RUNTIME_DIR not set. Do not override it for the Qt backend: native Wayland
+# needs the real runtime directory where the compositor socket lives.
+if [[ ${YADE_TESTGUI_BACKEND} == "x11" ]] ; then
+	export XDG_RUNTIME_DIR=/tmp/runtime-root
+	mkdir -p $XDG_RUNTIME_DIR
+	chmod 0700 $XDG_RUNTIME_DIR
+fi
 
 # Loop over files ${GUI_TESTS_PATH}/testGui*py
 # TODO: tell the called scripts what name to use "Empty" "Simple", etc. currently these names are written manually inside
@@ -106,7 +112,7 @@ for FileName in ${GUI_TESTS_PATH}/testGui*py; do
 	if [[ ${YADE_TESTGUI_BACKEND} == "x11" ]] ; then
 		time /usr/bin/xterm -l -xrm "XTerm*logFile:${LOGFILE}" -geometry 100x48+5+560  -e /bin/bash -c "${YADE_EXECUTABLE} ${GUI_TESTS_PATH}/testGui${TestFile}.py"
 	else
-		time /bin/bash -c "${YADE_EXECUTABLE} ${GUI_TESTS_PATH}/testGui${TestFile}.py" > ${LOGFILE} 2>&1
+		time /usr/bin/script -q -e -f -c "${YADE_EXECUTABLE} ${GUI_TESTS_PATH}/testGui${TestFile}.py" "${LOGFILE}"
 	fi
 
 	# The idea here is to have a screenshot from outside of yade. But taking a screenshot after it finished (crashed, or by normal exit)

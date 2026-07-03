@@ -369,16 +369,27 @@ if gui:
 			# usually Xlib.error.DisplayError, but there can be Xlib.error.XauthError etc as well
 			# let's just pretend any exception means the display would not work
 			return False
+	def hasWaylandDisplay():
+		if gui not in ('qt5', 'qt6'):
+			return False
+		waylandDisplay = os.environ.get('WAYLAND_DISPLAY')
+		if not waylandDisplay:
+			return False
+		if waylandDisplay.startswith('/'):
+			return os.path.exists(waylandDisplay)
+		runtimeDir = os.environ.get('XDG_RUNTIME_DIR')
+		if not runtimeDir:
+			return False
+		return os.path.exists(os.path.join(runtimeDir, waylandDisplay))
 	qtPlatform = os.environ.get('QT_QPA_PLATFORM', '').split(':', 1)[0]
-	hasWaylandDisplay = (gui in ('qt5', 'qt6')) and bool(os.environ.get('WAYLAND_DISPLAY'))
 	if qtPlatform.startswith('wayland'):
-		yade.runtime.hasDisplay = hasWaylandDisplay
+		yade.runtime.hasDisplay = hasWaylandDisplay()
 	elif qtPlatform == 'xcb':
 		yade.runtime.hasDisplay = hasXDisplay()
 	else:
 		# PyQt4's QApplication does exit(1) if it is unable to connect to the display.
 		# We still test X with bare xlib first, but Qt5/Qt6 may also run on native Wayland without DISPLAY.
-		yade.runtime.hasDisplay = hasXDisplay() or hasWaylandDisplay
+		yade.runtime.hasDisplay = hasXDisplay() or hasWaylandDisplay()
 	if not yade.runtime.hasDisplay:
 		gui=None
 		print('Warning: no Qt rendering display available (checked DISPLAY and WAYLAND_DISPLAY)')

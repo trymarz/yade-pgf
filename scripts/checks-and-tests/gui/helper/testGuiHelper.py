@@ -7,9 +7,36 @@
 #  GNU General Public License v2 or later. See file LICENSE for details. #
 ##########################################################################
 
-import subprocess, time, os, sys
+import subprocess, time, os, sys, threading
 import yade
 from yade import qt
+
+
+def _qtConnectionType(name):
+	if hasattr(qt.QtCore.Qt, "ConnectionType"):
+		return getattr(qt.QtCore.Qt.ConnectionType, name)
+	return getattr(qt.QtCore.Qt, name)
+
+
+class _QtThreadInvoker(qt.QtCore.QObject):
+	request = qt.QtCore.pyqtSignal()
+
+	def __init__(self):
+		qt.QtCore.QObject.__init__(self)
+		self.fn = None
+		self.result = None
+		self.error = None
+		self.done = None
+		self.request.connect(self.invoke, _qtConnectionType("QueuedConnection"))
+
+	@qt.QtCore.pyqtSlot()
+	def invoke(self):
+		try:
+			self.result = self.fn()
+		except Exception as e:
+			self.error = e
+		finally:
+			self.done.set()
 
 
 class TestGUIHelper:
@@ -35,6 +62,7 @@ class TestGUIHelper:
 		self.backend = os.environ.get("YADE_TESTGUI_BACKEND", "x11").lower()
 		if self.backend not in ("x11", "qt"):
 			raise RuntimeError("Unsupported YADE_TESTGUI_BACKEND=" + self.backend)
+		self.qtInvoker = None
 		# FIXME : this number 14 is hardcoded in scripts/checks-and-tests/gui/testGui.sh when testing if screenshots are present.
 		self.maxTestNum = 14
 		if (name != None):
@@ -56,6 +84,26 @@ class TestGUIHelper:
 		#ip.ask_exit()
 		#ip.pt_cli.exit()
 		#quit()
+
+	def callInQtThread(self, fn):
+		app = qt.QApplication.instance()
+		if app == None:
+			return fn()
+		if qt.QtCore.QThread.currentThread() == app.thread():
+			return fn()
+		if self.qtInvoker == None:
+			self.qtInvoker = _QtThreadInvoker()
+			self.qtInvoker.moveToThread(app.thread())
+		self.qtInvoker.fn = fn
+		self.qtInvoker.result = None
+		self.qtInvoker.error = None
+		self.qtInvoker.done = threading.Event()
+		self.qtInvoker.request.emit()
+		while not self.qtInvoker.done.wait(0.1):
+			pass
+		if self.qtInvoker.error != None:
+			raise self.qtInvoker.error
+		return self.qtInvoker.result
 
 	def processQtEvents(self):
 		app = qt.QApplication.instance()
@@ -119,7 +167,7 @@ class TestGUIHelper:
 		for i, line in enumerate(lines):
 			painter.drawText(12, 586 + i * 20, line)
 
-	def makeQtScreenshot(self):
+	def makeQtScreenshotInQtThread(self):
 		self.processQtEvents()
 		image = qt.QImage(1600, 1200, self.qtImageFormat())
 		image.fill(qt.QColor(245, 245, 245))
@@ -136,6 +184,9 @@ class TestGUIHelper:
 		if not image.save(filename):
 			raise RuntimeError("Failed to save " + filename)
 
+	def makeQtScreenshot(self):
+		self.callInQtThread(self.makeQtScreenshotInQtThread)
+
 	def makeNextScreenshot(self):
 		time.sleep(self.nextScreenshotWaitTime)
 		if self.backend == "x11":
@@ -151,76 +202,82 @@ class TestGUIHelper:
 		subprocess.run(["/usr/bin/xdotool", "mousemove", str(x), str(y), "click", str(mouseButton), "mousemove", "restore"])
 		time.sleep(self.clickWaitTime)
 
+	def openController(self):
+		if self.backend == "x11":
+			yade.qt.Controller()
+			yade.qt.controller.setWindowTitle('GUI test: ' + self.name)
+			yade.qt.controller.setGeometry(550, 20, 500, 1100)
+			yade.qt.Renderer().blinkHighlight = 'NEVER'
+			return
+		def _openController():
+			yade.qt.Controller()
+			yade.qt.controller.setWindowTitle('GUI test: ' + self.name)
+			yade.qt.controller.setGeometry(550, 20, 500, 1100)
+			yade.qt.Renderer().blinkHighlight = 'NEVER'
+			self.processQtEvents()
+		self.callInQtThread(_openController)
+
 	def openView(self):
 		if self.backend == "x11":
 			self.clickOnScreen(634, 1054)
 			return
-		if (len(yade.qt.views()) == 0):
-			button = getattr(yade.qt.controller, "show3dButton", None)
-			if button != None:
-				button.setChecked(False)
-				button.click()
-			else:
-				yade.qt.View()
-		self.processQtEvents()
+		def _openView():
+			if (len(yade.qt.views()) == 0):
+				button = getattr(yade.qt.controller, "show3dButton", None)
+				if button != None:
+					button.setChecked(False)
+					button.click()
+				else:
+					yade.qt.View()
+			self.processQtEvents()
+		self.callInQtThread(_openView)
 
 	def openInspector(self):
 		if self.backend == "x11":
 			self.clickOnScreen(982, 60)
 			return
-		if getattr(yade.qt.controller, "inspector", None) == None:
-			button = getattr(yade.qt.controller, "inspectButton", None)
-			if button != None:
-				button.click()
-			else:
-				yade.qt.Inspector()
-		yade.qt.controller.inspector.show()
-		self.processQtEvents()
+		def _openInspector():
+			if getattr(yade.qt.controller, "inspector", None) == None:
+				button = getattr(yade.qt.controller, "inspectButton", None)
+				if button != None:
+					button.click()
+				else:
+					yade.qt.Inspector()
+			yade.qt.controller.inspector.show()
+			self.processQtEvents()
+		self.callInQtThread(_openInspector)
 
 	def selectInspectorTab(self, index, x, y):
 		if self.backend == "x11":
 			self.clickOnScreen(x, y)
 			return
-		yade.qt.controller.inspector.tabWidget.setCurrentIndex(index)
-		self.processQtEvents()
+		def _selectInspectorTab():
+			yade.qt.controller.inspector.tabWidget.setCurrentIndex(index)
+			self.processQtEvents()
+		self.callInQtThread(_selectInspectorTab)
 
 	def selectControllerTab(self, name, x, y):
 		if self.backend == "x11":
 			self.clickOnScreen(x, y)
 			return
-		yade.qt.controller.setTabActive(name)
-		self.processQtEvents()
+		def _selectControllerTab():
+			yade.qt.controller.setTabActive(name)
+			self.processQtEvents()
+		self.callInQtThread(_selectControllerTab)
 
 	def selectInteractionFromBodyTab(self):
 		if self.backend == "x11":
 			self.clickOnScreen(1494, 55)
 		else:
-			self.processQtEvents()
+			self.callInQtThread(self.processQtEvents)
 
-	def screenshotEngine(self):
-		self.scrNum += 1
-		intro = "Test '" + self.name + "', stage:" + str(self.scrNum) + " iter:" + str(O.iter)
-		if (self.scrNum == 1):
-			self.makeNextScreenshot()
-			print(intro + " moving yade.qt.Controller()")
-			yade.qt.Controller()
-			yade.qt.controller.setWindowTitle('GUI test: ' + self.name)
-			yade.qt.controller.setGeometry(550, 20, 500, 1100)
-			yade.qt.Renderer().blinkHighlight = 'NEVER'
-		if (self.scrNum == 2):
-			self.makeNextScreenshot()
-			print(intro + " opening yade.qt.View()")
-			self.openView()
-			# Let's wait and see if it worked
-			t = 0.0
-			while (len(yade.qt.views()) == 0):
-				time.sleep(0.5)
-				t += 0.5
-				if (t > self.viewWaitTimeSeconds):
-					self.createEmptyFile("screenshots/yade_qt_View_FAILED_" + self.name)
-					print("*** ERROR: failed to open QT View window by clicking ***")
-					self.finish()
-			# OK, now we have a view to work with.
+	def viewCount(self):
+		if self.backend == "x11":
+			return len(yade.qt.views())
+		return self.callInQtThread(lambda: len(yade.qt.views()))
+
+	def configureView(self):
+		def _configureView():
 			vv = yade.qt.views()[0]
 			vv.axes = True
 			if (self.cameraParams == None):
@@ -232,6 +289,55 @@ class TestGUIHelper:
 				vv.lookAt, vv.viewDir, vv.eyePosition, vv.upVector = self.cameraParams
 			if (self.recenter):
 				yade.qt.center()
+			self.processQtEvents()
+		if self.backend == "x11":
+			_configureView()
+		else:
+			self.callInQtThread(_configureView)
+
+	def setInspectorGeometry(self):
+		def _setInspectorGeometry():
+			yade.qt.controller.inspector.setGeometry(1050, 20, 500, 1100)
+			self.processQtEvents()
+		if self.backend == "x11":
+			_setInspectorGeometry()
+		else:
+			self.callInQtThread(_setInspectorGeometry)
+
+	def closeWindows(self):
+		def _closeWindows():
+			vv = yade.qt.views()[0]
+			vv.close()
+			yade.qt.controller.inspector.close()
+			yade.qt.controller.close()
+			self.processQtEvents()
+		if self.backend == "x11":
+			_closeWindows()
+		else:
+			self.callInQtThread(_closeWindows)
+
+	def screenshotEngine(self):
+		self.scrNum += 1
+		intro = "Test '" + self.name + "', stage:" + str(self.scrNum) + " iter:" + str(O.iter)
+		if (self.scrNum == 1):
+			self.makeNextScreenshot()
+			print(intro + " moving yade.qt.Controller()")
+			self.openController()
+		if (self.scrNum == 2):
+			self.makeNextScreenshot()
+			print(intro + " opening yade.qt.View()")
+			self.openView()
+			# Let's wait and see if it worked
+			t = 0.0
+			while (self.viewCount() == 0):
+				time.sleep(0.5)
+				t += 0.5
+				if (t > self.viewWaitTimeSeconds):
+					self.createEmptyFile("screenshots/yade_qt_View_FAILED_" + self.name)
+					print("*** ERROR: failed to open QT View window by clicking ***")
+					self.finish()
+			# OK, now we have a view to work with.
+			self.configureView()
 		if (self.scrNum == 3):
 			self.makeNextScreenshot()
 			print(intro + " opening yade.qt.Inspector() , setting wire=True, setting intrGeom=True")
@@ -239,7 +345,7 @@ class TestGUIHelper:
 			success = False
 			for attempt in range(0, 30):
 				try:
-					yade.qt.controller.inspector.setGeometry(1050, 20, 500, 1100)
+					self.setInspectorGeometry()
 					success = True
 				except:
 					time.sleep(1)
@@ -330,8 +436,5 @@ class TestGUIHelper:
 			self.createEmptyFile("screenshots/testGui_" + self.name + "_OK_or_Skipped.txt")
 			print(intro + " exiting\n\n")
 			O.pause()
-			vv = yade.qt.views()[0]
-			vv.close()
-			yade.qt.controller.inspector.close()
-			yade.qt.controller.close()
+			self.closeWindows()
 			self.finish()
