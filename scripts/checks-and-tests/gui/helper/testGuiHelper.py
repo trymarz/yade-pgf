@@ -179,9 +179,7 @@ class TestGUIHelper:
 			# yade.qt.controller.setTabActive('simulation')
 		if (self.scrNum == 13):
 			print(intro + " (testing of matplotlib is skipped for now...)")
-			print(intro + " making screenshot 13")
 			self.makeNextScreenshot()
-			print(intro + " making screenshot 13 DONE")
 			# FIXME: I couldn't get matplotlib to draw the plot, while screenshotting is going on.
 			# self.makeNextScreenshot();
 			# O.pause()
@@ -195,21 +193,12 @@ class TestGUIHelper:
 			# self.makeNextScreenshot();
 			# matplotlib.pyplot.close(fig)
 		if (self.scrNum == 14):
-			print(intro + " making screenshot 14")
 			self.makeNextScreenshot()
-			print(intro + " making screenshot 14 DONE, making empty file")
 			self.createEmptyFile("screenshots/testGui_" + self.name + "_OK_or_Skipped.txt")
 			print(intro + " exiting\n\n")
-			print(intro + " O.pause()")
 			O.pause()
-			print(intro + " calling vv = yade.qt.views()[0]")
 			vv = yade.qt.views()[0]
-			print(intro + " calling vv.close()")
 			vv.close()
-			print(intro + " calling yade.qt.controller.inspector.close()")
 			yade.qt.controller.inspector.close()
-			print(intro + " calling yade.qt.controller.close()")
 			yade.qt.controller.close()
-			print(intro + " calling self.finish()")
 			self.finish()
-			print(intro + " AFTER calling self.finish()")
