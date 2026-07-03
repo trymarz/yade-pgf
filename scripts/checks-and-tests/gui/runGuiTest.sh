@@ -50,7 +50,9 @@ case "${YADE_CI_GUI_PLATFORM}" in
 			exit 1
 		fi
 
-		"${GUI_TEST_SCRIPT}"
+		# OpenGLRenderer still initializes freeglut, and glutInit() needs an X DISPLAY.
+		# Keep Qt on native Wayland, but provide a small Xvfb display for that legacy path.
+		xvfb-run -a -s "-screen 0 1600x1200x24" "${GUI_TEST_SCRIPT}"
 		;;
 	*)
 		echo "ERROR: unsupported YADE_CI_GUI_PLATFORM=${YADE_CI_GUI_PLATFORM}; use x11 or wayland."
