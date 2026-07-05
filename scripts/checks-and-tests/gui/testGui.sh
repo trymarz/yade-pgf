@@ -137,6 +137,7 @@ for FileName in ${GUI_TESTS_PATH}/testGui*py; do
 	fi
 done
 
+YADE_TESTGUI_COMPARE_SCREENSHOTS="1" # Maybe put this somewhere else...
 if [[ ${YADE_TESTGUI_BACKEND} != "x11" && ${YADE_TESTGUI_COMPARE_SCREENSHOTS} != "1" ]] ; then
 	echo -e "******************************************\n*** Skipping legacy desktop screenshot comparison for Qt-native backend. ***\n*** Set YADE_TESTGUI_COMPARE_SCREENSHOTS=1 to compare against matching references. ***\n******************************************\n"
 	exit 0
