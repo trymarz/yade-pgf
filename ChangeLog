@@ -63,6 +63,7 @@ PFV coupling
 
 Packaging & Build Improvements
 ******************************
+  Fix cmake warnings: replace deprecated FindPythonInterp/FindPythonLibs with modern Python3 module; constrain Python3 Development search to interpreter version to avoid ABI mismatch on systems with multiple Python versions (!1177)
   Add CI job for building Debian packages for Ubuntu resolute 26.04 (!1154)
   Fix Ubuntu 26.04 packaging, drop debhelper depenendency (!1161)
   Fix screenshots. (!1169)

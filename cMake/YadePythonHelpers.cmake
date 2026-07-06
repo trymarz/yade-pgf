@@ -112,18 +112,24 @@ FUNCTION(FIND_PYTHON_MODULE module)
 ENDFUNCTION(FIND_PYTHON_MODULE)
 
 
-# Find PythonLibs, all Python packages needed by yade, and libboost-python. Must be used after a call to FIND_PACKAGE(PythonInterp)
+# Find Python development files, all Python packages needed by yade, and libboost-python.
 FUNCTION(FIND_PYTHON_PACKAGES)
 	SET(ALL_PYTHON_DEPENDENCIES_FOUND FALSE PARENT_SCOPE)
 	SET(fail_message "Failed to import dependencies for Python version ${PYTHON_VERSION_STRING}. NOT FOUND:")
 
-	UNSET(PYTHON_LIBRARY CACHE)
-	UNSET(PYTHON_INCLUDE_DIR CACHE)
-	FIND_PACKAGE(PythonLibs QUIET)
-	IF(NOT PYTHONLIBS_FOUND)
+	# Constrain Development search to the same major.minor as the interpreter to avoid
+	# picking up a newer alpha/beta Python on systems with multiple versions installed
+	# (e.g. Debian Testing ships Python 3.14 dev headers alongside a Python 3.13 interpreter).
+	find_package(Python3 "${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}" EXACT COMPONENTS Development QUIET)
+	IF(NOT Python3_Development_FOUND)
 		MESSAGE(${fail_message} PythonLibs)
 		RETURN()
 	ENDIF()
+	# Set backward-compatible variable names exported to parent scope below
+	SET(PYTHONLIBS_FOUND ${Python3_Development_FOUND})
+	SET(PYTHON_LIBRARIES "${Python3_LIBRARIES}")
+	SET(PYTHON_INCLUDE_DIRS "${Python3_INCLUDE_DIRS}")
+	SET(PYTHON_INCLUDE_PATH "${Python3_INCLUDE_DIRS}")
 
 	# BEGIN find Boost for py_version
 	IF ( NOT LocalBoost )

@@ -54,7 +54,7 @@
 #  SUITESPARSEPATH: define this variable with the path to a custom suitesparse install
 #  PYTHON_VERSION: force python version to the given one, set -1 to automatically use the last version on the system. (-1 by default)
 #  DISABLE_PKGS : comma-separated list of disabled packages from 'pkg', 'preprocessing' or 'postprocessing', if empty all packages will be built.The packages `common` and `dem` are required to run, but the project can be compiled without them. (EMPTY by default)
-cmake_minimum_required(VERSION 3.5.0)
+cmake_minimum_required(VERSION 3.12)
 project(Yade C CXX)
 if(POLICY CMP0072)
 # FindOpenGL prefers GLVND by default when available.
@@ -73,6 +73,12 @@ if(POLICY CMP0167)
 # https://cmake.org/cmake/help/latest/policy/CMP0167.html
 
   cmake_policy(SET CMP0167 NEW)
+endif()
+if(POLICY CMP0175)
+# add_custom_command(TARGET) does not support DEPENDS; suppress error and keep
+# existing behaviour (DEPENDS is silently ignored in this form).
+# https://cmake.org/cmake/help/latest/policy/CMP0175.html
+  cmake_policy(SET CMP0175 OLD)
 endif()
 IF(CMAKE_CXX_COMPILER_VERSION VERSION_LESS 7.0.0)
   set (CMAKE_CXX_STANDARD 14)
@@ -334,24 +340,24 @@ INCLUDE(YadePythonHelpers)
 
 
 IF (DEFINED PYTHON_EXECUTABLE)
-	SET(USER_DEFINED_PYTHON_EX ${PYTHON_EXECUTABLE})
+	SET(Python3_EXECUTABLE "${PYTHON_EXECUTABLE}" CACHE FILEPATH "user defined python executable" FORCE)
 ENDIF()
-
 
 #Find python
 IF(${PYTHON_VERSION} EQUAL -1)
-	FIND_PACKAGE(PythonInterp)
+	find_package(Python3 COMPONENTS Interpreter)
 ELSE()
-	FIND_PACKAGE(PythonInterp ${PYTHON_VERSION})
+	find_package(Python3 ${PYTHON_VERSION} COMPONENTS Interpreter)
 ENDIF()
-IF(NOT PythonInterp_FOUND)
+IF(NOT Python3_Interpreter_FOUND)
 	MESSAGE(FATAL_ERROR "No python version could be found in your system.")
 ENDIF()
 
-IF (DEFINED USER_DEFINED_PYTHON_EX)
-	MESSAGE("Using user defined PYTHON_EXECUTABLE: ${USER_DEFINED_PYTHON_EX}")
-	SET(PYTHON_EXECUTABLE ${USER_DEFINED_PYTHON_EX} CACHE FILEPATH "user defined python executable" FORCE)
-ENDIF()
+# Set backward-compatible variable names used throughout the build files
+SET(PYTHON_EXECUTABLE "${Python3_EXECUTABLE}" CACHE FILEPATH "Python interpreter" FORCE)
+SET(PYTHON_VERSION_STRING "${Python3_VERSION}")
+SET(PYTHON_VERSION_MAJOR "${Python3_VERSION_MAJOR}")
+SET(PYTHON_VERSION_MINOR "${Python3_VERSION_MINOR}")
 
 #Check if specified version is found
 IF(${PYTHON_VERSION} EQUAL -1) # If -1, accept any Python version.
