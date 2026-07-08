@@ -34,7 +34,7 @@ try {
 	             (boost::python::arg("centers"), boost::python::arg("radii")),
 	             "Make packing from given list, same format as for constructor. Discards current data.")
 	        .def("load", &SpherePack::fromFile, (boost::python::arg("fileName")), "Load packing from external text file (current data will be discarded).")
-	        .def("save", &SpherePack::toFile, (boost::python::arg("fileName")), "Save packing to external text file (will be overwritten).")
+	        .def("save", &SpherePack::toFile, (boost::python::arg("fileName")), "Save packing to external text file (will be overwritten) in a 'x y z r :yref:`clumpId<Body.clumpId>`' format.")
 	        .def("fromSimulation", &SpherePack::fromSimulation, "Make packing corresponding to the current simulation. Discards current data.")
 	        //The basic sphere generator
 	        .def("makeCloud",

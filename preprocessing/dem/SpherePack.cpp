@@ -83,10 +83,10 @@ void SpherePack::toFile(const string& fname) const
 		throw runtime_error("Unable to open file `" + fname + "'");
 	}
 	if (cellSize != Vector3r::Zero()) {
-		f << "##PERIODIC:: " << cellSize[0] << " " << cellSize[1] << " " << cellSize[2] << endl;
+		f << "##PERIODIC:: " << yade::math::toString(cellSize[0]) << " " << yade::math::toString(cellSize[1]) << " " << yade::math::toString(cellSize[2]) << endl;
 	}
 	for (const Sph& s : pack) {
-		f << s.c[0] << " " << s.c[1] << " " << s.c[2] << " " << s.r << " " << s.clumpId << endl;
+		f << yade::math::toString(s.c[0]) << " " << yade::math::toString(s.c[1]) << " " << yade::math::toString(s.c[2]) << " " << yade::math::toString(s.r) << " " << s.clumpId << endl;
 	}
 	f.close();
 };

@@ -77,6 +77,7 @@ Small Enhancements
 ******************
   Fix importing ascii stl's with exotic locale (e.g. LC_NUMERIC=fr_FR.UTF-8) (!1181)
   Add Qt6 GUI build support (!1183)
+  Improve spherepack save (!1186)
 
 Testing & Continuous Integration
 ********************************
