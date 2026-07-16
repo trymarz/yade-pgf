@@ -65,7 +65,7 @@ public:
 	virtual ~ViscElPhys();
 	Real R;
 	// clang-format off
-	YADE_CLASS_BASE_DOC_ATTRS_CTOR(ViscElPhys,FrictPhys,"IPhys created from :yref:`ViscElMat`, for use with :yref:`Law2_ScGeom_ViscElPhys_Basic`.",
+	YADE_CLASS_BASE_DOC_ATTRS_CTOR(ViscElPhys,FrictPhys,"IPhys to describe a visco-elastic(-plastic) behaviour, with also possibility for rolling resistance. Used with :yref:`Law2_ScGeom_ViscElPhys_Basic`.",
 		((Real,cn,NaN,,"Normal viscous constant"))
 		((Real,cs,NaN,,"Shear viscous constant"))
 		((Real,Fn,0.0,,"Linear-elastic part of the normal force of the contact"))
@@ -95,10 +95,33 @@ REGISTER_SERIALIZABLE(ViscElPhys);
 // Uses the rule of consecutively connection.
 class Ip2_ViscElMat_ViscElMat_ViscElPhys : public IPhysFunctor {
 public:
-	static Real epsilon;
+	static Real epsilon; // some number that will be used in an iterative determination of cn from en, when necessary
 	void        go(const shared_ptr<Material>& b1, const shared_ptr<Material>& b2, const shared_ptr<Interaction>& interaction) override;
 	// clang-format off
-	YADE_CLASS_BASE_DOC_ATTRS(Ip2_ViscElMat_ViscElMat_ViscElPhys,IPhysFunctor,"Convert 2 instances of :yref:`ViscElMat` to :yref:`ViscElPhys` using the rule of consecutive connection.",
+	YADE_CLASS_BASE_DOC_ATTRS(Ip2_ViscElMat_ViscElMat_ViscElPhys,IPhysFunctor,"Convert 2 instances of :yref:`ViscElMat` to the visco-elastic-plastic :yref:`ViscElPhys` contact description. As for the shear plasticity, "
+	"the friction coefficient $\\mu  = \\tan \\phi$ is always evaluated as "
+      "$\\tan(\\min(\\phi_1,\\phi_2))$, where $\\phi_1$ and $\\phi_2$ are respectively the friction angle of particle 1 "
+      "and 2. For the other parameters, depending on the material input, the equivalent parameters of the contact "
+      "($K_n$,$C_n$,$K_s$,$C_s$,$\\phi$) are evaluated differently. In the following, the quantities in parenthesis are "
+      "the material constant which are precised for each particle. They are then associated to particle 1 and 2 (e.g. "
+      "$kn_1$,$kn_2$,$cn_1$...), and should not be confused with the equivalent parameters of the contact "
+      "($K_n$,$C_n$,$K_s$,$C_s$,$\\phi$). \n\n - If contact time (tc), normal and tangential restitution coefficient "
+      "(en,et) are precised, the equivalent parameters are evaluated following the formulation of "
+      "Pournin [Pournin2001]_.\n\n - If normal and tangential stiffnesses (kn, ks) and damping constant (cn,cs) "
+      "of each particle are precised, the equivalent stiffnesses and damping constants of each contact made of "
+      "two particles 1 and 2 is made $A = 2\\frac{a_1 a_2}{a_1 + a_2}$, where A is $K_n$, $K_s$, $C_n$ and $C_s$, "
+      "and 1 and 2 refer to the value associated to particle 1 and 2.\n\n - Alternatively it is possible to precise "
+      "the Young's modulus (young) and Poisson's ratio (poisson) instead of the normal and spring constant (kn and ks). "
+      "In this case, the equivalent parameters are evaluated the same way as the previous case with $kn_x = E_x d_x$, "
+      "$ks_x = v_x kn_x$, where $E_x$, $v_x$ and $d_x$ are Young's modulus, Poisson's ratio and diameter of particle x. "
+      "\n\n - If Young's modulus (young), Poisson's ratio (poisson), normal and tangential restitution coefficient (en,et)"
+      " are precised, the equivalent stiffnesses are evaluated as previously:  $K_n = 2\\frac{kn_1 kn_2}{kn_1 + kn_2}$, "
+      "$kn_x = E_x d_x$, $K_s = 2(ks_1 ks_2)/(ks_1 + ks_2)$, $ks_x = v kn_x$. The damping constant is computed at each "
+      "contact in order to fulfill the normal restitution coefficient $e_n = (en_1 + en_2)/2$. This is "
+      "achieved resolving numerically equation 21 of [Schwager2007]_ (There is in fact a mistake in the article from "
+      "equation 18 to 19, so that there is a change in sign).  Be careful in this configuration the tangential "
+      "restitution coefficient is set to 1 (no tangential damping). This formulation imposes directly the normal "
+      "restitution coefficient of the collisions instead of the damping constant.",
  		((shared_ptr<MatchMaker>,tc,,,"Instance of :yref:`MatchMaker` determining contact time"))
 		((shared_ptr<MatchMaker>,en,,,"Instance of :yref:`MatchMaker` determining restitution coefficient in normal direction"))
 		((shared_ptr<MatchMaker>,et,,,"Instance of :yref:`MatchMaker` determining restitution coefficient in tangential direction"))
@@ -121,33 +144,11 @@ public:
 	FUNCTOR2D(ScGeom, ViscElPhys);
 	// clang-format off
 	YADE_CLASS_BASE_DOC(Law2_ScGeom_ViscElPhys_Basic,LawFunctor,"Linear visco-elastic(-plastic) contact model operating on interactions with geom and phys of :yref:`ScGeom` and :yref:`ViscElPhys` types. "
-      "The contact law is visco-elastic in the normal direction, and visco-elastic frictional in the tangential direction. "
+      "The contact law is visco-elastic in the normal direction, with a cut-off to prevent any attractive forces, and visco-elastic frictional in the tangential direction. "
       "The normal contact is modelled as a spring of equivalent stiffness $k_n$, placed in parallel with a viscous damper "
-      "of equivalent viscosity $c_n$. As for the tangential contact, it is made of a spring-dashpot system (in parallel "
+      "of equivalent viscosity $c_n$ (plus the possible cut-off modification). As for the tangential contact, it is made of a spring-dashpot system (in parallel "
       "with equivalent stiffness $k_s$ and viscosity $c_s$) in serie with a slider of friction coefficient "
-      "$\\mu  = \\tan \\phi$.\n\nThe friction coefficient $\\mu  = \\tan \\phi$ is always evaluated as "
-      "$\\tan(\\min(\\phi_1,\\phi_2))$, where $\\phi_1$ and $\\phi_2$ are respectively the friction angle of particle 1 "
-      "and 2. For the other parameters, depending on the material input, the equivalent parameters of the contact "
-      "($K_n$,$C_n$,$K_s$,$C_s$,$\\phi$) are evaluated differently. In the following, the quantities in parenthesis are "
-      "the material constant which are precised for each particle. They are then associated to particle 1 and 2 (e.g. "
-      "$kn_1$,$kn_2$,$cn_1$...), and should not be confused with the equivalent parameters of the contact "
-      "($K_n$,$C_n$,$K_s$,$C_s$,$\\phi$). \n\n - If contact time (tc), normal and tangential restitution coefficient "
-      "(en,et) are precised, the equivalent parameters are evaluated following the formulation of "
-      "Pournin [Pournin2001]_.\n\n - If normal and tangential stiffnesses (kn, ks) and damping constant (cn,cs) "
-      "of each particle are precised, the equivalent stiffnesses and damping constants of each contact made of "
-      "two particles 1 and 2 is made $A = 2\\frac{a_1 a_2}{a_1 + a_2}$, where A is $K_n$, $K_s$, $C_n$ and $C_s$, "
-      "and 1 and 2 refer to the value associated to particle 1 and 2.\n\n - Alternatively it is possible to precise "
-      "the Young's modulus (young) and Poisson's ratio (poisson) instead of the normal and spring constant (kn and ks). "
-      "In this case, the equivalent parameters are evaluated the same way as the previous case with $kn_x = E_x d_x$, "
-      "$ks_x = v_x kn_x$, where $E_x$, $v_x$ and $d_x$ are Young's modulus, Poisson's ratio and diameter of particle x. "
-      "\n\n - If Young's modulus (young), Poisson's ratio (poisson), normal and tangential restitution coefficient (en,et)"
-      " are precised, the equivalent stiffnesses are evaluated as previously:  $K_n = 2\\frac{kn_1 kn_2}{kn_1 + kn_2}$, "
-      "$kn_x = E_x d_x$, $K_s = 2(ks_1 ks_2)/(ks_1 + ks_2)$, $ks_x = v kn_x$. The damping constant is computed at each "
-      "contact in order to fulfill the normal restitution coefficient $e_n = (en_1 + en_2)/2$. This is "
-      "achieved resolving numerically equation 21 of [Schwager2007]_ (There is in fact a mistake in the article from "
-      "equation 18 to 19, so that there is a change in sign).  Be careful in this configuration the tangential "
-      "restitution coefficient is set to 1 (no tangential damping). This formulation imposes directly the normal "
-      "restitution coefficient of the collisions instead of the damping constant.");
+      "$\\mu  = \\tan \\phi$.");
 	// clang-format on
 	DECLARE_LOGGER;
 };
