@@ -29,14 +29,14 @@ class ViscElMat : public FrictMat {
 public:
 	virtual ~ViscElMat();
 	// clang-format off
-	YADE_CLASS_BASE_DOC_ATTRS_CTOR(ViscElMat,FrictMat,"Material for simple viscoelastic model of contact from analytical solution of a pair spheres interaction problem  [Pournin2001]_ .",
+	YADE_CLASS_BASE_DOC_ATTRS_CTOR(ViscElMat,FrictMat,"Material for simple viscoelastic model of contact from analytical solution of a pair spheres interaction problem [Pournin2001]_ .",
 		((Real,tc,NaN,,"Contact time"))
 		((Real,en,NaN,,"Restitution coefficient in normal direction"))
 		((Real,et,NaN,,"Restitution coefficient in tangential direction"))
-		((Real,kn,NaN,,"Normal elastic stiffness. Attention, this parameter cannot be set if tc, en or es is defined!"))
-		((Real,cn,NaN,,"Normal viscous constant. Attention, this parameter cannot be set if tc, en or es is defined!"))
-		((Real,ks,NaN,,"Shear elastic stiffness. Attention, this parameter cannot be set if tc, en or es is defined!"))
-		((Real,cs,NaN,,"Shear viscous constant. Attention, this parameter cannot be set if tc, en or es is defined!"))
+		((Real,kn,NaN,,"Normal elastic stiffness. Attention, this parameter cannot be set if :yref:`tc<ViscElMat.tc>`, :yref:`en<ViscElMat.en>` or :yref:`et<ViscElMat.et>` is defined!"))
+		((Real,cn,NaN,,"Normal viscous constant. Attention, this parameter cannot be set if :yref:`tc<ViscElMat.tc>`, :yref:`en<ViscElMat.en>` or :yref:`et<ViscElMat.et>` is defined!"))
+		((Real,ks,NaN,,"Shear elastic stiffness. Attention, this parameter cannot be set if :yref:`tc<ViscElMat.tc>`, :yref:`en<ViscElMat.en>` or :yref:`et<ViscElMat.et>` is defined!"))
+		((Real,cs,NaN,,"Shear viscous constant. Attention, this parameter cannot be set if :yref:`tc<ViscElMat.tc>`, :yref:`en<ViscElMat.en>` or :yref:`et<ViscElMat.et>` is defined!"))
 		((Real,mR,0.0,,"Rolling resistance, see [Zhou1999536]_."))
 		((bool,lubrication,false,,"option to apply lubrication forces when material is defined from young, poisson and en (restitution coefficient)."))
 		((Real,viscoDyn,1e-3,,"if lubrication is activated, surrounding fluid dynamic viscosity considered to evaluate the effective restitution coefficient as a function of the local Stokes number of the collision."))
@@ -120,7 +120,7 @@ public:
 public:
 	FUNCTOR2D(ScGeom, ViscElPhys);
 	// clang-format off
-	YADE_CLASS_BASE_DOC(Law2_ScGeom_ViscElPhys_Basic,LawFunctor,"Linear viscoelastic model operating on ScGeom and ViscElPhys. "
+	YADE_CLASS_BASE_DOC(Law2_ScGeom_ViscElPhys_Basic,LawFunctor,"Linear visco-elastic(-plastic) contact model operating on interactions with geom and phys of :yref:`ScGeom` and :yref:`ViscElPhys` types. "
       "The contact law is visco-elastic in the normal direction, and visco-elastic frictional in the tangential direction. "
       "The normal contact is modelled as a spring of equivalent stiffness $k_n$, placed in parallel with a viscous damper "
       "of equivalent viscosity $c_n$. As for the tangential contact, it is made of a spring-dashpot system (in parallel "
