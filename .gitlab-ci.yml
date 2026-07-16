@@ -29,7 +29,7 @@ stages:
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
   GIT_CLEAN_FLAGS: -ffdx
-  #GIT_STRATEGY: clone
+  GIT_STRATEGY: clone
 
 # See: https://docs.gitlab.com/ee/ci/yaml/#retry
 # Skip repeats when:

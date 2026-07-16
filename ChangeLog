@@ -73,6 +73,7 @@ Packaging & Build Improvements
   Set Draft to use a lot less CI pipeline jobs, remember to do a full run before merging! (!1180)
   Drop CI/packaging support for Ubuntu < 22.04, Debian bullseye/bookworm and ppc64el (!1184)
   Fix CGAL/C++17 compatibility: only fall back to C++14 for old coinutils when CGAL is disabled, since CGAL hard-requires C++17 (!1184)
+  gitlab-runner now does a full clone of repo, because faster approach was breaking often. (!1192)
 
 Small Enhancements
 ******************
