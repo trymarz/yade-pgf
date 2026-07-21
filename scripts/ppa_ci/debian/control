@@ -58,13 +58,11 @@ Pre-Depends:
 Multi-Arch: foreign
 Depends:
  gnuplot,
- gtk2-engines-pixbuf,
  libyadedaily (= ${binary:Version}),
  mpi-default-bin,
  python3-yadedaily (= ${binary:Version}),
  python3-ipython | ipython3,
  python3-mpi4py,
- python3-pyqt5.qtwebkit,
  ${python:Depends},
  ${misc:Depends}
 Description: Platform for discrete element modeling
@@ -88,7 +86,6 @@ Pre-Depends:
  ${misc:Pre-Depends}
 Multi-Arch: same
 Depends:
- libopenblas-dev [amd64 i386 ia64 kfreebsd-amd64 kfreebsd-i386 powerpc],
  ${misc:Depends},
  ${shlibs:Depends}
 Description: Platform for discrete element modeling. Libraries
@@ -118,11 +115,9 @@ Depends:
  python3-pil,
  python3-pyqt5,
  python3-pyqt5.qtsvg,
- python3-pyqt5.qtwebkit,
  python3-tk,
  python3-xlib,
  python3-ipython | ipython3,
- python3-future,
  python3-mpmath,
  ${misc:Depends},
  ${python:Depends},

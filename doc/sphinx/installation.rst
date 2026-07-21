@@ -221,23 +221,13 @@ They can be installed from the command line of your Linux distribution, assuming
 		dpkg-dev build-essential g++ python3-dev python3-ipython python3-matplotlib \
 		libsqlite3-dev python3-numpy python3-tk gnuplot libgts-dev python3-pygraphviz \
 		libvtk9-dev libeigen3-dev python3-xlib python3-pyqt5 pyqt5-dev-tools python3-mpi4py \
-		python3-pyqt5.qtwebkit gtk2-engines-pixbuf python3-pyqt5.qtsvg libqglviewer-dev-qt5 \
+		python3-pyqt5.qtsvg libqglviewer-dev-qt5 \
 		python3-pil libjs-jquery python3-sphinx python3-git libxmu-dev libxi-dev libcgal-dev \
 		help2man libbz2-dev zlib1g-dev libopenblas-dev libsuitesparse-dev \
-		libmetis-dev python3-bibtexparser python3-future coinor-clp coinor-libclp-dev \
+		libmetis-dev python3-bibtexparser coinor-clp coinor-libclp-dev \
 		python3-mpmath libmpfr-dev libmpfrc++-dev libmpc-dev texlive-xetex python3-pickleshare python3-ipython-genutils
 
-.. note:: Qt Web component package name changes on newer Debian releases.
-
-	* On Debian 12 (bookworm) and earlier, Ubuntu LTS up to 24.04: the GUI help/web view uses the legacy ``python3-pyqt5.qtwebkit`` package if available (falling back to WebEngine if only that is installed).
-	* On Debian 13 (trixie) and Debian 14 (forky) the ``qtwebkit`` binary packages are removed from the archive. Install ``python3-pyqt5.qtwebengine`` to provide the WebEngine backend. Yade will automatically switch to ``QtWebEngineWidgets`` when ``QtWebKit`` imports fail.
-
-If you maintain your own dependency list for trixie/forky replace ``python3-pyqt5.qtwebkit`` with:
-
-::
-
-	python3-pyqt5.qtwebengine
-
+.. note:: The GUI help/web view uses ``QtWebKit`` if available, falling back to ``QtWebEngineWidgets`` automatically otherwise. Neither is a hard dependency; install ``python3-pyqt5.qtwebkit`` (Debian 12/Ubuntu 24.04 and earlier) or ``python3-pyqt5.qtwebengine`` (Debian 13/14, Ubuntu 26.04, where ``qtwebkit`` binary packages were removed from the archive) if you want that feature.
 
 If you are using other distributions than Debian or its derivatives you should
 install by yourself the software packages listed above. Their names in other distributions can differ from the

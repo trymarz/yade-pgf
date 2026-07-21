@@ -74,16 +74,6 @@ if args.dist in ('forky', 'resolute'):
 			        end=''
 			)
 
-# python3-pyqt5.qtwebkit binary packages were dropped from the Debian archive starting with
-# trixie (and are not present in forky either); see doc/sphinx/installation.rst.
-if args.dist in ('trixie', 'forky', 'resolute'):
-	with fileinput.FileInput(dirpathyade + '/debian/control', inplace=True) as file:
-		for line in file:
-			if 'python3-pyqt5.qtwebkit' not in line:
-				print(line, end='')
-			else:
-				print(line.replace('python3-pyqt5.qtwebkit', 'python3-pyqt5.qtwebengine'), end='')
-
 # Prepare high precision package.
 handlePrec = {'long-double': ('18', 2), 'float128': ('33', 1), 'mpfr150': ('150', 1)}
 if (args.prec in handlePrec):

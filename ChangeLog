@@ -74,6 +74,7 @@ Packaging & Build Improvements
   Drop CI/packaging support for Ubuntu < 22.04, Debian bullseye/bookworm and ppc64el (!1184)
   Fix CGAL/C++17 compatibility: only fall back to C++14 for old coinutils when CGAL is disabled, since CGAL hard-requires C++17 (!1184)
   gitlab-runner now does a full clone of repo, because faster approach was breaking often. (!1192)
+  Drop dead yadedaily deps python3-future, python3-pyqt5.qtwebkit, gtk2-engines-pixbuf; fixes uninstallable package on Ubuntu 26.04 resolute
 
 Small Enhancements
 ******************
