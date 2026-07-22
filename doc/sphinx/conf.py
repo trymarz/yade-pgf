@@ -340,10 +340,10 @@ def boostFuncSignature(name, obj, removeSelf=False):
 
 def fixSignature(app, what, name, obj, options, signature, return_annotation):
 	#print what,name,obj,signature#,dir(obj)
-	if what == 'attribute':
+	if what in ('attribute', 'property'):
 		doc = str(obj.__doc__)
 		ret = ''
-		m = re.match('.*:ydefault:`(.*?)`.*', doc)
+		m = re.search(r':ydefault:`(.*?)`', doc, re.DOTALL)
 		if m:
 			typ = ''
 			#try:
@@ -360,14 +360,14 @@ def fixSignature(app, what, name, obj, options, signature, return_annotation):
 			if dfl != '':
 				ret += ' (=' + dfl + '%s)' % typ
 			else:
-				ret += ' (=uninitalized%s)' % typ
+				ret += ' (=uninitialized%s)' % typ
 		#m=re.match('.*\[(.{,8})\].*',doc)
 		#m=re.match('.*:yunit:`(.?*)`.*',doc)
 		#if m:
 		#	units=m.group(1)
 		#	print '@@@@@@@@@@@@@@@@@@@@@',name,units
 		#	ret+=' ['+units+']'
-		return ret, None
+		return ret or None, None
 	elif what == 'class':
 		ret = []
 		if len(obj.__bases__) > 0:
@@ -417,6 +417,9 @@ def parse_ystaticattr(env, attr, attrnode):
 ###################
 ## http://groups.google.com/group/sphinx-dev/browse_thread/thread/35b8071ffe9a8feb
 def setup(app):
+	from sphinx.ext.autodoc import PropertyDocumenter
+	PropertyDocumenter.directivetype = 'attribute'
+
 	from sphinx.highlighting import lexers
 	from pygments.lexers.compiled import CppLexer
 	lexers['cpp'] = CppLexer(tabsize=3)
