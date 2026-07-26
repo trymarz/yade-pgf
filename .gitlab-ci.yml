@@ -8,7 +8,7 @@
 # image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
 # image: registry.gitlab.com/yade-dev/docker-yade:debian-testing-nogui
 # image: registry.gitlab.com/yade-dev/docker-yade:debian-testing-arm64 # jobs currently disabled, see note below
-# image: registry.gitlab.com/yade-dev/docker-yade:suse15
+# image: registry.gitlab.com/yade-dev/docker-yade:suse16
 # image: registry.gitlab.com/yade-dev/docker-yade:archlinux-current
 #
 # Support policy: we drop CI/packaging support for an Ubuntu or Debian release once that
@@ -442,14 +442,22 @@ make_opposite:
     - echo $EXTRA_CMAKE_ARGS
   image: registry.gitlab.com/yade-dev/docker-yade:debian-testing
 
-make_suse15:
+make_suse:
   <<: *make_definition
   <<: *artifacts_definition
   <<: *skip_WIP_and_Draft
   before_script:
-    - export CXXFLAGS="-Wno-int-in-bool-context -Wno-comment $CXXFLAGS"
+    # GCC 15 (Leap 16) enables -Wtemplate-body by default, which flags
+    # CGAL/boost/graph/iterator.h's Halfedge_around_*_iterator::operator
+    # bool() (calls a base() that only exists once the template is
+    # actually instantiated with a real Graph) - combined with -Werror
+    # that turns a template body GCC previously never diagnosed into a
+    # hard build failure. Not a yade bug: same root cause every time.
+    - export CXXFLAGS="-Wno-int-in-bool-context -Wno-comment -Wno-template-body $CXXFLAGS"
+    - export EXTRA_CMAKE_ARGS="-DUSE_QT6=ON -DENABLE_MPI=OFF $EXTRA_CMAKE_ARGS"
     - echo $CXXFLAGS
-  image: registry.gitlab.com/yade-dev/docker-yade:suse15
+    - echo $EXTRA_CMAKE_ARGS
+  image: registry.gitlab.com/yade-dev/docker-yade:suse16
 
 make_nogui:
   <<: *make_definition
@@ -656,14 +664,14 @@ test_opposite:
     - make_opposite
   needs: ["make_opposite"]
 
-test_suse15:
+test_suse:
   <<: *test_definition
   <<: *skip_GUI_TEST
   <<: *skip_WIP_and_Draft
-  image: registry.gitlab.com/yade-dev/docker-yade:suse15
+  image: registry.gitlab.com/yade-dev/docker-yade:suse16
   dependencies:
-    - make_suse15
-  needs: ["make_suse15"]
+    - make_suse
+  needs: ["make_suse"]
 
 test_nogui:
   <<: *test_definition
@@ -1007,13 +1015,13 @@ check_opposite:
     - make_opposite
   needs: ["make_opposite"]
 
-check_suse15:
+check_suse:
   <<: *check_definition
   <<: *skip_WIP_and_Draft
-  image: registry.gitlab.com/yade-dev/docker-yade:suse15
+  image: registry.gitlab.com/yade-dev/docker-yade:suse16
   dependencies:
-    - make_suse15
-  needs: ["make_suse15"]
+    - make_suse
+  needs: ["make_suse"]
 
 check_clang:
   <<: *check_definition

@@ -24,15 +24,24 @@ allTests = [
 # yapf: enable
 
 # add any new yade module (ugly...)
-import yade.export, yade.linterpolation, yade.log, yade.pack, yade.plot, yade.post2d, yade.timing, yade.utils, yade.ymport, yade.geom, yade.gridpfacet, yade.libVersions, yade.mpy
+import yade.export, yade.linterpolation, yade.log, yade.pack, yade.plot, yade.post2d, yade.timing, yade.utils, yade.ymport, yade.geom, yade.gridpfacet, yade.libVersions
 
 allModules = (
         yade.export, yade.linterpolation, yade.log, yade.pack, yade.plot, yade.post2d, yade.timing, yade.utils, yade.ymport, yade.geom, yade.gridpfacet,
-        yade.libVersions, yade.mpy
+        yade.libVersions
 )
 try:
 	import yade.qt
 	allModules += (yade.qt,)
+except ImportError:
+	pass
+
+try:
+	# mpi4py may be installed but fail to import (e.g. its MPI runtime libs are
+	# outside the default linker path, as on openSUSE), not just be absent -
+	# either way this must not take down the whole test module import.
+	import yade.mpy
+	allModules += (yade.mpy,)
 except ImportError:
 	pass
 
