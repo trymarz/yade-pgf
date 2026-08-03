@@ -96,7 +96,7 @@ O.engines = [
         #To plot the wall normal position of the spheres with time
         PyRunner(command='plotPos()', virtPeriod=0.01, label='plot'),
         # Integrate the equation and calculate the new position/velocities...
-        NewtonIntegrator(gravity=gravityVector, label='newtonIntegr')
+        NewtonIntegrator(damping=0.2, gravity=gravityVector, label='newtonIntegr')
 ]
 #save the initial configuration to be able to recharge the simulation starting configuration easily
 O.saveTmp()

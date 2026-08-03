@@ -60,7 +60,7 @@ O.engines = [
                 [Law2_ScGeom_FrictPhys_CundallStrack(sphericalBodies=False)
                 ]  #ScGeom and that Law2 also apply to LevelSet shapes, but sphericalBodies=False is required in the general case
         ),
-        NewtonIntegrator(),
+        NewtonIntegrator(damping=0.2),
         VTKRecorder(recorders=["lsBodies"], iterPeriod=1)  # multiblockLS=True # if you prefer a unique output file
 ]
 O.bodies[0].state.angVel = (1, 0, 0)

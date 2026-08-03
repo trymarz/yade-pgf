@@ -65,7 +65,7 @@ O.engines = [
         InteractionLoop(
                 [Ig2_Sphere_Sphere_ScGeom(interactionDetectionFactor=EnlargeFactor, label='ig2ss')], [Ip2_CpmMat_CpmMat_CpmPhys()], [Law2_ScGeom_CpmPhys_Cpm()]
         ),
-        NewtonIntegrator(),
+        NewtonIntegrator(damping=0.2),
         Peri3dController(
                 goal=(20e-4, -6e-4, 0, -2e6, 3e-4, 2e6),  # Vector6 of prescribed final values (xx,yy,zz, yz,zx,xy)
                 stressMask=0b101100,  # prescribed ex,ey,sz,syz,ezx,sxy;   e..strain;  s..stress

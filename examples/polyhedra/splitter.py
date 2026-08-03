@@ -38,7 +38,7 @@ O.engines = [
                 [Ig2_Wall_Polyhedra_PolyhedraGeom(), Ig2_Polyhedra_Polyhedra_PolyhedraGeom()], [Ip2_PolyhedraMat_PolyhedraMat_PolyhedraPhys()],
                 [Law2_PolyhedraGeom_PolyhedraPhys_Volumetric()]
         ),
-        NewtonIntegrator(),
+        NewtonIntegrator(damping=0.2),
         PolyhedraSplitter(iterPeriod=100),
 ]
 

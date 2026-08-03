@@ -18,7 +18,7 @@ O.engines = [
                 [Ig2_Polyhedra_Polyhedra_PolyhedraGeom(interactionDetectionFactor=factor)], [Ip2_PolyhedraMat_PolyhedraMat_PolyhedraPhys()],
                 [Law2_PolyhedraGeom_PolyhedraPhys_Volumetric()]
         ),
-        NewtonIntegrator(),
+        NewtonIntegrator(damping=0.2),
 ]
 
 O.dt = 0.00001

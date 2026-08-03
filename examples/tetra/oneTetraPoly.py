@@ -29,7 +29,7 @@ O.engines = [
         ForceResetter(),
         InsertionSortCollider([Bo1_Polyhedra_Aabb()]),
         InteractionLoop([], [], []),
-        NewtonIntegrator(),
+        NewtonIntegrator(damping=0.2),
         PyRunner(iterPeriod=1, command="changeVelocity()"),
 ]
 O.step()

@@ -5,7 +5,7 @@ O.engines = [
         ForceResetter(),
         InsertionSortCollider([Bo1_Sphere_Aabb()]),
         InteractionLoop([Ig2_Sphere_Sphere_ScGeom()], [Ip2_FrictMat_FrictMat_FrictPhys()], [Law2_ScGeom_FrictPhys_CundallStrack()]),
-        NewtonIntegrator(label='newton', gravity=(0, 0, -9.81))
+        NewtonIntegrator(damping=0.2, label='newton', gravity=(0, 0, -9.81))
 ]
 O.dt = PWaveTimeStep()
 

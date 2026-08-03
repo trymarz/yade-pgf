@@ -6,7 +6,7 @@ O.engines = [
                 Bo1_Facet_Aabb(),
         ]),
         InteractionLoop([Ig2_Sphere_Sphere_ScGeom(), Ig2_Facet_Sphere_ScGeom()], [Ip2_FrictMat_FrictMat_FrictPhys()], [Law2_ScGeom_FrictPhys_CundallStrack()]),
-        NewtonIntegrator(),
+        NewtonIntegrator(damping=0.2),
 ]
 
 s1 = sphere((2, 2, 0), 1)

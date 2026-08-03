@@ -70,7 +70,7 @@ O.engines = [
         ForceResetter(),
         InsertionSortCollider([Bo1_Sphere_Aabb()]),
         InteractionLoop([Ig2_Sphere_Sphere_ScGeom()], [Ip2_FrictMat_FrictMat_FrictPhys()], [Law2_ScGeom_FrictPhys_CundallStrack()]),
-        NewtonIntegrator(),
+        NewtonIntegrator(damping=0.2),
         Peri3dController(
                 goal=(-1e7, -1e7, -1e7, 0, 0, 0),  # Vector6 of prescribed final values
                 stressMask=0b000111,
@@ -90,7 +90,7 @@ O.engines = [
         ForceResetter(),
         InsertionSortCollider([Bo1_Sphere_Aabb()]),
         InteractionLoop([Ig2_Sphere_Sphere_ScGeom()], [Ip2_FrictMat_FrictMat_FrictPhys()], [Law2_ScGeom_FrictPhys_CundallStrack()]),
-        NewtonIntegrator(),
+        NewtonIntegrator(damping=0.2),
         Peri3dController(
                 goal=(-1e7, -1e7, -4e-1, 0, 0, 0),  # Vector6 of prescribed final values
                 stressMask=0b000011,

@@ -51,7 +51,7 @@ O.engines = [
                 [Ip2_PolyhedraMat_PolyhedraMat_PolyhedraPhys()],
                 [Law2_PolyhedraGeom_PolyhedraPhys_Volumetric()],
         ),
-        NewtonIntegrator(label='newton'),
+        NewtonIntegrator(damping=0.2, label='newton'),
 ]
 
 O.dt = 0.00001

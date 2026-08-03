@@ -35,7 +35,7 @@ O.engines = [
                 [Ip2_FrictMat_FrictMat_FrictPhys(), Ip2_CpmMat_CpmMat_CpmPhys(cohesiveThresholdIter=1)],
                 [Law2_ScGeom_FrictPhys_CundallStrack(), Law2_ScGeom_CpmPhys_Cpm()]
         ),
-        NewtonIntegrator(gravity=(0, 0, -30)),
+        NewtonIntegrator(damping=0.2, gravity=(0, 0, -30)),
 ]
 O.dt = PWaveTimeStep()
 

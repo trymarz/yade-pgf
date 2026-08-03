@@ -36,7 +36,7 @@ O.engines = [
                         Ip2_FrictMat_FrictMat_FrictPhys(),
                 ], [Law2_ScGeom_CpmPhys_Cpm(), Law2_ScGeom_FrictPhys_CundallStrack()]
         ),
-        NewtonIntegrator(label='newton'),
+        NewtonIntegrator(damping=0.2, label='newton'),
 ]
 O.step()
 

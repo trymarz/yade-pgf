@@ -20,7 +20,7 @@ O.engines = [
                 [Ip2_FrictMat_FrictMat_FrictPhys() if scGeom else Ip2_PolyhedraMat_PolyhedraMat_PolyhedraPhys()],
                 [Law2_ScGeom_FrictPhys_CundallStrack() if scGeom else Law2_PolyhedraGeom_PolyhedraPhys_Volumetric()]
         ),
-        NewtonIntegrator(),
+        NewtonIntegrator(damping=0.2),
 ]
 
 O.dt = 0.00001

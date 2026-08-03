@@ -9,7 +9,7 @@ O.engines = [
         ForceResetter(),
         InsertionSortCollider([Bo1_Sphere_Aabb(), Bo1_Facet_Aabb()], label='isc'),
         InteractionLoop([Ig2_Sphere_Sphere_ScGeom(), Ig2_Facet_Sphere_ScGeom()], [Ip2_FrictMat_FrictMat_FrictPhys()], [Law2_ScGeom_FrictPhys_CundallStrack()]),
-        NewtonIntegrator(gravity=(0, 0, -10)),
+        NewtonIntegrator(damping=0.2, gravity=(0, 0, -10)),
         #PyRunner(command='doCellFlip()',realPeriod=5)
 ]
 

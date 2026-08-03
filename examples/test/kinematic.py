@@ -10,7 +10,7 @@ O.engines = [
         TranslationEngine(ids=[0], translationAxis=(0, 0, 1), velocity=.1) + RotationEngine(rotationAxis=(0, 0, 1), angularVelocity=1, rotateAroundZero=True) +
         RotationEngine(rotationAxis=(1, 0, 0), angularVelocity=.3, rotateAroundZero=False),
         HelixEngine(ids=[1], rotationAxis=(0, 0, 1), angularVelocity=1, linearVelocity=.1),
-        NewtonIntegrator(warnNoForceReset=False),
+        NewtonIntegrator(damping=0.2, warnNoForceReset=False),
 ]
 O.dt = 1e-6
 O.saveTmp()

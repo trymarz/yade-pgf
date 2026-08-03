@@ -29,7 +29,7 @@ if 'MPI' in yade.config.features and yade.libVersions.getAllVersionsCpp()['mpi']
 	   label="interactionLoop"
 	  ),
 	  GlobalStiffnessTimeStepper(timeStepUpdateInterval=10,label="timeStepper"),
-	  NewtonIntegrator(label="newton")
+	  NewtonIntegrator(damping=0.2,label="newton")
 	 ]
 
 	#add spheres

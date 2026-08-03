@@ -76,7 +76,7 @@ O.engines = [
                 [Ig2_Wall_LevelSet_MultiScGeom()], [Ip2_FrictMat_FrictMat_MultiFrictPhys(kn=knVal, ks=ksVal)],
                 [Law2_MultiScGeom_MultiFrictPhys_CundallStrack(sphericalBodies=False)]
         ),
-        NewtonIntegrator(gravity=Vector3(0, 0, -9.8)),
+        NewtonIntegrator(damping=0.2, gravity=Vector3(0, 0, -9.8)),
         PyRunner(command='saveData()', iterPeriod=1, initRun=True),
         VTKRecorder(recorders=["lsBodies"], iterPeriod=100, fileName='multiScGeom', initRun=True)
 ]

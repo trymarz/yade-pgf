@@ -22,7 +22,7 @@ O.engines = [
                 [Ip2_FrictMat_PolyhedraMat_FrictPhys()],
                 [Law2_ScGeom_FrictPhys_CundallStrack()],
         ),
-        NewtonIntegrator(),
+        NewtonIntegrator(damping=0.2),
 ]
 
 O.dt = 1e-7

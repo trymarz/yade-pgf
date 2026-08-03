@@ -37,7 +37,7 @@ O.engines = [
         # construct CombinedKinematicEngine with label, add (with +) TranslationEngine and RotationEngine
         CombinedKinematicEngine(ids=ids, label='combEngine') + TranslationEngine(translationAxis=(1, 0, 0), velocity=vel) +
         RotationEngine(rotationAxis=(0, 0, 1), angularVelocity=0, rotateAroundZero=True, zeroPoint=(0, 0, 0)),
-        NewtonIntegrator(),
+        NewtonIntegrator(damping=0.2),
 ]
 
 # get TranslationEngine and RotationEngine from CombinedKinematicEngine

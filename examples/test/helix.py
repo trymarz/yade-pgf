@@ -13,7 +13,7 @@ O.engines = [
                 slope=.003,
                 label='spiral'
         ),
-        NewtonIntegrator()
+        NewtonIntegrator(damping=0.2)
 ]
 O.dt = 4e-6
 O.saveTmp('initial')

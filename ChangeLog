@@ -9,6 +9,7 @@ Bug Fixes
 Breaking Changes
 *********
   Fix the stressDamping in TriaxialStressController that altered max_vel (affects default behaviour of TriaxialStressController) (!1162)
+  The default damping of NewtonIntegrator is now 0, example scripts are adapted (!1195)
 
 Code Formatting & Organization
 ******************************

@@ -13,7 +13,7 @@ O.engines = [
         InteractionLoop([Ig2_Sphere_Sphere_ScGeom()], [Ip2_FrictMat_FrictMat_CapillaryPhys()], [Law2_ScGeom_FrictPhys_CundallStrack(neverErase=1)]),
         Law2_ScGeom_CapillaryPhys_Capillarity(capillaryPressure=1e3),
         GlobalStiffnessTimeStepper(),
-        NewtonIntegrator(),
+        NewtonIntegrator(damping=0.2),
         PyRunner(command='computeThings()', iterPeriod=1)
 ]
 

@@ -13,7 +13,7 @@ O.engines = [
         RotationEngine(rotationAxis=[1, 1, 0], angularVelocity=.001, ids=[1]),
         ElasticContactLaw(label='elasticLaw'),
         PyRunner(iterPeriod=10000, command='interInfo()'),
-        NewtonIntegrator()
+        NewtonIntegrator(damping=0.2)
 ]
 
 O.dt = 1e-8

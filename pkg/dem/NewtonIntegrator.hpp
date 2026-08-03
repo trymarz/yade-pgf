@@ -72,7 +72,7 @@ public:
 	void action() override;
 	// clang-format off
 	YADE_CLASS_BASE_DOC_ATTRS_CTOR_PY(NewtonIntegrator,GlobalEngine,"Engine integrating newtonian motion equations, see :ref:`sect-motion-integration` for some theoretical background.",
-		((Real,damping,0.2,,"damping coefficient for Cundall's non viscous damping (see :ref:`NumericalDamping` and [Chareyre2005]_)"))
+		((Real,damping,0.0,,"damping coefficient for Cundall's non viscous damping (see :ref:`NumericalDamping` and [Chareyre2005]_)"))
 		((Vector3r,gravity,Vector3r::Zero(),,"Gravitational acceleration (effectively replaces GravityEngine)."))
 		((Real,maxVelocitySq,0,,"stores max. displacement, based on which we trigger collision detection. |yupdate|"))
 		((bool,exactAsphericalRot,true,,"Enable more exact body rotation integrator for :yref:`aspherical bodies<Body.aspherical>` *only*, using formulations from [delValle2023]_, [Omelyan1998]_, or [Fincham1992]_ depending on :yref:`rotAlgorithm<NewtonIntegrator.rotAlgorithm>`"))
