@@ -345,7 +345,7 @@
         </DataArray>
       </Strips>
       <Polys>
-        <DataArray type="Int64" Name="connectivity" format="ascii" RangeMin="0" RangeMax="191">
+        <DataArray type="Int64" IdType="1" Name="connectivity" format="ascii" RangeMin="0" RangeMax="191">
           0 14 12 0 13 1
           12 13 0 13 17 1
           2 20 15 14 2 15

@@ -49,6 +49,10 @@ if ('VTK' in features):
 					if (t1[3] == t2[3]):
 						section = t1[3]
 #						print("checking section: ", section, ("(non-matching lines allowed)" if (section in toSkip) else ""))
+					elif ((t1[2] == ' IdType=') and (t1[5] == 'connectivity') and (t1[5] == t2[3])):
+						# VTK 9.6.2 introduced extra field, let's work around this without adding a new referenceFile
+						line1 = line1[0:32]+line1[43:] # remove ' IdType="1"'
+						section = t2[3]
 					else:
 						raise YadeCheckError(
 						        "checkPotentialVTKRecorders cannot determine section name in file " + fname + " line: " +
