@@ -11,7 +11,9 @@ find_path(QGLVIEWER_INCLUDE_DIR
          )
 
 find_library(QGLVIEWER_LIBRARIES
-             NAMES QGLViewer QGLViewer-qt5
+# IMPORTANT! Always put numbered version first. Otherwise when debian will again switch to next QT version,
+# we will once again link against the wrong binary version of the library and we will have crashes on runtime.
+             NAMES QGLViewer-qt5 QGLViewer
 )
 
 IF(QGLVIEWER_INCLUDE_DIR AND QGLVIEWER_LIBRARIES)
