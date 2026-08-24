@@ -143,7 +143,7 @@ void SegmentedStateUpdater::initialize(Body::id_t bId, Real thickness_)
 			segState->facetRefNormal  = f->normal;
 		} else {
 			coatingThicknessVectorLen = thetaResolution * phiResolution;
-			segmentArea = 6 * Mathr::PI * pow(s->radius, 2) / coatingThicknessVectorLen * 1e6; // * 1e6 converts to squared millimiters
+			segmentArea = 4 * Mathr::PI * pow(s->radius, 2) / coatingThicknessVectorLen * 1e6; // * 1e6 converts to squared millimiters
 			segState->thetaResolution = thetaResolution;
 			segState->phiResolution   = phiResolution;
 			// initialize segment contacts here

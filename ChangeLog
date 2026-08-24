@@ -6,6 +6,7 @@ Bug Fixes
 *********
   Fix infinite recursion in OpenGLWrapper's glLineWidth() for 32-bit float Real builds, caught by GCC 15's -Werror=infinite-recursion
   Prefer libQGLViewer-qt5 over the unsuffixed libQGLViewer, fixing the exit segfault of Qt5 builds on systems where the unsuffixed library is the Qt6 build (!1207)
+  Fix the segment area computation in the coating feature (!1208)
 
 Breaking Changes
 *********
