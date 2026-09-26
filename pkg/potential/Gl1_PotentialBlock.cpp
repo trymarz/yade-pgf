@@ -441,7 +441,7 @@ void PotentialBlockVTKRecorder::action()
 	blockId->SetName("id");
 	// bodyId ##############################################################
 	//#endif
-	int                                       countID = 0;
+	//int                                       countID = 0;
 	vtkSmartPointer<vtkVectorText>            textArray2[scene->bodies->size()];
 	vtkSmartPointer<vtkPolyDataMapper>        txtMapper[scene->bodies->size()];
 	vtkSmartPointer<vtkLinearExtrusionFilter> extrude[scene->bodies->size()];
@@ -505,7 +505,7 @@ void PotentialBlockVTKRecorder::action()
 			//polydata->DeleteCells();
 
 #endif
-			countID++;
+			//countID++;
 		}
 		//vtkSmartPointer<ImpFuncPB> function = ImpFuncPB::New();
 		vtkSmartPointer<vtkImplicitBoolean> boolFunction   = vtkSmartPointer<vtkImplicitBoolean>::New();
@@ -532,13 +532,13 @@ void PotentialBlockVTKRecorder::action()
 			function->k = pb->k;
 			//Matrix3r directionCos = b->state->ori.conjugate().toRotationMatrix();  //FIXME
 			Matrix3r rotation = b->state->ori.conjugate().toRotationMatrix(); //*pb->oriAabb.conjugate();
-			int      count    = 0;
+			//int      count    = 0;
 			function->clump   = false;
 			for (int i = 0; i < 3; i++) {
 				for (int j = 0; j < 3; j++) {
 					//function->rotationMatrix[count] = directionCos(j,i);
 					function->rotationMatrix(i, j) = rotation(i, j); //input is actually direction cosine?
-					count++;
+					//count++;
 				}
 			}
 

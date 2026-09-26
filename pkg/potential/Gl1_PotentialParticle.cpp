@@ -367,7 +367,7 @@ void PotentialParticleVTKRecorder::action()
 	blockId->SetNumberOfComponents(1);
 	blockId->SetName("id");
 	// bodyId ##############################################################
-	int                                       countID = 0;
+	//int                                       countID = 0;
 	vtkSmartPointer<vtkVectorText>            textArray2[scene->bodies->size()];
 	vtkSmartPointer<vtkPolyDataMapper>        txtMapper[scene->bodies->size()];
 	vtkSmartPointer<vtkLinearExtrusionFilter> extrude[scene->bodies->size()];
@@ -387,7 +387,7 @@ void PotentialParticleVTKRecorder::action()
 			pid[0] = pbPosID->InsertNextPoint(pos);
 			pbIdCells->InsertNextCell(1, pid);
 
-			countID++;
+			//countID++;
 		}
 		//vtkSmartPointer<ImpFunc> function = ImpFunc::New();
 		function->a           = pb->a;
@@ -398,12 +398,12 @@ void PotentialParticleVTKRecorder::action()
 		function->r           = pb->r;
 		function->k           = pb->k;
 		Matrix3r directionCos = b->state->ori.conjugate().toRotationMatrix();
-		int      count        = 0;
+		//int      count        = 0;
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
 				//function->rotationMatrix[count] = directionCos(j,i);
 				function->rotationMatrix(i, j) = directionCos(j, i);
-				count++;
+				//count++;
 			}
 		}
 

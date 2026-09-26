@@ -17,8 +17,11 @@
 //when you want it compiled, you can pass -DTWOPHASEFLOW to cmake, or just uncomment the following line
 // #define TWOPHASEFLOW
 #ifdef TWOPHASEFLOW
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
 #include "FlowEngine_TwoPhaseFlowEngineT.hpp"
 #include <Eigen/SparseLU>
+#pragma GCC diagnostic pop
 
 #ifdef LINSOLV
 #include <cholmod.h>

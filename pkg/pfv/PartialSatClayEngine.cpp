@@ -464,14 +464,14 @@ void PartialSatClayEngine::setPorosityWithImageryGrid(string imageryFilePath2, F
 	}
 	std::vector<Vector3r> gridCoords;
 	std::vector<Real>     porosities;
-	int                   l = 0;
+	//int                   l = 0;
 	Real                  x, y, z, porosity2;
 	while (file >> x >> y >> z >> porosity2) {
 		gridCoords.push_back(Vector3r(x, y, z));
 		//gridCoords[l][1] = y;
 		//gridCoords[l][2] = z;
 		porosities.push_back(porosity2);
-		l++;
+		//l++;
 	}
 	cout << "finished creating coords vec and porosities" << endl;
 	Tesselation& Tes = flow.T[flow.currentTes];

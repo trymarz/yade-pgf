@@ -33,10 +33,13 @@
 // #define TAUCS_LIB //comment this if TAUCS lib is not available, it will disable PARDISO lib as well
 
 #ifdef LINSOLV
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
 #include <Eigen/CholmodSupport>
 #include <Eigen/Sparse>
 #include <Eigen/SparseCore>
 #include <cholmod.h>
+#pragma GCC diagnostic pop
 #endif
 
 #ifdef TAUCS_LIB

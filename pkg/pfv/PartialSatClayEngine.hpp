@@ -26,7 +26,10 @@
 #include <pkg/dem/TesselationWrapper.hpp>
 #include <pkg/pfv/FlowBoundingSphere.hpp>
 #include <pkg/pfv/Network.hpp>
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
 #include <Eigen/SparseLU>
+#pragma GCC diagnostic pop
 #include <cholmod.h>
 
 namespace yade { // Cannot have #include directive inside.

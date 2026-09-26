@@ -2317,7 +2317,6 @@ void TwoPhaseFlowEngine::solvePressure()
 	eSolver.factorize(aMatrix);
 	eSolver.compute(aMatrix);
 
-
 	//Solve for pressure: FIXME: add check for quality of matrix, if problematic, skip all below.
 	pressuresList = eSolver.solve(residualsList);
 

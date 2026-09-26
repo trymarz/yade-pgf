@@ -103,6 +103,7 @@ Testing & Continuous Integration
   make_suse: build against Qt6 (-DUSE_QT6=ON, matching the suse16 image's Qt6-only package set), silence a GCC-15 -Wtemplate-body false positive from CGAL's boost/graph/iterator.h, and disable MPI (openSUSE keeps its MPI runtime libs outside the default linker path, breaking mpi4py import even with yade's own MPI support built in) (!1201)
   py/tests: don't let a failing `import yade.mpy` (e.g. mpi4py installed but its MPI runtime libs unavailable) take down the whole test module import; guard it with try/except like yade.qt already is (!1201)
   Fix vtk 9.2.6 test - update reference file (!1205)
+  Fix CI pipeline with recent errors due to latest g++ version (!1211)
 
 High precision RealHP<N> ComplexHP<N>
 *************************************
