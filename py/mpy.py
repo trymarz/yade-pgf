@@ -198,7 +198,7 @@ def configure():  # calling this function will import mpi4py.MPI,
 	comm = worldComm.Split(color, key)  # if OFOAM coupled, split communicator
 	comm_slave = comm.Get_parent()
 	if comm_slave != MPI.COMM_NULL:  # if executor is a spawned worker merge comm with master
-		comm = comm_slave.Merge()
+		comm = comm_slave.Merge(high=True)  # workers after the master (high=False), so the master is always rank 0
 
 	rank = comm.Get_rank()  # set rank and numThreads
 	if rank > 0:
@@ -314,7 +314,10 @@ def initialize(np):
 
 		mprint("will spawn ", numThreads - process_count, " workers running:", yadeArgv[0], yadeArgv[1:])
 		comm_slave = MPI.COMM_WORLD.Spawn(yadeArgv[0], args=yadeArgv[1:], maxprocs=numThreads - process_count)
-		comm = comm_slave.Merge()
+		# high must be given explicitly: with equal values the group order is left to the MPI library, and
+		# Open MPI 5 then orders the groups by hashed job ids, i.e. randomly - the master ended up as rank 2
+		# while assuming rank 0 and the checks hung (https://gitlab.com/yade-dev/trunk/-/issues/397)
+		comm = comm_slave.Merge(high=False)
 		yade.runtime.opts.mpi_mode = True
 		if waitingCommands:
 			declareMasterInteractive()  #in interactive session tell the workers to ignore timeout

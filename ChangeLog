@@ -62,6 +62,7 @@ OpenMPI / OpenMP threads
   Temporarily drop support for Open MPI 5.0.9, until it is fixed. (!1160)
   Temporarily drop support for Open MPI 5.0.10, until it is fixed. (!1169)
   Temporarily drop support for Open MPI 5.0.11, until it is fixed. (!1212)
+  Bring back support for Open MPI 5.0.10 and 5.0.11. The problem was hostname length > 25 characters in the gitlab runners and random rank (since Open MPI 5) for master process, when rank 0 was expected (!1188)
 
 OpenFoam coupling
 *****************

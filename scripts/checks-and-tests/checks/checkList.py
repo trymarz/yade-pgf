@@ -58,10 +58,12 @@ def acceptOMPIVersion():  # filter out specific distros for MPI checks
 	if yade.libVersions.getAllVersionsCpp()['mpi'][1] == 'ompi:5.0.9':
 		# See: https://gitlab.com/yade-dev/trunk/-/issues/397
 		return False  # Open MPI 5.0.9 does not work.
-	if yade.libVersions.getAllVersionsCpp()['mpi'][1] == 'ompi:5.0.10':
-		return False  # Open MPI 5.0.10 does not work.
-	if yade.libVersions.getAllVersionsCpp()['mpi'][1] == 'ompi:5.0.11':
-		return False  # Open MPI 5.0.11 does not work.
+	# Open MPI 5.0.10 / 5.0.11 work. The failures in https://gitlab.com/yade-dev/trunk/-/issues/397 had two causes:
+	# (1) Open MPI <= 5.0.11 truncates the singleton id it passes to prte when the hostname is long (as in
+	#     gitlab-runner containers): fixed by a short 'hostname' in [runners.docker] of the runners' config.toml,
+	#     upstream fix in Open MPI 5.0.12;
+	# (2) mpy.py relied on the default MPI_Intercomm_merge ordering, which
+	#     is random with Open MPI 5: fixed in mpy.py (explicit 'high'). See !1188.
 	return True
 
 

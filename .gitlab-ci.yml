@@ -551,6 +551,8 @@ make_SSE:
     - export OMPI_MCA_mpi_yield_when_idle=1
     - export OMPI_MCA_btl_vader_single_copy_mechanism=none
     - export OMPI_MCA_btl=self,vader,tcp
+    - export OMPI_MCA_btl_tcp_if_include=lo
+    - export OMPI_MCA_oob_tcp_if_include=lo
     - export OMPI_MCA_pml=ob1
     - export OMPI_MCA_orte_tmpdir_base=/tmp
     - export OMPI_MCA_plm=isolated
@@ -908,6 +910,8 @@ test_ubuntu_2204_jammy_foam10:
     - export OMPI_MCA_mpi_yield_when_idle=1
     - export OMPI_MCA_btl_vader_single_copy_mechanism=none
     - export OMPI_MCA_btl=self,vader,tcp
+    - export OMPI_MCA_btl_tcp_if_include=lo
+    - export OMPI_MCA_oob_tcp_if_include=lo
     - export OMPI_MCA_pml=ob1
     - export OMPI_MCA_orte_tmpdir_base=/tmp
     - export OMPI_MCA_plm=isolated
