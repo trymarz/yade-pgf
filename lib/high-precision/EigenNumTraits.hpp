@@ -81,6 +81,11 @@ template <int levelHP> struct NumTraitsRealHP : GenericNumTraits<::yade::RealHP<
 };
 
 namespace internal {
+#if defined(YADE_THIN_REAL_WRAPPER_HPP) && EIGEN_VERSION_AT_LEAST(5, 0, 0)
+	// The wrapper has the floating-point trait but needs Eigen's native long-double random implementation.
+	template <> struct random_float_impl<::yade::math::ThinRealWrapper<long double>> : random_float_impl<long double> { };
+#endif
+
 	// TODO: - make sure that all these functions and these below in macro YADE_EIGEN_SUPPORT_REAL_HP, are properly recognized and used.
 	//         I am not 100% sure that <int levelHP> is properly resolved.
 	// other ideas:

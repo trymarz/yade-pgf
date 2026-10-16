@@ -4,6 +4,7 @@ Sun, Aug 04 20:05:00 2024 +0100
 
 Bug Fixes
 *********
+  Fix Eigen 5 random-number generation for ThinRealWrapper<long double> in long-double builds
   Fix infinite recursion in OpenGLWrapper's glLineWidth() for 32-bit float Real builds, caught by GCC 15's -Werror=infinite-recursion
   Prefer libQGLViewer-qt5 over the unsuffixed libQGLViewer, fixing the exit segfault of Qt5 builds on systems where the unsuffixed library is the Qt6 build (!1207)
   Fix the segment area computation in the coating feature (!1208)
