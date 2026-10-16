@@ -36,8 +36,14 @@ public:
 	// add value to the accumulator; safely called from parallel sections
 	void add(const Real& val, const std::string& name, int& id, bool reset = false)
 	{
-		if (id < 0) findId(name, id, reset);
-		energies.add(id, val);
+#if defined(YADE_OPENMP) && YADE_REAL_BIT > 128
+		// The high-precision fallback shares storage, including during first-use registration and growth.
+#pragma omp critical(yade_high_precision_energy_tracker)
+#endif
+		{
+			if (id < 0) findId(name, id, reset);
+			energies.add(id, val);
+		}
 	}
 	Real getItem_py(const std::string& name)
 	{

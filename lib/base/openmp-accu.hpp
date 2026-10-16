@@ -255,7 +255,6 @@ public:
 	size_t                      size() const { return data.size(); }
 	T                           operator[](size_t ix) const { return get(ix); }
 	T                           get(size_t ix) const { return data[ix]; }
-	void                        add(size_t ix, const T& diff) { data[ix] += diff; }
 	void                        set(size_t ix, const T& val) { data[ix] = val; }
 	void                        reset(size_t ix) { data[ix] = ZeroInitializer<T>(); }
 	std::vector<std::vector<T>> getPerThreadData() const
@@ -268,15 +267,40 @@ public:
 		}
 		return ret;
 	}
+	void add(size_t ix, const T& diff)
+	{
+#ifdef YADE_OPENMP
+#pragma omp critical(yade_high_precision_array_accumulator)
+#endif
+		{
+			data[ix] += diff;
+		}
+	}
 };
 
-// single-threaded version of the accumulator above
+// Shared-storage fallback for high-precision and non-OpenMP builds.
 template <typename T> class OpenMPAccumulator {
 	T data;
 
 public:
-	void operator+=(const T& val) { data += val; }
-	void operator-=(const T& val) { data -= val; }
+	void operator+=(const T& val)
+	{
+#ifdef YADE_OPENMP
+#pragma omp critical(yade_high_precision_scalar_accumulator)
+#endif
+		{
+			data += val;
+		}
+	}
+	void operator-=(const T& val)
+	{
+#ifdef YADE_OPENMP
+#pragma omp critical(yade_high_precision_scalar_accumulator)
+#endif
+		{
+			data -= val;
+		}
+	}
 	     operator T() const { return get(); }
 	void reset() { data = ZeroInitializer<T>(); }
 	T    get() const { return data; }
