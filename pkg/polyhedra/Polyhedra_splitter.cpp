@@ -8,6 +8,7 @@
 #undef NDEBUG
 #endif
 
+#include <fstream>
 #include <lib/high-precision/Constants.hpp>
 #include <pkg/polyhedra/Polyhedra_splitter.hpp>
 #include <sys/stat.h>

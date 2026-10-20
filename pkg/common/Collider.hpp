@@ -10,7 +10,6 @@
 
 #include <core/Bound.hpp>
 #include <core/GlobalEngine.hpp>
-#include <core/Interaction.hpp>
 
 #include <core/Dispatching.hpp>
 

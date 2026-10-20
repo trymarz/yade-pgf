@@ -1,5 +1,8 @@
 #pragma once
 #include <boost/python/raw_function.hpp>
+#include <boost/python/make_constructor.hpp>
+#include <boost/python/dict.hpp>
+#include <limits>
 // many thanks to http://markmail.org/message/s4ksg6nfspw2wxwd
 namespace boost {
 namespace python {

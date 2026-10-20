@@ -7,6 +7,7 @@
 #include <lib/pyutil/doc_opts.hpp>
 #include <core/Omega.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/python.hpp>
 #include <boost/python/tuple.hpp>
 #include <string>
 

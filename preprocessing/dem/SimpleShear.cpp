@@ -7,6 +7,7 @@
 *************************************************************************/
 
 #include "SimpleShear.hpp"
+#include <fstream>
 #include <lib/high-precision/Constants.hpp>
 
 #include <core/Aabb.hpp>

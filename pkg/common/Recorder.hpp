@@ -1,6 +1,7 @@
 // 2009 © Václav Šmilauer <eudoxos@arcig.cz>
 #pragma once
 #include <pkg/common/PeriodicEngines.hpp>
+#include <fstream>
 
 namespace yade { // Cannot have #include directive inside.
 

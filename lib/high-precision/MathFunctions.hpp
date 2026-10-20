@@ -24,7 +24,8 @@
 #include <boost/math/complex.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/tools/config.hpp>
-#include <boost/random.hpp>
+#include <boost/random/generate_canonical.hpp>
+#include <boost/random/mersenne_twister.hpp>
 #include <cmath>
 #include <complex>
 #include <cstdlib>

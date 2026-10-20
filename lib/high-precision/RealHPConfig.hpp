@@ -31,8 +31,12 @@
 #include <lib/high-precision/Real.hpp>
 #include <array>
 #include <boost/mpl/vector_c.hpp>
-#include <boost/preprocessor.hpp>
 #include <boost/python.hpp>
+#include <boost/preprocessor/seq/enum.hpp>
+#include <boost/preprocessor/seq/for_each.hpp>
+#include <boost/preprocessor/seq/reverse.hpp>
+#include <boost/preprocessor/seq/seq.hpp>
+#include <boost/preprocessor/seq/size.hpp>
 
 namespace yade {
 namespace math {

@@ -12,7 +12,6 @@
 #include <lib/serialization/Serializable.hpp>
 
 #include "Scene.hpp"
-#include "ThreadWorker.hpp"
 
 namespace yade { // Cannot have #include directive inside.
 

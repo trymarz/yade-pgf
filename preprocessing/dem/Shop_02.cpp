@@ -7,38 +7,22 @@
 #include <core/Interaction.hpp>
 #include <core/Scene.hpp>
 
-#include <core/Aabb.hpp>
 #include <core/Clump.hpp>
-#include <pkg/common/InsertionSortCollider.hpp>
 
-#include <pkg/common/Box.hpp>
 #include <pkg/common/ElastMat.hpp>
 #include <pkg/common/Sphere.hpp>
 #include <pkg/dem/CapillaryPhys.hpp>
-#include <pkg/dem/ViscoelasticPM.hpp>
 
-#include <pkg/common/Bo1_Aabb.hpp>
-#include <pkg/dem/FrictPhys.hpp>
-#include <pkg/dem/Ig2_Box_Sphere_ScGeom.hpp>
-#include <pkg/dem/Ig2_Sphere_Sphere_ScGeom.hpp>
-#include <pkg/dem/NewtonIntegrator.hpp>
 
-#include <pkg/common/ForceResetter.hpp>
 
-#include <core/Dispatching.hpp>
-#include <core/InteractionLoop.hpp>
-#include <pkg/common/GravityEngines.hpp>
 
-#include <pkg/dem/ElasticContactLaw.hpp>
-#include <pkg/dem/GlobalStiffnessTimeStepper.hpp>
 
 #include <pkg/dem/FrictPhys.hpp>
 #include <pkg/dem/HertzMindlin.hpp>
-#include <pkg/dem/ScGeom.hpp>
+#include <pkg/dem/DemXDofGeom.hpp>
 
 #include <pkg/common/Grid.hpp>
 
-#include <pkg/dem/Tetra.hpp>
 
 #ifdef YADE_OPENGL
 #include <pkg/common/Gl1_NormPhys.hpp>

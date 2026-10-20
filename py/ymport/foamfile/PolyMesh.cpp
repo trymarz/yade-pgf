@@ -10,6 +10,7 @@
 #include <lib/base/Math.hpp>
 
 #include <boost/python/tuple.hpp>
+#include <boost/filesystem/operations.hpp>
 
 #include <stdarg.h>
 #include <stdio.h>

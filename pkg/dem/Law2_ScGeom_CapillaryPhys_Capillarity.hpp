@@ -11,6 +11,7 @@
 #pragma once
 
 #include <core/GlobalEngine.hpp>
+#include <iosfwd>
 
 namespace yade { // Cannot have #include directive inside.
 

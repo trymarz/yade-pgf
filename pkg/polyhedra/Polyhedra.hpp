@@ -13,18 +13,13 @@
 #include <core/Dispatching.hpp>
 #include <core/Interaction.hpp>
 #include <core/Material.hpp>
-#include <core/Omega.hpp>
 #include <core/Shape.hpp>
 #include <pkg/common/ElastMat.hpp>
-#include <pkg/common/Facet.hpp>
-#include <pkg/common/Sphere.hpp>
-#include <pkg/common/Wall.hpp>
 #include <pkg/dem/FrictPhys.hpp>
-#include <pkg/dem/ScGeom.hpp>
-#include <fstream>
+#include <iosfwd>
+#include <time.h>
 
 #ifdef YADE_OPENGL
-#include <lib/opengl/GLUtils.hpp>
 #include <lib/opengl/OpenGLWrapper.hpp>
 #include <pkg/common/GLDrawFunctors.hpp>
 #endif

@@ -9,7 +9,6 @@
 #pragma once
 
 #include "GlobalEngine.hpp"
-#include "Interaction.hpp"
 #include "Scene.hpp"
 
 namespace yade { // Cannot have #include directive inside.

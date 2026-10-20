@@ -6,6 +6,7 @@
 *  GNU General Public License v2 or later. See file LICENSE for details. *
 *************************************************************************/
 #ifdef FLOW_ENGINE
+#include <fstream>
 #include "TwoPhaseFlowEngine.hpp"
 #include <lib/high-precision/Constants.hpp>
 

@@ -21,14 +21,13 @@
 #include <core/PartialEngine.hpp>
 #include <core/Scene.hpp>
 #include <core/State.hpp>
+#include <pkg/common/ElastMat.hpp>
 #include <pkg/common/MatchMaker.hpp>
 #include <pkg/dem/ScGeom.hpp>
-#include <pkg/dem/TesselationWrapper.hpp>
 #include <pkg/pfv/FlowBoundingSphere.hpp>
 #include <pkg/pfv/Network.hpp>
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
-#include <Eigen/SparseLU>
 #pragma GCC diagnostic pop
 #include <cholmod.h>
 

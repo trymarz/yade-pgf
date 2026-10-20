@@ -20,15 +20,7 @@
 #include <vector>
 
 #include <boost/lexical_cast.hpp>
-#include <boost/numeric/conversion/bounds.hpp>
-#include <boost/preprocessor.hpp>
-#include <boost/python.hpp>
-#include <boost/python/class.hpp>
-#include <boost/python/module.hpp>
-#include <boost/python/object.hpp>
 #include <boost/shared_ptr.hpp>
-#include <boost/tuple/tuple.hpp>
-#include <boost/type_traits.hpp>
 
 
 #ifndef FOREACH

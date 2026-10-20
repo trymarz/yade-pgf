@@ -9,12 +9,13 @@
 // Experimental engine under development
 #ifdef FLOW_ENGINE
 #ifdef PARTIALSAT
+#include <fstream>
 #include "PartialSatClayEngine.hpp"
 #include <lib/high-precision/Constants.hpp>
 #include <pkg/common/Sphere.hpp>
 #include <pkg/dem/CohesiveFrictionalContactLaw.hpp>
 #include <pkg/dem/HertzMindlin.hpp>
-#include <boost/range/algorithm_ext/erase.hpp>
+#include <pkg/dem/ScGeom.hpp>
 
 #ifdef YADE_VTK
 

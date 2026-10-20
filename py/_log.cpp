@@ -13,6 +13,7 @@
 #include <lib/base/LoggingUtils.hpp>
 #include <lib/pyutil/doc_opts.hpp>
 #include <core/Omega.hpp>
+#include <boost/python.hpp>
 #include <boost/core/demangle.hpp>
 #include <chrono>
 #include <string>

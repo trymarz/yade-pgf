@@ -1,3 +1,4 @@
+#include <core/InteractionLoop.hpp>
 #include "ViscoelasticCapillarPM.hpp"
 #include <lib/high-precision/Constants.hpp>
 #include <core/Omega.hpp>

@@ -1,4 +1,5 @@
 #pragma once
+#include <boost/python/docstring_options.hpp>
 
 // macro to set the same docstring generation options in all modules
 // disable_cpp_signatures apparently appeared after 1.35 or 1.34

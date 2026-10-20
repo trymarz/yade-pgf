@@ -12,7 +12,6 @@
 #include "CGAL/constructions/constructions_on_weighted_points_cartesian_3.h"
 #endif
 #include "vector"
-#include <CGAL/Width_3.h>
 #include <assert.h>
 #include <fstream>
 #include <iostream>

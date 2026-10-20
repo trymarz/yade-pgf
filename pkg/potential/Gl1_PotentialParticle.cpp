@@ -17,6 +17,7 @@
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpragmas"
 #pragma GCC diagnostic ignored "-Wsuggest-override"
+#include <vtkActor.h>
 #include <vtkActor2D.h>
 #include <vtkAppendPolyData.h>
 #include <vtkCamera.h>
@@ -34,6 +35,7 @@
 #include <vtkLinearExtrusionFilter.h>
 #include <vtkLookupTable.h>
 #include <vtkPointData.h>
+#include <vtkPolyData.h>
 #include <vtkPolyDataMapper.h>
 #include <vtkProperty.h>
 #include <vtkRegularPolygonSource.h>

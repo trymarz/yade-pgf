@@ -4,6 +4,7 @@
 // © 2006 Bruno Chareyre <bruno.chareyre@grenoble-inp.fr>
 
 #include <lib/high-precision/Constants.hpp>
+#include <core/Interaction.hpp>
 #include <core/Omega.hpp>
 #include <core/Scene.hpp>
 #include <pkg/dem/ScGeom.hpp>

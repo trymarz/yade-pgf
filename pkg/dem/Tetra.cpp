@@ -14,6 +14,7 @@
 
 #ifdef YADE_CGAL
 #include <CGAL/intersections.h>
+#include <CGAL/squared_distance_3.h>
 #endif
 #ifdef YADE_OPENGL
 #include <lib/opengl/OpenGLWrapper.hpp>

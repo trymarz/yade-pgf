@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include <core/Body.hpp>
 #include <core/PartialEngine.hpp>
 #include <boost/unordered_map.hpp>
 

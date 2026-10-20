@@ -2,14 +2,13 @@
 
 #pragma once
 
-#include <boost/lambda/lambda.hpp>
 
 #include "lib/base/Logging.hpp"
 #include "lib/base/Math.hpp"
 #include "core/Body.hpp"
 
 #include <lib/base/AliasNamespaces.hpp>
-#include <boost/function.hpp>
+#include <boost/tuple/tuple.hpp>
 
 namespace yade { // Cannot have #include directive inside.
 

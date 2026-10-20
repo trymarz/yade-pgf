@@ -2,6 +2,7 @@
 
 #include <lib/base/Logging.hpp>
 #include <lib/base/Math.hpp>
+#include <boost/python.hpp>
 #include <lib/pyutil/doc_opts.hpp>
 #include <preprocessing/dem/SpherePack.hpp>
 

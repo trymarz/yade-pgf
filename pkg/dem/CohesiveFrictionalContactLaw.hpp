@@ -15,7 +15,6 @@
 #include <pkg/common/NormShearPhys.hpp>
 #include <pkg/dem/FrictPhys.hpp>
 #include <pkg/dem/ScGeom.hpp>
-#include <boost/tuple/tuple.hpp>
 
 namespace yade { // Cannot have #include directive inside.
 

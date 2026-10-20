@@ -1,3 +1,4 @@
+#include <fstream>
 #include <lib/high-precision/Constants.hpp>
 #include <pkg/dem/DemXDofGeom.hpp>
 #include <pkg/dem/DomainLimiter.hpp>

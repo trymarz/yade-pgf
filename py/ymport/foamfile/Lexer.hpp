@@ -14,9 +14,9 @@
 #pragma once
 
 #include "Token.hpp"
-#include "VerifyMacros.hpp"
 
-#include <boost/filesystem.hpp>
+#include <boost/filesystem/path.hpp>
+#include <cstdint>
 
 namespace yade {
 namespace ymport {

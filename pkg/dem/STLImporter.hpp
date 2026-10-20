@@ -10,6 +10,10 @@
 #include <core/BodyContainer.hpp>
 #include <pkg/common/Facet.hpp>
 #include <clocale>
+#include <cstdio>
+#include <cstring>
+#include <set>
+#include <tuple>
 #include <string>
 
 namespace yade { // Cannot have #include directive inside.

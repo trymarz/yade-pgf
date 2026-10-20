@@ -6,6 +6,7 @@
 #include <lib/pyutil/gil.hpp>
 #include <lib/serialization/ObjectIO.hpp>
 #include <core/Omega.hpp>
+#include <core/Scene.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 
 #include "FileGenerator.hpp"

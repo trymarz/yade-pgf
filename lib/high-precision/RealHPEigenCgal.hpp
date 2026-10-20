@@ -10,7 +10,10 @@
 
 // Select which RealHP<N> are going to work with Eigen, CGAL, minieigenHP, by selecting N values in YADE_EIGENCGAL_HP, YADE_MINIEIGEN_HP
 #include <lib/high-precision/RealHPConfig.hpp>
-#include <boost/preprocessor.hpp>
+#include <boost/preprocessor/comparison/greater_equal.hpp>
+#include <boost/preprocessor/control/if.hpp>
+#include <boost/preprocessor/seq/elem.hpp>
+#include <boost/preprocessor/seq/for_each.hpp>
 
 /*
 

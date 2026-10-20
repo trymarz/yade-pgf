@@ -6,6 +6,7 @@
 *  GNU General Public License v2 or later. See file LICENSE for details.     *
 ******************************************************************************/
 #pragma once
+#include <boost/tuple/tuple.hpp>
 #include <lib/base/Math.hpp>
 #include <core/Body.hpp>
 #include <core/Dispatching.hpp>

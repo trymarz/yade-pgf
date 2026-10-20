@@ -7,7 +7,6 @@
 *************************************************************************/
 #pragma once
 
-#include <core/InteractionContainer.hpp>
 #include <pkg/common/Collider.hpp>
 #include <vector>
 

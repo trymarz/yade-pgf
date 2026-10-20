@@ -7,6 +7,7 @@
 #undef NDEBUG
 #endif
 #include "Polyhedra_Ig2.hpp"
+#include <pkg/dem/ScGeom.hpp>
 
 namespace yade { // Cannot have #include directive inside.
 

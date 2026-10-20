@@ -8,15 +8,15 @@
 
 #ifdef YADE_CGAL
 
+#include <core/Scene.hpp>
+#include <pkg/common/Sphere.hpp>
 #include "TesselationWrapper.hpp"
 #include <lib/high-precision/Constants.hpp>
 #include <preprocessing/dem/Shop.hpp>
 #include <preprocessing/dem/SpherePack.hpp>
 
 #ifdef YADE_OPENGL
-#include <lib/opengl/GLUtils.hpp>
 #include <lib/opengl/OpenGLWrapper.hpp>
-#include <pkg/common/GLDrawFunctors.hpp>
 #include <chrono>
 #include <thread>
 #endif

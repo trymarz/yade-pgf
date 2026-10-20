@@ -1,6 +1,5 @@
 #pragma once
 #include <lib/high-precision/RealIO.hpp>
-#include <boost/lexical_cast.hpp>
 #include <fstream>
 #include <iostream>
 

@@ -8,6 +8,7 @@
 *************************************************************************/
 
 #ifdef TWOPHASEFLOW
+#include <fstream>
 #include "TwoPhaseFlowEngine.hpp"
 #include <boost/range/algorithm_ext/erase.hpp>
 

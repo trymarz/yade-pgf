@@ -24,7 +24,6 @@
 
 #pragma once
 #include <chrono>
-#include <type_traits>
 
 namespace yade {
 struct Timer {

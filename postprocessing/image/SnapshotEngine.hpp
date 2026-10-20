@@ -1,8 +1,6 @@
 #pragma once
 
 #if (defined(YADE_OPENGL) and defined(YADE_QT))
-#include <lib/opengl/OpenGLWrapper.hpp>
-#include <core/Scene.hpp>
 #include <pkg/common/PeriodicEngines.hpp>
 
 #pragma GCC diagnostic push

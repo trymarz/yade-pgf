@@ -11,10 +11,15 @@
 #include <core/Omega.hpp>
 #include <boost/core/null_deleter.hpp>
 #include <boost/filesystem.hpp>
-#include <boost/log/utility/setup/file.hpp>
+#include <boost/lexical_cast.hpp>
+#include <boost/log/expressions.hpp>
+#include <boost/log/attributes/constant.hpp>
 #include <boost/phoenix/bind/bind_function.hpp>
 #include <fstream>
+#include <iostream>
 #include <ostream>
+#include <sstream>
+#include <stdexcept>
 
 SINGLETON_SELF(Logging);
 

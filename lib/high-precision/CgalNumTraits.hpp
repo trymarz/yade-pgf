@@ -12,10 +12,11 @@
 #error "This file cannot be included alone, include Real.hpp instead"
 #endif
 
-#include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
+#include <CGAL/Number_types/internal/Exact_type_selector.h>
 #include <CGAL/Interval_nt.h>
 #include <CGAL/NT_converter.h>
 #include <CGAL/number_type_basic.h>
+#include <CGAL/version.h>
 // cmake already checks for GMP presence when checking for CGAL
 #include <CGAL/gmpxx.h>
 // newer CGAL uses boost multiprecision

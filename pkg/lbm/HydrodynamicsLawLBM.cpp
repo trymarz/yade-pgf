@@ -23,6 +23,7 @@
 *************************************************************************/
 #ifdef LBM_ENGINE
 
+#include <fstream>
 #include "HydrodynamicsLawLBM.hpp"
 #include <lib/base/AliasNamespaces.hpp>
 #include <lib/high-precision/Constants.hpp>

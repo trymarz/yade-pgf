@@ -16,7 +16,6 @@
 #include "State.hpp"
 
 #include <lib/base/Math.hpp>
-#include <lib/multimethods/Indexable.hpp>
 #include <lib/serialization/Serializable.hpp>
 
 namespace yade { // Cannot have #include directive inside.

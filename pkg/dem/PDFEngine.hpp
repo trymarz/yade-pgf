@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include <core/Interaction.hpp>
 #include <pkg/common/NormShearPhys.hpp>
 #include <pkg/common/PeriodicEngines.hpp>
 #include <pkg/dem/ScGeom.hpp>

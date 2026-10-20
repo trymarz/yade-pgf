@@ -5,7 +5,6 @@
 #ifndef Q_MOC_RUN
 #include <core/Omega.hpp>
 #include <pkg/common/OpenGLRenderer.hpp>
-#include <pkg/common/PeriodicEngines.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #endif
 

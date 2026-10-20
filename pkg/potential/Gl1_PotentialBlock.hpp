@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include <lib/computational-geometry/MarchingCube.hpp>
 #include <vector>
 //#include <pkg/potential/PotentialBlock.hpp>
 #include <pkg/common/PeriodicEngines.hpp>
@@ -19,34 +18,8 @@
 // Code that generates this warning, Note: we cannot do this trick in yade. If we have a warning in yade, we have to fix it! See also https://gitlab.com/yade-dev/trunk/merge_requests/73
 // This method will work once g++ bug https://gcc.gnu.org/bugzilla/show_bug.cgi?id=53431#c34 is fixed.
 #include <vtkImplicitFunction.h>
-#include <vtkPolyData.h>
-#include <vtkRenderWindow.h>
-#include <vtkRenderer.h>
 
-#include <vtkActor.h>
-#include <vtkAppendPolyData.h>
-#include <vtkCellArray.h>
-#include <vtkCellData.h>
-#include <vtkCylinderSource.h>
-#include <vtkExtractVOI.h>
-#include <vtkFloatArray.h>
-#include <vtkLinearExtrusionFilter.h>
-#include <vtkRenderWindowInteractor.h>
-#include <vtkSampleFunction.h>
 #include <vtkSmartPointer.h>
-#include <vtkStructuredPoints.h>
-#include <vtkStructuredPointsWriter.h>
-#include <vtkTextActor.h>
-#include <vtkTextActor3D.h>
-#include <vtkTextProperty.h>
-#include <vtkTransform.h>
-#include <vtkTransformPolyDataFilter.h>
-#include <vtkTriangle.h>
-#include <vtkVectorText.h>
-#include <vtkWriter.h>
-#include <vtkXMLImageDataWriter.h>
-#include <vtkXMLStructuredGridWriter.h>
-#include <vtkXMLUnstructuredGridWriter.h>
 #pragma GCC diagnostic pop
 
 #endif //YADE_VTK

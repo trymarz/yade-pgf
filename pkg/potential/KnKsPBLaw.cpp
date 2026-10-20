@@ -1,6 +1,7 @@
 #ifdef YADE_POTENTIAL_BLOCKS
 
 
+#include <core/InteractionLoop.hpp>
 #include "KnKsPBLaw.hpp"
 #include <lib/high-precision/Constants.hpp>
 #include <core/Omega.hpp>

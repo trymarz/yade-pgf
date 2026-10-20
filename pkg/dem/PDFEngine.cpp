@@ -1,3 +1,4 @@
+#include <core/Scene.hpp>
 #include "PDFEngine.hpp"
 #include <lib/high-precision/Constants.hpp>
 #include <fstream>

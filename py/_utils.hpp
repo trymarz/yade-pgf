@@ -1,18 +1,8 @@
 #pragma once
 
 #include <lib/base/AliasNamespaces.hpp>
-#include <lib/computational-geometry/Hull2d.hpp>
 #include <lib/pyutil/doc_opts.hpp>
-#include <core/Omega.hpp>
-#include <core/Scene.hpp>
-#include <pkg/common/Facet.hpp>
-#include <pkg/common/NormShearPhys.hpp>
-#include <pkg/common/Sphere.hpp>
-#include <pkg/dem/DemXDofGeom.hpp>
-#include <pkg/dem/ScGeom.hpp>
-#include <pkg/dem/Tetra.hpp>
-#include <pkg/dem/ViscoelasticPM.hpp>
-#include <preprocessing/dem/Shop.hpp>
+#include <core/Body.hpp>
 #ifdef YADE_MPI
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpragmas"

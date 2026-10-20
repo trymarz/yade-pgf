@@ -65,8 +65,6 @@
 #include <pkg/levelSet/ShopLS.hpp>
 #endif
 #include <pkg/dem/HertzMindlin.hpp>
-#include <boost/fusion/include/pair.hpp>
-#include <boost/fusion/support/pair.hpp>
 #include <boost/unordered_map.hpp>
 
 namespace yade { // Cannot have #include directive inside.

@@ -18,9 +18,7 @@
 // END workaround
 
 #include <Eigen/Core>
-#include <Eigen/Eigenvalues>
 #include <Eigen/Geometry>
-#include <Eigen/SVD>
 
 #include <iomanip>
 #include <sstream>

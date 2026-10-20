@@ -35,8 +35,8 @@
 #ifdef LINSOLV
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#include <fstream>
 #include <Eigen/CholmodSupport>
-#include <Eigen/Sparse>
 #include <Eigen/SparseCore>
 #include <cholmod.h>
 #pragma GCC diagnostic pop

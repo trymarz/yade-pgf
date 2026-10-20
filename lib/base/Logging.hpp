@@ -7,6 +7,7 @@
 *************************************************************************/
 
 #pragma once
+#include <boost/preprocessor/seq/for_each.hpp>
 /*
  * This file defines various useful logging-related macros. For full description see https://yade-dem.org/doc/prog.html#debugging
  * Quick summary:
@@ -34,11 +35,14 @@
 #endif
 
 #include <lib/base/Singleton.hpp>
-#include <boost/log/expressions.hpp>
-#include <boost/log/trivial.hpp>
-#include <boost/log/utility/setup.hpp>
-#include <boost/preprocessor.hpp>
+#include <boost/log/expressions/keyword.hpp>
+#include <boost/log/sources/severity_logger.hpp>
+#include <boost/log/sources/record_ostream.hpp>
+#include <boost/log/sinks/sync_frontend.hpp>
+#include <boost/log/sinks/text_ostream_backend.hpp>
+#include <boost/make_shared.hpp>
 #include <map>
+#include <iostream>
 #include <string>
 #include <vector>
 

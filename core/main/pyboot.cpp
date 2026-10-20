@@ -1,5 +1,7 @@
 #include <lib/base/Logging.hpp>
 #include <core/Omega.hpp>
+#include <boost/python.hpp>
+#include <fstream>
 #include <signal.h>
 
 CREATE_CPP_LOCAL_LOGGER("pyboot.cpp");

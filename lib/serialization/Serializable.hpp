@@ -8,7 +8,18 @@
 
 #pragma once
 
+#include <boost/preprocessor/arithmetic/dec.hpp>
+#include <boost/preprocessor/cat.hpp>
+#include <boost/preprocessor/comparison/not_equal.hpp>
+#include <boost/preprocessor/control/if.hpp>
+#include <boost/preprocessor/punctuation/comma_if.hpp>
+#include <boost/preprocessor/seq/for_each.hpp>
+#include <boost/preprocessor/seq/for_each_i.hpp>
+#include <boost/preprocessor/seq/size.hpp>
+#include <boost/preprocessor/stringize.hpp>
+#include <boost/preprocessor/tuple/elem.hpp>
 #include <boost/type_traits/integral_constant.hpp>
+#include <boost/python.hpp>
 
 #include <lib/base/AliasNamespaces.hpp>
 #include <lib/base/Math.hpp>

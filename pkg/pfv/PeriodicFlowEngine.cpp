@@ -14,6 +14,7 @@
 /// See below the commented exemple, for a possible solution
 
 #include "FlowEngine_FlowEngine_PeriodicInfo.hpp"
+#include "PeriodicFlow.hpp"
 
 namespace yade { // Cannot have #include directive inside.
 

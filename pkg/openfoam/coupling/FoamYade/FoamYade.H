@@ -28,7 +28,8 @@
 // #include "fvm.H"
 #else
 #warning "FOUNDATION VERSION 6, or FOAM.COM"
-#include "fvCFD.H"
+#include "volFields.H"
+#include "uniformDimensionedFields.H"
 #endif
 
 #include "interpolation.H"

@@ -33,11 +33,11 @@ The files are
 */
 
 #pragma once
+#include<core/Cell.hpp>
+#include<core/Omega.hpp>
 #include<core/PartialEngine.hpp>
-#include<pkg/dem/TriaxialCompressionEngine.hpp>
 // #include<pkg/dem/TesselationWrapper.hpp>
 #include<pkg/pfv/FlowBoundingSphere.hpp>
-#include<pkg/pfv//PeriodicFlow.hpp>
 #ifdef PARTIALSAT
 #include<pkg/pfv/PartialSatLinSolv.hpp>
 #endif

@@ -5,7 +5,6 @@
 #include <lib/base/Logging.hpp>
 #include <lib/base/Math.hpp>
 #include <core/Body.hpp>
-#include <core/PartialEngine.hpp>
 
 namespace yade { // Cannot have #include directive inside.
 

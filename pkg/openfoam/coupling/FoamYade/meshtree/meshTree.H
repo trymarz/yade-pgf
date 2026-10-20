@@ -26,7 +26,7 @@
 // #include "surfaceFields.H"
 // #include "fvm.H"
 #else
-#include "fvCFD.H"
+#include "volFields.H"
 #endif
 
 namespace Foam {

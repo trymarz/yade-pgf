@@ -3,6 +3,7 @@
 #include <core/PartialEngine.hpp>
 #include <boost/unordered_map.hpp>
 #include <functional>
+#include <deque>
 
 namespace yade { // Cannot have #include directive inside.
 

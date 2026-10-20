@@ -12,6 +12,7 @@
 #ifdef YADE_CGAL
 
 #include <lib/high-precision/Real.hpp>
+#include <CGAL/version.h>
 #if CGAL_VERSION_MAJOR >= 6
 #include <CGAL/AABB_traits_3.h>
 #include <CGAL/AABB_triangle_primitive_3.h>
@@ -25,15 +26,11 @@
 #include <CGAL/Delaunay_triangulation_3.h>
 #include <CGAL/Filtered_kernel.h>
 #include <CGAL/Polyhedron_3.h>
-#include <CGAL/Polyhedron_items_with_id_3.h>
 #include <CGAL/Simple_cartesian.h>
 #include <CGAL/Surface_mesh.h>
 #include <CGAL/Tetrahedron_3.h>
 #include <CGAL/Triangulation_data_structure_3.h>
 #include <CGAL/Triangulation_structural_filtering_traits.h>
-#include <CGAL/convex_hull_3.h>
-#include <CGAL/linear_least_squares_fitting_3.h>
-#include <CGAL/squared_distance_3.h>
 
 namespace CGAL {
 // The Exact_predicates_inexact_constructions_kernel used `double`. Make corresponding typedef for Real type.

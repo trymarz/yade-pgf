@@ -15,7 +15,8 @@
  */
 
 #include <lib/base/Logging.hpp>
-#include <boost/preprocessor.hpp>
+#include <boost/preprocessor/seq/for_each.hpp>
+#include <boost/preprocessor/stringize.hpp>
 #include <boost/python.hpp>
 
 #ifndef YADE_ENUM_SUPPORT_HPP

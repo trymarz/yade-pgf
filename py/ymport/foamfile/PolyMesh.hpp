@@ -13,7 +13,6 @@
 
 #include <lib/base/AliasNamespaces.hpp>
 
-#include <boost/filesystem.hpp>
 #include <boost/python/list.hpp>
 
 #include <memory>

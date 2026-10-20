@@ -11,6 +11,7 @@
 #include <pkg/common/GravityEngines.hpp>
 #include <pkg/common/PeriodicEngines.hpp>
 #include <boost/regex.hpp>
+#include <fstream>
 
 namespace yade { // Cannot have #include directive inside.
 

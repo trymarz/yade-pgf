@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include <fstream>
 #include <pkg/pfv/FlowBoundingSphere.hpp> //include after #define XVIEW
 // #include "PeriodicTesselation.h"
 // #include "basicVTKwritter.hpp"

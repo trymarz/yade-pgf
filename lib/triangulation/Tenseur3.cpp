@@ -1,5 +1,4 @@
 #include "Tenseur3.h"
-#include "RegularTriangulation.h"
 
 namespace yade {
 namespace CGT {

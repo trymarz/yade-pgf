@@ -2,6 +2,7 @@
 // Some plugins from removed CPP-fiels
 
 #include <core/Aabb.hpp>
+#include <core/Scene.hpp>
 #include <pkg/common/BoundaryController.hpp>
 #include <pkg/common/Box.hpp>
 #include <pkg/common/CylScGeom6D.hpp>

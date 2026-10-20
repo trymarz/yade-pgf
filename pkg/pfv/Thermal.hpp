@@ -30,7 +30,6 @@ Caulk, R. and Chareyre, B. (2019) An open framework for the simulation of therma
 //#include<pkg/pfv/FlowEngine.hpp>
 #include "FlowEngine_FlowEngineT.hpp"
 #include <lib/triangulation/Tesselation.h>
-#include <pkg/dem/TesselationWrapper.hpp>
 #include <pkg/pfv/FlowBoundingSphere.hpp>
 #include <pkg/pfv/Network.hpp>
 

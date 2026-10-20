@@ -9,6 +9,7 @@
 #include <preprocessing/dem/Shop.hpp>
 #include <preprocessing/dem/SpherePack.hpp>
 #include <random>
+#include <fstream>
 
 namespace yade { // Cannot have #include directive inside.
 

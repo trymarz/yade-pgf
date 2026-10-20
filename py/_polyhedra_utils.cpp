@@ -2,6 +2,7 @@
 // https://www.vutbr.cz/www_base/gigadisk.php?i=95194aa9a
 
 #ifdef YADE_CGAL
+#include <CGAL/convex_hull_3.h>
 
 #include <lib/base/AliasNamespaces.hpp>
 #include <lib/base/Logging.hpp>
@@ -12,6 +13,7 @@
 #include <pkg/common/ElastMat.hpp>
 #include <pkg/common/Sphere.hpp>
 #include <pkg/polyhedra/Polyhedra.hpp>
+#include <fstream>
 #include <numpy/ndarraytypes.h>
 
 CREATE_CPP_LOCAL_LOGGER("_polyhedra_utils.cpp");

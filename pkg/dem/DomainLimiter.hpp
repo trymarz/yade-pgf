@@ -1,4 +1,6 @@
 
+#include <core/Body.hpp>
+#include <core/Interaction.hpp>
 #include <core/PartialEngine.hpp>
 #include <pkg/common/PeriodicEngines.hpp>
 #include <pkg/common/Sphere.hpp>

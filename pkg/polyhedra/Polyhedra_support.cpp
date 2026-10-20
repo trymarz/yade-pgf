@@ -7,6 +7,9 @@
 #undef NDEBUG
 #endif
 
+#include <fstream>
+#include <CGAL/convex_hull_3.h>
+#include <CGAL/linear_least_squares_fitting_3.h>
 #include "Polyhedra.hpp"
 
 #define likely(x) __builtin_expect((x), 1)

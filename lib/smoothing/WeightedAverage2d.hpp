@@ -5,6 +5,7 @@
 #include <lib/base/Math.hpp>
 
 #include <boost/math/distributions/normal.hpp>
+#include <boost/python.hpp>
 
 namespace yade { // Cannot have #include directive inside.
 

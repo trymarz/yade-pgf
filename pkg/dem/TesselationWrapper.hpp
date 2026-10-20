@@ -10,12 +10,8 @@
 #pragma once
 #include <lib/triangulation/Tesselation.h>
 #include <core/GlobalEngine.hpp>
-#include <core/Omega.hpp>
-#include <core/Scene.hpp>
-#include <pkg/common/Sphere.hpp>
 #include <pkg/dem/MicroMacroAnalyser.hpp>
 #ifdef YADE_OPENGL
-#include <lib/opengl/GLUtils.hpp>
 #include <lib/opengl/OpenGLWrapper.hpp>
 #include <pkg/common/OpenGLRenderer.hpp>
 #endif

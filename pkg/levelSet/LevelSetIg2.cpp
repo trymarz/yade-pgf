@@ -10,6 +10,7 @@
 #include <pkg/levelSet/OtherClassesForLSContact.hpp>
 #include <pkg/levelSet/ShopLS.hpp>
 #include <preprocessing/dem/Shop.hpp>
+#include <numeric>
 
 namespace yade {
 YADE_PLUGIN((

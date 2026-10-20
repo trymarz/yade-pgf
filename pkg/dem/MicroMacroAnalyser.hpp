@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include <fstream>
 #include <lib/triangulation/KinematicLocalisationAnalyser.hpp>
 #include <core/GlobalEngine.hpp>
 

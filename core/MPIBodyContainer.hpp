@@ -11,7 +11,6 @@
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpragmas"
 #pragma GCC diagnostic ignored "-Wsuggest-override"
-#include <mpi.h>
 #pragma GCC diagnostic pop
 
 namespace yade { // Cannot have #include directive inside.

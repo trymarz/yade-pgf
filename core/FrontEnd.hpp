@@ -8,7 +8,6 @@
 
 #pragma once
 
-#include "Omega.hpp"
 
 #include <lib/factory/Factorable.hpp>
 

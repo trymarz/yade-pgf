@@ -1,8 +1,7 @@
 // 2022 © Karol Brzeziński <karol.brze@gmail.com>
 #pragma once
-#include <core/Scene.hpp>
+#include <core/Body.hpp>
 #include <pkg/common/BoundaryController.hpp>
-#include <preprocessing/dem/Shop.hpp>
 
 namespace yade { // Cannot have #include directive inside.
 

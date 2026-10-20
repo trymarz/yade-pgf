@@ -3,6 +3,9 @@
 
 #ifdef YADE_CGAL
 #include "Polyhedra.hpp"
+#include <pkg/common/Facet.hpp>
+#include <pkg/common/Sphere.hpp>
+#include <pkg/common/Wall.hpp>
 
 namespace yade { // Cannot have #include directive inside.
 

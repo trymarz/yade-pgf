@@ -2,6 +2,7 @@
 #include <lib/base/AliasNamespaces.hpp>
 #include <lib/base/Logging.hpp>
 #include <lib/base/Math.hpp>
+#include <boost/python.hpp>
 #include <lib/pyutil/doc_opts.hpp>
 
 CREATE_CPP_LOCAL_LOGGER("_packPredicates.cpp");

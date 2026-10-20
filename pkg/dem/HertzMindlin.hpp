@@ -14,7 +14,6 @@ The DMT formulation is also considered (for adhesive particles, rigid and small 
 #include <pkg/common/ElastMat.hpp>
 #include <pkg/common/MatchMaker.hpp>
 #include <pkg/common/NormShearPhys.hpp>
-#include <pkg/common/PeriodicEngines.hpp>
 #include <pkg/dem/FrictPhys.hpp>
 #include <pkg/dem/ScGeom.hpp>
 

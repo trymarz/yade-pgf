@@ -4,7 +4,7 @@
 #include <core/GlobalEngine.hpp>
 #include <core/Omega.hpp>
 #include <core/Scene.hpp>
-#include <time.h>
+#include <sys/time.h>
 
 namespace yade { // Cannot have #include directive inside.
 

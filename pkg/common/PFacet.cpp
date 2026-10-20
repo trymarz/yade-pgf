@@ -5,6 +5,7 @@
 *  This program is free software; it is licensed under the terms of the      *
 *  GNU General Public License v2 or later. See file LICENSE for details.     *
 ******************************************************************************/
+#include <core/InteractionLoop.hpp>
 #include "PFacet.hpp"
 #ifdef YADE_OPENGL
 #include <lib/opengl/OpenGLWrapper.hpp>

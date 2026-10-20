@@ -19,6 +19,7 @@
 #include <core/ForceContainer.hpp>
 #include <core/InteractionContainer.hpp>
 #include <core/Material.hpp>
+#include <boost/date_time/posix_time/posix_time_types.hpp>
 #ifdef YADE_MPI
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpragmas"

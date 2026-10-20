@@ -24,6 +24,7 @@
 #ifdef LBM_ENGINE
 
 #pragma once
+#include <fstream>
 #include <core/GlobalEngine.hpp>
 #include <pkg/lbm/LBMbody.hpp>
 #include <pkg/lbm/LBMlink.hpp>

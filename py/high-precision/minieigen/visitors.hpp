@@ -7,6 +7,8 @@
 *************************************************************************/
 
 #pragma once
+#include <Eigen/Eigenvalues>
+#include <Eigen/SVD>
 #include "common.hpp"
 // classes dealing with exposing actual types, with many switches inside depending on template arguments
 

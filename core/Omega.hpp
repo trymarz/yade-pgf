@@ -12,17 +12,13 @@
 
 // XXX never do #include<Python.h>, see https://www.boost.org/doc/libs/1_71_0/libs/python/doc/html/building/include_issues.html
 #include <boost/python/detail/wrap_python.hpp>
-#include <fstream>
-#include <iostream>
 #include <mutex>
-#include <time.h>
 
 #include <lib/base/Math.hpp>
-#include <lib/factory/ClassFactory.hpp>
 
 #include "SimulationFlow.hpp"
 #include <lib/base/Singleton.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/date_time/posix_time/posix_time_types.hpp>
 #include <map>
 #include <set>
 

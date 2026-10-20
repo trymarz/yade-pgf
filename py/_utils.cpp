@@ -4,6 +4,17 @@
 #include <pkg/levelSet/ShopLS.hpp>
 #endif // YADE_LS_DEM
 #include <py/_utils.hpp>
+#include <lib/computational-geometry/Hull2d.hpp>
+#include <core/Omega.hpp>
+#include <core/Scene.hpp>
+#include <pkg/common/Facet.hpp>
+#include <pkg/common/NormShearPhys.hpp>
+#include <pkg/common/Sphere.hpp>
+#include <pkg/dem/DemXDofGeom.hpp>
+#include <pkg/dem/ScGeom.hpp>
+#include <pkg/dem/Tetra.hpp>
+#include <pkg/dem/ViscoelasticPM.hpp>
+#include <preprocessing/dem/Shop.hpp>
 // https://codeyarns.com/2014/03/11/how-to-selectively-ignore-a-gcc-warning/
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpragmas"

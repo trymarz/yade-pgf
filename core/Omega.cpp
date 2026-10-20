@@ -12,6 +12,8 @@
 #include "Scene.hpp"
 #include "ThreadRunner.hpp"
 #include "TimeStepper.hpp"
+#include <lib/factory/ClassFactory.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
 #include <lib/base/Math.hpp>
 #include <lib/multimethods/FunctorWrapper.hpp>
 #include <lib/multimethods/Indexable.hpp>

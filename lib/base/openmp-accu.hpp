@@ -2,8 +2,9 @@
 #pragma once
 
 #include <lib/base/Math.hpp>
-#include <boost/predef.h>
 #include <boost/serialization/split_free.hpp>
+#include <cstdlib>
+#include <cstring>
 #include <unistd.h>
 
 #ifdef YADE_OPENMP

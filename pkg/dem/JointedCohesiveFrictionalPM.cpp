@@ -5,6 +5,7 @@ Scholtès, L., and Donzé F., "Modelling progressive failure in fractured rock m
 Caulk, R. (2018) Stochastic Augmentation of the Discrete Element Method for the Investigation of Tensile Rupture in Heterogeneous Rock.
 Yade Technical Archive. DOI: 10.5281/zenodo.1202039 */
 
+#include <fstream>
 #include "JointedCohesiveFrictionalPM.hpp"
 #include <lib/high-precision/Constants.hpp>
 #include <core/Omega.hpp>

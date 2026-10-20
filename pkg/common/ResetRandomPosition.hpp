@@ -7,6 +7,11 @@
 *************************************************************************/
 #pragma once
 
+#include <boost/random/linear_congruential.hpp>
+#include <boost/random/mersenne_twister.hpp>
+#include <boost/random/uniform_int.hpp>
+#include <boost/random/uniform_real.hpp>
+#include <boost/random/variate_generator.hpp>
 #include <core/Dispatching.hpp>
 #include <core/Scene.hpp>
 #include <pkg/common/Collider.hpp>

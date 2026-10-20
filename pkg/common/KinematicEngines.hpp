@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include <core/Body.hpp>
 #include <lib/base/Math.hpp>
 #include <lib/high-precision/Constants.hpp>
 #include <core/PartialEngine.hpp>

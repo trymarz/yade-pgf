@@ -1,6 +1,7 @@
 // 2011 © Bruno Chareyre <bruno.chareyre@grenoble-inp.fr>
 // 2012 © Kneib Francois <francois.kneib@irstea.fr>
 #pragma once
+#include <core/Body.hpp>
 #include <pkg/dem/ScGeom.hpp>
 
 namespace yade { // Cannot have #include directive inside.

@@ -9,7 +9,6 @@
 #pragma once
 
 #include <lib/base/Math.hpp>
-#include <string>
 #include <vector>
 
 namespace yade { // Cannot have #include directive inside.

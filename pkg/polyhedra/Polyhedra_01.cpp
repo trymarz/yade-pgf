@@ -6,6 +6,7 @@
 #ifdef NDEBUG
 #undef NDEBUG
 #endif
+#include <CGAL/convex_hull_3.h>
 #include "Polyhedra.hpp"
 
 namespace yade { // Cannot have #include directive inside.

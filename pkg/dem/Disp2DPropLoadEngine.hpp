@@ -12,6 +12,7 @@
 #include <core/Body.hpp>
 #include <core/Omega.hpp>
 #include <pkg/common/BoundaryController.hpp>
+#include <fstream>
 
 namespace yade { // Cannot have #include directive inside.
 

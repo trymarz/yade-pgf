@@ -6,6 +6,7 @@
 *  GNU General Public License v2 or later. See file LICENSE for details. *
 *************************************************************************/
 
+#include <fstream>
 #include "Law2_ScGeom_CapillaryPhys_Capillarity.hpp"
 #include <pkg/common/ElastMat.hpp>
 #include <pkg/dem/ScGeom.hpp>
