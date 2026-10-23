@@ -202,7 +202,7 @@ Yade compilation and execution rely on a number of mandatory and optional extern
 Following dependencies are for instance mandatory:
 
 * `cmake <http://www.cmake.org/>`_ build system
-* `gcc <https://gcc.gnu.org/>`_ compiler (``g++``); other compilers will not work; you need g++>=4.2 for openMP support
+* `gcc <https://gcc.gnu.org/>`_ compiler (``g++``) with C++17 support
 * `boost <http://www.boost.org/>`_ 1.47 or later
 * `Qt <http://www.qt.io/>`_ library
 * `freeglut3 <http://freeglut.sourceforge.net>`_
@@ -353,8 +353,8 @@ upon detecting the C and C++ compiler to use::
 	export CXX=/usr/bin/clang++
 	cmake -DOPTION1=VALUE1 -DOPTION2=VALUE2
 
-Clang does not support OpenMP-parallelizing for the moment, that is why the
-feature will be disabled.
+Clang supports OpenMP when a compatible runtime, such as ``libomp``, is installed.
+Yade detects OpenMP during configuration. To disable it, use ``-DENABLE_OPENMP=OFF``.
 
 Supported linux releases
 ^^^^^^^^^^^^^^^^^^^^^^^^

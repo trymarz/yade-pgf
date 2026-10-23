@@ -246,14 +246,9 @@ template <int N> struct Substitute {
 };
 //#endif
 
-// The 'if constexpr(…)' is not working for C++14. So I have to simulate it using templates. Otherwise the python 'import >>thisModule<<' is really slow.
-template <int, bool> struct IfConstexprForSlowFunctions {
-	static void work(const py::scope&) { };
-};
-
-template <int N> struct IfConstexprForSlowFunctions<N, true> {
-	static void work(const py::scope& scopeHP)
-	{
+template <int N, bool enabled> void exposeSlowFunctions(const py::scope& scopeHP)
+{
+	if constexpr (enabled) {
 		py::scope HPn(scopeHP);
 		py::def("erf",
 		        static_cast<RealHP<N> (*)(const RealHP<N>&)>(&::yade::math::erf),
@@ -272,14 +267,11 @@ template <int N> struct IfConstexprForSlowFunctions<N, true> {
 		        (py::arg("x")),
 		        R"""(:return: ``Real`` Computes the `gamma function <https://en.wikipedia.org/wiki/Gamma_function>`__ of arg. Depending on compilation options wraps ``::boost::multiprecision::tgamma(…)`` or `std::tgamma(…) <https://en.cppreference.com/w/cpp/numeric/math/tgamma>`__ function.)""");
 	}
-};
+}
 
-template <int, bool> struct IfConstexprForEigen;
-
-//#ifndef __clang__ // problem with clang 9.0.1-12. It tries to instatinate an explicitly illegal/disabled code. Produces errors that some types don't exist. But they shouldn't exist.
-template <int N> struct IfConstexprForEigen<N, true> {
-	static void work(const py::scope& scopeHP, const long& defprec)
-	{
+template <int N, bool useEigenTraits> void exposeEigenTraits(const py::scope& scopeHP, const long& defprec)
+{
+	if constexpr (useEigenTraits) {
 		py::scope HPn(scopeHP);
 		py::def("highest",
 		        Eigen::NumTraits<RealHP<N>>::highest,
@@ -321,13 +313,7 @@ template <int N> struct IfConstexprForEigen<N, true> {
 		py::def("smallest_positive",
 		        static_cast<RealHP<N> (*)()>(&Eigen::NumTraits<RealHP<N>>::smallest_positive),
 		        R"""(:return: ``Real`` the smallest number greater than zero. Wraps `std::numeric_limits<Real>::min() <https://en.cppreference.com/w/cpp/types/numeric_limits/min>`__)""");
-	}
-};
-//#endif
-
-template <int N> struct IfConstexprForEigen<N, false> {
-	static void work(const py::scope& scopeHP, const long& defprec)
-	{
+	} else {
 		py::scope HPn(scopeHP);
 		py::def("highest",
 		        Substitute<N>::highest,
@@ -370,7 +356,7 @@ template <int N> struct IfConstexprForEigen<N, false> {
 		        Substitute<N>::isEqualFuzzy,
 		        R"""(:return: ``bool``, ``True`` if the absolute difference between two numbers is smaller than `std::numeric_limits<Real>::epsilon() <https://en.cppreference.com/w/cpp/types/numeric_limits/epsilon>`__)""");
 	}
-};
+}
 
 template <int N, bool registerConverters> struct RegisterRealHPMath {
 	// python 'import this_module' measured time: skipSlowFunctionsAbove_N==6 → 10min, N==5 → 3m24s, N==4 → 1m55s, N==3 → 1minute23sec
@@ -798,8 +784,7 @@ template <int N, bool registerConverters> struct RegisterRealHPMath {
 		/**********************         special mathematical functions         **********************/
 		/********************************************************************************************/
 		// remember that complex functions must be registered first.
-		// The 'if constexpr(…)' is not working for C++14. So I have to simulate it using templates. Otherwise the python 'import >>thisModule<<' is really slow.
-		IfConstexprForSlowFunctions<N, (N <= skipSlowFunctionsAbove_N)>::work(scopeHP);
+		exposeSlowFunctions<N, (N <= skipSlowFunctionsAbove_N)>(scopeHP);
 
 		/********************************************************************************************/
 		/**********************        extract C-array from std::vector        **********************/
@@ -845,9 +830,7 @@ template <int N, bool registerConverters> struct RegisterRealHPMath {
 		py::scope().attr("ComplexAddCost")        = int(Eigen::NumTraits<ComplexHP<N>>::AddCost);
 		py::scope().attr("ComplexMulCost")        = int(Eigen::NumTraits<ComplexHP<N>>::MulCost);
 
-		//#if defined(YADE_EIGEN_NUM_TRAITS_HPP) or defined(EIGEN_MPREALSUPPORT_MODULE_H)
-		// The 'if constexpr(…)' is not working for C++14. So I have to simulate it using templates. Otherwise compiler will try to access non-existing types.
-		IfConstexprForEigen<N, (std::numeric_limits<RealHP<N>>::digits >= std::numeric_limits<long double>::digits)>::work(scopeHP, defprec);
+		exposeEigenTraits<N, (std::numeric_limits<RealHP<N>>::digits >= std::numeric_limits<long double>::digits)>(scopeHP, defprec);
 
 		py::def("dummy_precision",
 		        Eigen::NumTraits<RealHP<N>>::dummy_precision,
@@ -1011,7 +994,7 @@ try {
 		std_pair_to_python_converter<double, double>();
 	}
 	// this loop registers all python functions from range defined in YADE_EIGENCGAL_HP, file lib/high-precision/RealHPEigenCgal.hpp
-	// Some functions for large N are extremely slow during python 'import yade.math', so they are not registered, see struct IfConstexprForSlowFunctions
+	// Some functions for large N are extremely slow during python 'import yade.math', so they are not registered, see exposeSlowFunctions
 	::yade::math::detail::registerLoopForHPn<::yade::math::RealHPConfig::SupportedByMinieigen, RegisterRealHPMath>();
 
 	py::def("testLoopRealHP",

@@ -90,7 +90,7 @@ namespace math {
 #else
 		// boost cpp_bin_float has some problem that importing it in python is very slow when these functions are exported: erf, erfc, lgamma, tgamma
 		// python 'import this_module' measured time: workaroundSlowBoostBinFloat==6 → 10min, N==5 → 3m24s, N==4 → 1m55s, N==3 → 1minute23sec
-		// the workaround is to make them unavailable in python for higher N values. See invocation of IfConstexprForSlowFunctions in py/high-precision/_math.cpp
+		// the workaround is to make them unavailable in python for higher N values. See invocation of exposeSlowFunctions in py/high-precision/_math.cpp
 #ifndef YADE_DISABLE_REAL_MULTI_HP
 		static const constexpr auto workaroundSlowBoostBinFloat = 2;
 #else

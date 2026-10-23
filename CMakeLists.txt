@@ -80,11 +80,7 @@ if(POLICY CMP0175)
 # https://cmake.org/cmake/help/latest/policy/CMP0175.html
   cmake_policy(SET CMP0175 OLD)
 endif()
-IF(CMAKE_CXX_COMPILER_VERSION VERSION_LESS 7.0.0)
-  set (CMAKE_CXX_STANDARD 14)
-ELSE()
-  set (CMAKE_CXX_STANDARD 17)
-ENDIF()
+set (CMAKE_CXX_STANDARD 17)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Enable verbose timing display?
@@ -176,28 +172,19 @@ INCLUDE(GNUInstallDirs)
 INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR})
 
 #===========================================================
-# HACK!!! If the version of gcc is 4.8 or greater, we add -ftrack-macro-expansion=0
-# and -save-temps into compiler to reduce the memory consumption during compilation.
+# HACK!!! Add -ftrack-macro-expansion=0 for GCC and -save-temps
+# to reduce the memory consumption during compilation.
 # See http://bugs.debian.org/726009 for more information
 # Can be removed later, if gcc fixes its regression
-# Taken from http://stackoverflow.com/questions/4058565/check-gcc-minor-in-cmake
-
-# this line was trying to get the g++ version. But it does not work with ccache.
-# But we already have CMAKE_CXX_COMPILER_VERSION, so we don't need this line!
-#EXECUTE_PROCESS(COMMAND ${CMAKE_C_COMPILER} -dumpversion OUTPUT_VARIABLE GCC_VERSION)
 
 IF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")  # Check whether we compile with GCC
-  IF (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 4.8 OR CMAKE_CXX_COMPILER_VERSION VERSION_EQUAL 4.8)
-    MESSAGE(STATUS "GCC Version >= 4.8. Adding -ftrack-macro-expansion=0")
-    ADD_DEFINITIONS("-ftrack-macro-expansion=0")
-  ELSE()
-    MESSAGE(STATUS "GCC Version < 4.8. will not use -ftrack-macro-expansion=0")
-  ENDIF()
+  MESSAGE(STATUS "Adding -ftrack-macro-expansion=0")
+  ADD_DEFINITIONS("-ftrack-macro-expansion=0")
 ENDIF()
 
 # -save-temps is not supported with ccache
-IF ((CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 4.8 OR CMAKE_CXX_COMPILER_VERSION VERSION_EQUAL 4.8) AND ( NOT "${CMAKE_CXX_COMPILER_LAUNCHER}" MATCHES ".*ccache" AND NOT "${CMAKE_CXX_COMPILER}" MATCHES ".*ccache.*" AND NOT DISABLE_SAVE_TEMPS))
-  MESSAGE(STATUS "GCC Version >= 4.8. Adding -save-temps")
+IF (NOT "${CMAKE_CXX_COMPILER_LAUNCHER}" MATCHES ".*ccache" AND NOT "${CMAKE_CXX_COMPILER}" MATCHES ".*ccache.*" AND NOT DISABLE_SAVE_TEMPS)
+  MESSAGE(STATUS "Adding -save-temps")
   ADD_DEFINITIONS("-save-temps")
 ELSE()
   IF ( "${CMAKE_CXX_COMPILER_LAUNCHER}" MATCHES ".*ccache" OR "${CMAKE_CXX_COMPILER}" MATCHES ".*ccache.*" )
@@ -213,7 +200,7 @@ ELSE()
         unset(__CXX_COMPILER_ARG1)
     ENDIF()
   ELSE()
-    MESSAGE(STATUS "GCC Version < 4.8 or DISABLE_SAVE_TEMPS. will not use -save-temps")
+    MESSAGE(STATUS "DISABLE_SAVE_TEMPS is enabled; will not use -save-temps")
   ENDIF()
 ENDIF()
 
@@ -1333,11 +1320,6 @@ IF(ENABLE_POTENTIAL_BLOCKS)
     SET(DISABLED_FEATS "${DISABLED_FEATS} POTENTIAL_BLOCKS")
     SET(ENABLE_POTENTIAL_BLOCKS OFF)
   ENDIF(CLP_FOUND AND OPENBLAS_FOUND AND LAPACK_FOUND)
-IF(COINUTILS_VERSION VERSION_LESS 2.11.3 AND NOT ENABLE_CGAL)
-  # CGAL requires C++17 (hard #error otherwise), so only fall back to C++14 when CGAL is disabled.
-  set (CMAKE_CXX_STANDARD 14)
-  MESSAGE(STATUS "${Esc}[91mWARNING: coinutils version older than 2.11.3. Falling back to C++14.${Esc}[0m")
-ENDIF(COINUTILS_VERSION VERSION_LESS 2.11.3 AND NOT ENABLE_CGAL)
 ELSE(ENABLE_POTENTIAL_BLOCKS)
   SET(DISABLED_FEATS "${DISABLED_FEATS} POTENTIAL_BLOCKS")
 ENDIF(ENABLE_POTENTIAL_BLOCKS)
