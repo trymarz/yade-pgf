@@ -735,8 +735,8 @@ Real Ig2_PB_PB_ScGeom::getAreaPolygon2(
 
 			p1 = (ptOnP1a - prevPoint);
 			p2 = (ptOnP2a - prevPoint);
-			if ((p1 - p2).norm() > pow(10, -6)) {
-				if (p1.norm() < p2.norm()) {
+			if ((p1 - p2).squaredNorm() > 1e-12) {
+				if (p1.squaredNorm() < p2.squaredNorm()) {
 					ptOnBoundary = ptOnP1a;
 					countParticleA++;
 					normalDir = searchDirA;
@@ -818,7 +818,7 @@ Real Ig2_PB_PB_ScGeom::getAreaPolygon2(
 			if (count == 70) {
 				break;
 			} //FIXME: This can break the calculation of contactArea for particles with very complex shape, where the contact area is a polygon with more than 70 faces. Either increase the number or delete this line all together @vsangelidakis. EDIT: This check is supposed to prevent infinite loops, but anyway we should output a warning if we stop the calculation of the contactArea midway
-		} while (count < 4 || /*( */ (newPt - secondPoint).norm() > tol); // && (newPt-secondPoint).norm() > tol) );
+		} while (count < 4 || /*( */ (newPt - secondPoint).squaredNorm() > tol * tol); // && (newPt-secondPoint).norm() > tol) );
 		//std::cout<<"area polygon count: "<<count<<endl;
 		if (countParticleA > countParticleB) {
 			smaller = 1;

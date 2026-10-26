@@ -113,7 +113,7 @@ void ThermalEngine::setReynoldsNumbers()
 	Tesselation& Tes  = flow->solver->T[flow->solver->currentTes];
 	const long   size = Tes.cellHandles.size();
 	if (uniformReynolds != -1) { // gain efficiency if we know the flow is creep (assigning uniform low reynolds to all cells)
-		Real NussfluidK = (2. + 0.6 * pow(uniformReynolds, 0.5) * pow(Pr, 0.33333)) * fluidK;
+		Real NussfluidK = (2. + 0.6 * math::sqrt(uniformReynolds) * math::pow(Pr, 0.33333)) * fluidK;
 #pragma omp parallel for
 		for (long i = 0; i < size; i++) {
 			CellHandle& cell           = Tes.cellHandles[i];
@@ -137,17 +137,17 @@ void ThermalEngine::setReynoldsNumbers()
 		for (int j = 0; j < 4; j++) {
 			if (!cell->neighbor(j)->info().isFictious) {
 				l          = cell->info() - cell->neighbor(j)->info();
-				charLength = sqrt(l.squared_length());
+				charLength = math::sqrt(l.squared_length());
 			}
 		}
-		const Real avgCellFluidVel = sqrt(cell->info().averageVelocity().squared_length());
+		const Real avgCellFluidVel = math::sqrt(cell->info().averageVelocity().squared_length());
 		double     Reynolds        = flow->solver->fluidRho * avgCellFluidVel * charLength / flow->viscosity;
 		if (Reynolds < 0 || math::isnan(Reynolds)) {
 			cerr << "Reynolds is negative or nan" << endl;
 			Reynolds = 0;
 		}
 		if (Reynolds > 1000 || poro < 0.35) {
-			Nusselt               = 2. + 0.6 * pow(Reynolds, 0.5) * pow(Pr, 0.33333);
+			Nusselt               = 2. + 0.6 * math::sqrt(Reynolds) * math::pow(Pr, 0.33333);
 			cell->info().Reynolds = Reynolds;
 		} else if (
 		        (0 <= Reynolds)
@@ -512,12 +512,12 @@ void ThermalEngine::computeSolidSolidConduction(const shared_ptr<Interaction>& I
 		// compute the thermal resistance of the pair and the associated flux
 		Real thermalResist;
 		if (useKernMethod) {
-			const Real numerator = pow((-d + r - R) * (-d - r + R) * (-d + r + R) * (d + r + R), 0.5);
+			const Real numerator = math::sqrt((-d + r - R) * (-d - r + R) * (-d + r + R) * (d + r + R));
 			const Real rc        = numerator / (2. * d);
 			thermalResist        = 2. * (k1 + k2) * rc * rc / (r1 + r2 - pd);
 		} //thermalResist = ((k1+k2)/2.)*area/(r1+r2-pd);}
 		else if (useBoBMethod) {
-			const Real rc = pow((-d + r - R) * (-d - r + R) * (-d + r + R) * (d + r + R), 0.5) / (2.0 * d);
+			const Real rc = math::sqrt((-d + r - R) * (-d - r + R) * (-d + r + R) * (d + r + R)) / (2.0 * d);
 			thermalResist = 4.0 * rc / (1.0 / k1 + 1.0 / k2);
 		} else if (useHertzMethod) {
 			const Real re    = 1. / r1 + 1. / r2;
@@ -624,11 +624,11 @@ void ThermalEngine::computeFluidFluidConduction()
 		else
 			fluidToSolidRatio = cell->info().facetFluidSurfacesRatio[facetPair.second];
 		//if (flow->thermalPorosity>0) fluidConductionAreaFactor=flow->thermalPorosity;
-		area = fluidConductionAreaFactor * sqrt(cell->info().facetSurfaces[facetPair.second].squared_length()) * fluidToSolidRatio;
+		area = fluidConductionAreaFactor * math::sqrt(cell->info().facetSurfaces[facetPair.second].squared_length()) * fluidToSolidRatio;
 		//area = sqrt(fluidSurfK.squared_length());
 		//poreVector = cell->info() - neighborCell->info();
 		poreVector = cellBarycenter(cell) - cellBarycenter(neighborCell); // voronoi was breaking for hexagonal packings
-		distance   = sqrt(poreVector.squared_length());
+		distance   = math::sqrt(poreVector.squared_length());
 		if (distance < minimumFluidCondDist) distance = minimumFluidCondDist;
 		//cout << "conduction distance" << distance << endl;
 		//if (distance < area) continue;  // hexagonal packings result in extremely small distances that blow up the simulation
@@ -728,7 +728,7 @@ void ThermalEngine::thermalExpansion()
 				sphere->radius += thState->delRadius;
 
 				// Update inertia for momentum conservation
-				thState->inertia = (2.0 / 5.0) * thState->mass * pow(sphere->radius, 2) * Vector3r::Ones();
+				thState->inertia = (2.0 / 5.0) * thState->mass * math::pow(sphere->radius, 2) * Vector3r::Ones();
 			}
 		}
 		YADE_PARALLEL_FOREACH_BODY_END();
@@ -789,8 +789,8 @@ void ThermalEngine::computeCellVolumeChangeFromSolidVolumeChange(CellHandle& cel
 		if (!first && thState->isCavity) continue; // don't consider fake cavity bodies
 		const Real surfaceArea
 		        = cell->info().sphericalVertexSurface[v]; // from last fluid engine remesh. We could store this in cell->info() if it becomes a burden
-		const Real rCubedDiff = pow(sphere->radius, 3) - pow(sphere->radius - thState->delRadius, 3);
-		const Real areaTot    = 4. * M_PI * pow(sphere->radius, 2); // We could store this in cell->info() if it becomes a burden
+		const Real rCubedDiff = math::pow(sphere->radius, 3) - math::pow(sphere->radius - thState->delRadius, 3);
+		const Real areaTot    = 4. * M_PI * math::pow(sphere->radius, 2); // We could store this in cell->info() if it becomes a burden
 		solidVolumeChange += surfaceArea / areaTot * rCubedDiff * M_PI * 4. / 3.;
 	}
 

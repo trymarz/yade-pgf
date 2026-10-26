@@ -60,10 +60,10 @@ void Ip2_FrictMatCDM_FrictMatCDM_MindlinPhysCDM::go(const shared_ptr<Material>& 
 	const Real Db = scg->refR2;
 	const Real R  = Da * Db / (Da + Db); // equivalent radius
 
-	const Real Kno = 4. / 3. * E * sqrt(R); // coefficient for normal stiffness
+	const Real Kno = 4. / 3. * E * math::sqrt(R); // coefficient for normal stiffness
 	//Real Kso = 2*sqrt(4*R)*G/(2-V); // coefficient for shear stiffness
 	//CHANGED
-	const Real Kso           = 8 * sqrt(R) / ((2 - Va) / Ga + (2 - Vb) / Gb); // coefficient for shear stiffness
+	const Real Kso           = 8 * math::sqrt(R) / ((2 - Va) / Ga + (2 - Vb) / Gb); // coefficient for shear stiffness
 	const Real frictionAngle = (!frictAngle) ? math::min(fa, fb) : (*frictAngle)(mat1->id, mat2->id, mat1->frictionAngle, mat2->frictionAngle);
 
 
@@ -270,7 +270,7 @@ bool Law2_ScGeom_MindlinPhysCDM_HertzMindlinCDM::go(shared_ptr<IGeom>& ig, share
 	//reformulated formula
 	phys->isYielding = false;
 	//check yield condition
-	if (2.0 * phys->E / Mathr::PI * math::pow(uN / phys->R, 0.5) > phys->sigmaMax) {
+	if (2.0 * phys->E / Mathr::PI * math::sqrt(uN / phys->R) > phys->sigmaMax) {
 		phys->isYielding = true;
 		Real hfac        = math::pow(Mathr::PI * phys->sigmaMax / 2.0 / phys->E, 2.0);
 		phys->R          = (uDEM + phys->radius * phys->alphaFac) / (hfac + phys->alphaFac);
@@ -278,7 +278,7 @@ bool Law2_ScGeom_MindlinPhysCDM_HertzMindlinCDM::go(shared_ptr<IGeom>& ig, share
 	}
 
 	// here we store the value of kn to compute the time step
-	phys->kn          = 4. / 3.0 * phys->E * math::pow(phys->R * uN, 0.5);
+	phys->kn          = 4. / 3.0 * phys->E * math::sqrt(phys->R * uN);
 	Real Fn           = phys->kn * uN;    // normal Force (scalar)
 	phys->normalForce = Fn * scg->normal; // normal Force (vector)
 
@@ -286,7 +286,7 @@ bool Law2_ScGeom_MindlinPhysCDM_HertzMindlinCDM::go(shared_ptr<IGeom>& ig, share
 	/* SHEAR FORCE */
 	/***************/
 
-	phys->ks = 8.0 * phys->G * math::pow(phys->R * uN, 0.5); //adapted tangential stiffness
+	phys->ks = 8.0 * phys->G * math::sqrt(phys->R * uN); //adapted tangential stiffness
 	// 1. Rotate shear force
 	Vector3r& shearElastic = scg->rotate(phys->shearElastic);
 	// 2. Get shear force (incrementally)

@@ -102,7 +102,7 @@ void SpheresFactory::action()
 
 	// pick random initial velocity
 	Vector3r initVel;
-	if (normalVel.norm() > 0) {
+	if (normalVel.squaredNorm() > 0) {
 		normalVel.normalize();
 		initVel = normalVel;
 	} else {

@@ -492,7 +492,7 @@ void PotentialBlock::calculateInertia(Vector3r& centroid, Real& Ixx, Real& Iyy, 
 			Qp.y()      = crossProd.y();
 			Qp.z()      = crossProd.z();
 			Qp.normalize();
-			if (crossProd.norm() < pow(10, -7)) {
+			if (crossProd.squaredNorm() < 1e-14) {
 				Qp = Quaternionr::Identity();
 			}
 			rotatedCoord = Qp.conjugate() * vertex;

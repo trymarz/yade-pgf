@@ -240,10 +240,10 @@ bool Law2_ScGeom6D_InelastCohFrictPhys_CohesionMoment::go(shared_ptr<IGeom>& ig,
 		if (bendM_elast.norm() > phys->maxElB || phys->onPlastB) { // plastic behavior
 			phys->onPlastB = 1;
 			bendM          = bendM - phys->kDam * relRotBend;                            //trial bending
-			if (bendM.norm() < phys->moment_bending.norm()) {                            // if bending decreased, we are unloading ...
+			if (bendM.squaredNorm() < phys->moment_bending.squaredNorm()) {                            // if bending decreased, we are unloading ...
 				bendM = bendM + phys->kDam * relRotBend - phys->kRUnld * relRotBend; // ... so undo bendM and apply unload coefficient.
 				Vector3r newPureCreep = phys->pureCreep - phys->kRCrp * relRotBend;  // trial pure creep.
-				phys->pureCreep       = newPureCreep.norm() < phys->pureCreep.norm()
+				phys->pureCreep       = newPureCreep.squaredNorm() < phys->pureCreep.squaredNorm()
 				              ? newPureCreep
 				              : phys->pureCreep + phys->kRCrp * relRotBend; // while unloading, pure creep must decrease.
 				phys->kDam            = phys->kr
@@ -251,11 +251,11 @@ bool Law2_ScGeom6D_InelastCohFrictPhys_CohesionMoment::go(shared_ptr<IGeom>& ig,
 				                / (phys->maxBendMom - phys->maxElB); // compute the damage coefficient.
 			} else {                                                     // bending increased, so we are loading (bendM has to be unchanged).
 				Vector3r newPureCreep = phys->pureCreep - phys->kRCrp * relRotBend;
-				phys->pureCreep       = newPureCreep.norm() > phys->pureCreep.norm()
+				phys->pureCreep       = newPureCreep.squaredNorm() > phys->pureCreep.squaredNorm()
 				              ? newPureCreep
 				              : phys->pureCreep + phys->kRCrp * relRotBend;         // while loading, pure creep must increase.
-				if (phys->pureCreep.norm() < bendM.norm()) bendM = phys->pureCreep; // bending moment can't be greather than pure creep.
-				if (phys->pureCreep.norm() > phys->maxCrpRchdB.norm())
+				if (phys->pureCreep.squaredNorm() < bendM.squaredNorm()) bendM = phys->pureCreep; // bending moment can't be greather than pure creep.
+				if (phys->pureCreep.squaredNorm() > phys->maxCrpRchdB.squaredNorm())
 					phys->maxCrpRchdB = phys->pureCreep; // maxCrpRchdB must follow the maximum of pure creep.
 				if (phys->pureCreep.norm() > phys->maxBendMom) {
 					phys->cohesionBroken = 1;

@@ -462,7 +462,7 @@ bool Ig2_ChainedCylinder_ChainedCylinder_ScGeom6D::go(
 		Vector3r A = pChain1->pos, a = cylinderNext1->state->pos - A, B = pChain2->pos, b = cylinderNext2->state->pos - B;
 		Vector3r N = a.cross(b);
 		Vector3r normal;
-		if (N.norm() > 1e-14) {
+		if (N.squaredNorm() > 1e-28) { 
 			dist = math::abs(N.dot(B - A) / (N.norm())); //distance between the two LINES.
 			//But we need to check that the intersection point is inside the two SEGMENTS ...
 			//Projection of B to have a common plan between the two segments.

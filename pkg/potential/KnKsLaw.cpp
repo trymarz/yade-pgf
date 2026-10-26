@@ -127,12 +127,12 @@ bool Law2_SCG_KnKsPhys_KnKsLaw::go(shared_ptr<IGeom>& ig, shared_ptr<IPhys>& ip,
 	Real du = 0.0;
 	//Real debugFn = 0.0;
 	//Real u_prev = fabs(phys->u_cumulative);
-	if (phys->shearDir.norm() > pow(10, -15)) {
+	if (phys->shearDir.squaredNorm() > 1e-30) {
 		phys->shearDir.normalize(); // FIXME: Maybe normalise the shearDir regardless of its magnitude?
 	}
 	Real degradeLength = phys->brittleLength; /*jointLength = 100u_peak */
 	/* Elastic and plastic displacement can have negative signs but must be consistent throughout the simulation */
-	if (phys->initialShearDir.norm() < pow(10, -11)) {
+	if (phys->initialShearDir.squaredNorm() < 1e-22) {
 		phys->initialShearDir = phys->shearDir;
 		du                    = shearIncrement.norm();
 		if (fabs(phys->mobilizedShear) > 0.99999) {
@@ -360,7 +360,7 @@ bool Law2_SCG_KnKsPhys_KnKsLaw::go(shared_ptr<IGeom>& ig, shared_ptr<IPhys>& ip,
 			else if (normDampDissipValue > 0)
 				scene->energy->add(normDampDissipValue, "normDampDissip", normDampDissipIx, /*reset at every timestep*/ false);
 			// Here, instead of checking shearViscous.norm(), I should consider a boolean variable "noShearDamp", like in HertzMindlin.cpp
-			if (phys->shearViscous.norm() > 0.0) {
+			if (phys->shearViscous.squaredNorm() > 0.0) {
 				/*const*/ Real shearDampDissipValue = phys->shearViscous.dot(incidentVs * dt);
 				if (traceEnergy) {
 					shearDampDissip += shearDampDissipValue; // calc dissipation of energy due to shear damping damping
@@ -370,7 +370,7 @@ bool Law2_SCG_KnKsPhys_KnKsLaw::go(shared_ptr<IGeom>& ig, shared_ptr<IPhys>& ip,
 			}
 		}
 	}
-	if (shearForce.norm() < pow(10, -11)) {
+	if (shearForce.squaredNorm() < 1e-22) {
 		phys->mobilizedShear = 1.0;
 	} else {
 		phys->mobilizedShear = shearForce.norm() / maxFs;

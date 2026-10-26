@@ -435,7 +435,7 @@ void LevelSet::init() // computes stuff (center, volume, inertia, nVoxInside) on
 	yMean /= volume;
 	zMean /= volume;
 	center = Vector3r(xMean, yMean, zMean);
-	if (center.norm() > pow(3., 0.5) * spac) // checking the possible offset wrt a grid spacing-dependent characteristic length
+	if (center.squaredNorm() > 3. * spac * spac) // checking the possible offset wrt a grid spacing-dependent characteristic length
 		LOG_ERROR(
 		        "Incorrect LevelSet description: shape center is equal to " << center << " in local axes, instead of 0 (modulo a " << spac
 		                                                                    << " grid spacing).");

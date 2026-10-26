@@ -585,31 +585,31 @@ void Ip2_JCFpmMat_JCFpmMat_JCFpmPhys::go(const shared_ptr<Material>& b1, const s
 
 	/// +++ Jointed interactions ->NOTE: geom->normal is oriented from 1 to 2 / jointNormal from plane to sphere
 	if (st1->onJoint && st2->onJoint) {
-		if ((((st1->jointNormal1.cross(st2->jointNormal1)).norm() < 0.1) && (st1->jointNormal1.dot(st2->jointNormal1) < 0))
-		    || (((st1->jointNormal1.cross(st2->jointNormal2)).norm() < 0.1) && (st1->jointNormal1.dot(st2->jointNormal2) < 0))
-		    || (((st1->jointNormal1.cross(st2->jointNormal3)).norm() < 0.1) && (st1->jointNormal1.dot(st2->jointNormal3) < 0))) {
+		if ((((st1->jointNormal1.cross(st2->jointNormal1)).squaredNorm() < 0.01) && (st1->jointNormal1.dot(st2->jointNormal1) < 0))
+		    || (((st1->jointNormal1.cross(st2->jointNormal2)).squaredNorm() < 0.01) && (st1->jointNormal1.dot(st2->jointNormal2) < 0))
+		    || (((st1->jointNormal1.cross(st2->jointNormal3)).squaredNorm() < 0.01) && (st1->jointNormal1.dot(st2->jointNormal3) < 0))) {
 			contactPhysics->isOnJoint   = true;
 			contactPhysics->jointNormal = st1->jointNormal1;
 		} else if (
-		        (((st1->jointNormal2.cross(st2->jointNormal1)).norm() < 0.1) && (st1->jointNormal2.dot(st2->jointNormal1) < 0))
-		        || (((st1->jointNormal2.cross(st2->jointNormal2)).norm() < 0.1) && (st1->jointNormal2.dot(st2->jointNormal2) < 0))
-		        || (((st1->jointNormal2.cross(st2->jointNormal3)).norm() < 0.1) && (st1->jointNormal2.dot(st2->jointNormal3) < 0))) {
+		        (((st1->jointNormal2.cross(st2->jointNormal1)).squaredNorm() < 0.01) && (st1->jointNormal2.dot(st2->jointNormal1) < 0))
+		        || (((st1->jointNormal2.cross(st2->jointNormal2)).squaredNorm() < 0.01) && (st1->jointNormal2.dot(st2->jointNormal2) < 0))
+		        || (((st1->jointNormal2.cross(st2->jointNormal3)).squaredNorm() < 0.01) && (st1->jointNormal2.dot(st2->jointNormal3) < 0))) {
 			contactPhysics->isOnJoint   = true;
 			contactPhysics->jointNormal = st1->jointNormal2;
 		} else if (
-		        (((st1->jointNormal3.cross(st2->jointNormal1)).norm() < 0.1) && (st1->jointNormal3.dot(st2->jointNormal1) < 0))
-		        || (((st1->jointNormal3.cross(st2->jointNormal2)).norm() < 0.1) && (st1->jointNormal3.dot(st2->jointNormal2) < 0))
-		        || (((st1->jointNormal3.cross(st2->jointNormal3)).norm() < 0.1) && (st1->jointNormal3.dot(st2->jointNormal3) < 0))) {
+		        (((st1->jointNormal3.cross(st2->jointNormal1)).squaredNorm() < 0.01) && (st1->jointNormal3.dot(st2->jointNormal1) < 0))
+		        || (((st1->jointNormal3.cross(st2->jointNormal2)).squaredNorm() < 0.01) && (st1->jointNormal3.dot(st2->jointNormal2) < 0))
+		        || (((st1->jointNormal3.cross(st2->jointNormal3)).squaredNorm() < 0.01) && (st1->jointNormal3.dot(st2->jointNormal3) < 0))) {
 			contactPhysics->isOnJoint   = true;
 			contactPhysics->jointNormal = st1->jointNormal3;
 		} else if (
 		        (st1->joint > 3 || st2->joint > 3)
-		        && ((((st1->jointNormal1.cross(st2->jointNormal1)).norm() > 0.1) && ((st1->jointNormal1.cross(st2->jointNormal2)).norm() > 0.1)
-		             && ((st1->jointNormal1.cross(st2->jointNormal3)).norm() > 0.1))
-		            || (((st1->jointNormal2.cross(st2->jointNormal1)).norm() > 0.1) && ((st1->jointNormal2.cross(st2->jointNormal2)).norm() > 0.1)
-		                && ((st1->jointNormal2.cross(st2->jointNormal3)).norm() > 0.1))
-		            || (((st1->jointNormal3.cross(st2->jointNormal1)).norm() > 0.1) && ((st1->jointNormal3.cross(st2->jointNormal2)).norm() > 0.1)
-		                && ((st1->jointNormal3.cross(st2->jointNormal3)).norm() > 0.1)))) {
+		        && ((((st1->jointNormal1.cross(st2->jointNormal1)).squaredNorm() > 0.01) && ((st1->jointNormal1.cross(st2->jointNormal2)).squaredNorm() > 0.01)
+		             && ((st1->jointNormal1.cross(st2->jointNormal3)).squaredNorm() > 0.01))
+		            || (((st1->jointNormal2.cross(st2->jointNormal1)).squaredNorm() > 0.01) && ((st1->jointNormal2.cross(st2->jointNormal2)).squaredNorm() > 0.01)
+		                && ((st1->jointNormal2.cross(st2->jointNormal3)).squaredNorm() > 0.01))
+		            || (((st1->jointNormal3.cross(st2->jointNormal1)).squaredNorm() > 0.01) && ((st1->jointNormal3.cross(st2->jointNormal2)).squaredNorm() > 0.01)
+		                && ((st1->jointNormal3.cross(st2->jointNormal3)).squaredNorm() > 0.01)))) {
 			contactPhysics->isOnJoint   = true;
 			contactPhysics->more        = true;
 			contactPhysics->jointNormal = geom->normal;

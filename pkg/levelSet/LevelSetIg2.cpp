@@ -681,7 +681,7 @@ Real Ig2_LevelSet_LevelSet_ScGeom::normalMismatch(const shared_ptr<Interaction>&
 	normals.second = b2->state->ori * sh2->normal(sh2->surfNodes[std::get<1>(closestNodeOn2Data)]);
 	LOG_DEBUG("Normal computed on 1 is " << normals.first << " while on 2 it is " << -normals.second);
 	const shared_ptr<ScGeom> geom = YADE_PTR_CAST<ScGeom>(c->geom);
-	if ((normals.first.cross(geom->normal).norm() > 1.e-7) and (normals.second.cross(geom->normal).norm() > 1.e-7))
+	if ((normals.first.cross(geom->normal).squaredNorm() > 1.e-14) and (normals.second.cross(geom->normal).squaredNorm() > 1.e-14))
 		LOG_ERROR("Could not reproduce cont.geom.normal, how is that possible ?");
 	return math::asin(normals.first.cross(normals.second).norm()); // a - normals.second would be logical but useless because of .norm()
 }

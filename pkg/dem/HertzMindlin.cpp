@@ -152,8 +152,8 @@ void Ip2_FrictMat_FrictMat_MindlinPhys::go(const shared_ptr<Material>& b1, const
 	const Real E             = Ea * Eb / ((1. - math::pow(Va, 2)) * Eb + (1. - math::pow(Vb, 2)) * Ea); // effective Young modulus
 	const Real R             = Da * Db / (Da + Db);                                                     // equivalent radius
 	const Real Rmean         = (Da + Db) / 2.;                                                          // mean radius
-	const Real Kno           = 4. / 3. * E * sqrt(R);                                                   // coefficient for normal stiffness
-	const Real Kso           = 8 * sqrt(R) * G;                                                         // coefficient for shear stiffness
+	const Real Kno           = 4. / 3. * E * math::sqrt(R);                                                   // coefficient for normal stiffness
+	const Real Kso           = 8 * math::sqrt(R) * G;                                                         // coefficient for shear stiffness
 	const Real frictionAngle = (!frictAngle) ? math::min(fa, fb) : (*frictAngle)(mat1->id, mat2->id, mat1->frictionAngle, mat2->frictionAngle);
 
 	const Real Adhesion = 4. * Mathr::PI * R * gamma; // calculate adhesion force as predicted by DMT theory
@@ -209,12 +209,12 @@ void Ip2_FrictMat_FrictMat_MindlinPhys::go(const shared_ptr<Material>& b1, const
 		        * (h1
 		           + En * (h2 + En * (h3 + En * (h4 + En * (h5 + En * (h6 + En * (h7 + En * (h8 + En * (h9 + En * h10))))))))); // Eq. (B7) from Thornton et al. (2013)
 		contactPhysics->betan = (En == 1.0) ? 0
-		                                    : sqrt(1.0 / (1.0 - (math::pow(1.0 + En, 2)) * exp(alphan))
+		                                    : math::sqrt(1.0 / (1.0 - (math::pow(1.0 + En, 2)) * exp(alphan))
 		                                           - 1.0); // Eq. (B6) from Thornton et al. (2013) - This is noted as 'gamma' in their paper
 
 		// although Thornton (2015) considered betan=betas, here we use his formulae (B6) and (B7) allowing for betas to take a different value, based on the input es
 		const Real alphas     = Es * (h1 + Es * (h2 + Es * (h3 + Es * (h4 + Es * (h5 + Es * (h6 + Es * (h7 + Es * (h8 + Es * (h9 + Es * h10)))))))));
-		contactPhysics->betas = (Es == 1.0) ? 0 : sqrt(1.0 / (1.0 - (math::pow(1.0 + Es, 2)) * exp(alphas)) - 1.0);
+		contactPhysics->betas = (Es == 1.0) ? 0 : math::sqrt(1.0 / (1.0 - (math::pow(1.0 + Es, 2)) * exp(alphas)) - 1.0);
 
 		// betan/betas specified, use that value directly
 	} else { // Constant coefficient of restitution
@@ -364,12 +364,12 @@ bool Law2_ScGeom_MindlinPhys_HertzWithLinearShear::go(shared_ptr<IGeom>& ig, sha
 
 	// shear force
 	Vector3r&       Fs             = geom->rotate(phys->shearForce);
-	Real            ks             = nonLin > 0 ? phys->kso * math::pow(uN, 0.5) : phys->kso;
+	Real            ks             = nonLin > 0 ? phys->kso * math::sqrt(uN) : phys->kso;
 	const Vector3r& shearIncrement = geom->shearIncrement();
 	Fs -= ks * shearIncrement;
 	// Mohr-Coulomb slip
 	Real maxFs2 = pow(Fn, 2) * pow(phys->tangensOfFrictionAngle, 2);
-	if (Fs.squaredNorm() > maxFs2) Fs *= sqrt(maxFs2) / Fs.norm();
+	if (Fs.squaredNorm() > maxFs2) Fs *= math::sqrt(maxFs2) / Fs.norm();
 
 	// apply forces
 	Vector3r f = -phys->normalForce - phys->shearForce; /* should be a reference returned by geom->rotate */
@@ -445,13 +445,13 @@ bool Law2_ScGeom_MindlinPhys_Mindlin::go(shared_ptr<IGeom>& ig, shared_ptr<IPhys
 	/* TANGENTIAL NORMAL STIFFNESS */
 	/*******************************/
 
-	phys->kn = 3. / 2. * phys->kno * math::pow(uN, 0.5); // here we store the value of kn to compute the time step
+	phys->kn = 3. / 2. * phys->kno * math::sqrt(uN); // here we store the value of kn to compute the time step
 
 	/******************************/
 	/* TANGENTIAL SHEAR STIFFNESS */
 	/******************************/
 
-	phys->ks = phys->kso * math::pow(uN, 0.5); // get tangential stiffness (this is a tangent value, so we can pass it to the GSTS)
+	phys->ks = phys->kso * math::sqrt(uN); // get tangential stiffness (this is a tangent value, so we can pass it to the GSTS)
 
 	/************************/
 	/* DAMPING COEFFICIENTS */
@@ -466,8 +466,8 @@ bool Law2_ScGeom_MindlinPhys_Mindlin::go(shared_ptr<IGeom>& ig, shared_ptr<IPhys
 		                      / (de1->mass
 		                         + de2->mass))); // get equivalent mass if both bodies are dynamic, if not set it equal to the one of the dynamic body
 		if (phys->betan != 0. || phys->betas != 0.) {      // Constant coefficient of restitution (see Thornton, 2015)
-			Real Cn_crit = 2. * sqrt(mbar * phys->kn); // Critical damping coefficient (normal direction)
-			Real Cs_crit = 2. * sqrt(mbar * phys->ks); // Critical damping coefficient (shear direction)
+			Real Cn_crit = 2. * math::sqrt(mbar * phys->kn); // Critical damping coefficient (normal direction)
+			Real Cs_crit = 2. * math::sqrt(mbar * phys->ks); // Critical damping coefficient (shear direction)
 
 			cn = Cn_crit * phys->betan; // Damping normal coefficient
 			cs = Cs_crit * phys->betas; // Damping tangential coefficient
@@ -758,8 +758,8 @@ void Ip2_FrictMat_FrictMat_MindlinCapillaryPhys::go(
 	const Real E             = Ea * Eb / ((1. - math::pow(Va, 2)) * Eb + (1. - math::pow(Vb, 2)) * Ea); // Young modulus
 	const Real R             = Da * Db / (Da + Db);                                                     // equivalent radius
 	const Real Rmean         = (Da + Db) / 2.;                                                          // mean radius
-	const Real Kno           = 4. / 3. * E * sqrt(R);                                                   // coefficient for normal stiffness
-	const Real Kso           = 8 * sqrt(R) * G;                                                         // coefficient for shear stiffness
+	const Real Kno           = 4. / 3. * E * math::sqrt(R);                                                   // coefficient for normal stiffness
+	const Real Kso           = 8 * math::sqrt(R) * G;                                                         // coefficient for shear stiffness
 	const Real frictionAngle = math::min(fa, fb);
 
 	const Real Adhesion = 4. * Mathr::PI * R * gamma; // calculate adhesion force as predicted by DMT theory
@@ -806,12 +806,12 @@ void Ip2_FrictMat_FrictMat_MindlinCapillaryPhys::go(
 		        * (h1
 		           + En * (h2 + En * (h3 + En * (h4 + En * (h5 + En * (h6 + En * (h7 + En * (h8 + En * (h9 + En * h10))))))))); // Eq. (B7) from Thornton et al. (2013)
 		contactPhysics->betan = (En == 1.0) ? 0
-		                                    : sqrt(1.0 / (1.0 - (math::pow(1.0 + En, 2)) * exp(alphan))
+		                                    : math::sqrt(1.0 / (1.0 - (math::pow(1.0 + En, 2)) * math::exp(alphan))
 		                                           - 1.0); // Eq. (B6) from Thornton et al. (2013) - This is noted as 'gamma' in their paper
 
 		// although Thornton (2015) considered betan=betas, here we use his formulae (B6) and (B7) allowing for betas to take a different value, based on the input es
 		const Real alphas     = Es * (h1 + Es * (h2 + Es * (h3 + Es * (h4 + Es * (h5 + Es * (h6 + Es * (h7 + Es * (h8 + Es * (h9 + Es * h10)))))))));
-		contactPhysics->betas = (Es == 1.0) ? 0 : sqrt(1.0 / (1.0 - (math::pow(1.0 + Es, 2)) * exp(alphas)) - 1.0);
+		contactPhysics->betas = (Es == 1.0) ? 0 : math::sqrt(1.0 / (1.0 - (math::pow(1.0 + Es, 2)) * math::exp(alphas)) - 1.0);
 
 		// betan/betas specified, use that value directly
 	} else {

@@ -141,7 +141,7 @@ bool Law2_SCG_KnKsPBPhys_KnKsPBLaw::go(shared_ptr<IGeom>& ig /* contact geometry
 
 	Real du        = shearIncrement.norm(); /* magnitude of shear increment */
 	phys->shearDir = shearIncrement;        /* get shear direction */
-	if (phys->shearDir.norm() > pow(10, -15)) {
+	if (phys->shearDir.squaredNorm() > 1e-30) {
 		phys->shearDir.normalize(); // FIXME: Maybe normalise the shearDir regardless of its magnitude?
 	}
 
@@ -540,7 +540,7 @@ bool Law2_SCG_KnKsPBPhys_KnKsPBLaw::go(shared_ptr<IGeom>& ig /* contact geometry
 				else if (normDampDissipValue > 0)
 					scene->energy->add(normDampDissipValue, "normDampDissip", normDampDissipIx, /*reset at every timestep*/ false);
 				// Here, instead of checking shearViscous.norm(), I should consider a boolean variable "noShearDamp", like in HertzMindlin.cpp
-				if (phys->shearViscous.norm() > 0.0) {
+				if (phys->shearViscous.squaredNorm() > 0.0) {
 					/*const*/ Real shearDampDissipValue = phys->shearViscous.dot(incidentVs * dt);
 					if (traceEnergy) {
 						shearDampDissip += shearDampDissipValue; // calc dissipation of energy due to shear damping damping
@@ -603,7 +603,7 @@ bool Law2_SCG_KnKsPBPhys_KnKsPBLaw::go(shared_ptr<IGeom>& ig /* contact geometry
 
 	/* ********************************************************************************************************************* */
 	/** RECORDING VALUES AND DEBUGGING */
-	if (shearForce.norm() < pow(10, -11)) {
+	if (shearForce.squaredNorm() < 1e-22) {
 		phys->mobilizedShear = 1.0;
 	} else {
 		phys->mobilizedShear = shearForce.norm() / maxFs;
@@ -658,7 +658,7 @@ Real Law2_SCG_KnKsPBPhys_KnKsPBLaw::stressUpdateVec(
 
 	//If new stress after elastic update is outside the previous yield surface
 
-	if (newFs.norm() - maxFs > pow(10, -11) && fN > pow(10, -11) && (Ks * du).norm() > pow(10, -11)) {
+	if (newFs.norm() - maxFs > pow(10, -11) && fN > pow(10, -11) && (Ks * du).squaredNorm() > 1e-22) {
 		// Fs_new = Fs_prev + dF
 		// dF = Ks*du_elastic = Ks*(du - du_plastic) = Ks*(du - beta*du_p)
 		// where du_p is a unit vector whose sign is Sign((Fs_prev + Ks*du).dot(du))*Sign(du);
@@ -793,7 +793,7 @@ Real Law2_SCG_KnKsPBPhys_KnKsPBLaw::stressUpdateVecTalesnick(
 
 	//If new stress after elastic update is outside the previous yield surface
 
-	if (newFs.norm() - maxFs > pow(10, -11) && fN > pow(10, -11) && (Ks * du).norm() > pow(10, -11)) {
+	if (newFs.norm() - maxFs > pow(10, -11) && fN > pow(10, -11) && (Ks * du).squaredNorm() > 1e-22) {
 		// Fs_new = Fs_prev + dF
 		// dF = Ks*du_elastic = Ks*(du - du_plastic) = Ks*(du - beta*du_p)
 		// where du_p is a unit vector whose sign is Sign((Fs_prev + Ks*du).dot(du))*Sign(du);
