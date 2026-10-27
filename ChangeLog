@@ -18,6 +18,7 @@ Breaking Changes
 
 Code Formatting & Organization
 ******************************
+  Simplify compatibility helpers and update documentation after dropping C++14 support (!1224)
   Prune redundant includes and use direct header dependencies without moving code (split from !1218)
   Reformat C++ sources with clang-format 21, matching the version now used by the CI format-check job
 

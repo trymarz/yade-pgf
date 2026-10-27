@@ -15,13 +15,10 @@
 using namespace ::yade::MathEigenTypes;
 
 #include <py/high-precision/minieigen/RealVisitor.hpp>
-template <int N, bool> struct Helper {
-	static void expose_math_Real(bool /* notDuplicate */, const py::scope& /* topScope */) { };
-};
 
-template <int N> struct Helper<N, true> {
-	static void expose_math_Real(bool notDuplicate, const py::scope& topScope)
-	{
+template <int N> void expose_math_Real(bool notDuplicate, const py::scope& topScope)
+{
+	if constexpr (std::numeric_limits<RealHP<N>>::digits10 >= 18) {
 		if (notDuplicate) {
 			py::class_<RealHP<N>>(
 			        "Real",
@@ -31,15 +28,7 @@ template <int N> struct Helper<N, true> {
 		} else {
 			py::scope().attr("Real") = topScope.attr("Real");
 		}
-	};
-};
-
-template <int N> void expose_math_Real(bool notDuplicate, const py::scope& topScope)
-{
-	// We have almost switched to C++17 which supports 'if constexpr'. But some compile targets:
-	//   make_18_04, make_18_04_nogui, make_suse15, mk_bll_arm64, mk_bll_ppc64el, mk_bookw_arm64 use C++14
-	// still use C++14, so I cannot use 'if constexpr' and instead have to use a clunky template
-	Helper<N, (std::numeric_limits<RealHP<N>>::digits10 >= 18)>::expose_math_Real(notDuplicate, topScope);
+	}
 }
 
 // explicit instantination - tell compiler to produce a compiled version of expose_converters (it is faster when done in parallel in .cpp files)

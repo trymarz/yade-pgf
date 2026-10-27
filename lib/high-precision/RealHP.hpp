@@ -40,6 +40,7 @@ struct ComplexHP { };
 #include <boost/mpl/size.hpp>
 #include <boost/mpl/vector.hpp>
 #include <boost/utility/enable_if.hpp>
+#include <type_traits>
 #ifdef YADE_MPFR
 #include <boost/multiprecision/mpfr.hpp>
 #if (BOOST_VERSION >= 107100)
@@ -269,14 +270,8 @@ namespace math {
 	//
 	// So this detail is to properly recognize various complex types with struct IsHPComplex
 	namespace detail {
-		// Older compilers do not have std::void_t, this small helper type is used by HasPlus, HasMinus, etc, below.
-		template <typename... Ts> struct make_void {
-			typedef void type;
-		};
-		template <typename... Ts> using void_type = typename make_void<Ts...>::type;
-
 		template <class, class = void> struct has_value_type : std::false_type { };
-		template <class T> struct has_value_type<T, void_type<typename T::value_type>> : std::true_type { };
+		template <class T> struct has_value_type<T, std::void_t<typename T::value_type>> : std::true_type { };
 		template <typename T, bool = has_value_type<T>::value> struct IsHPComplex {
 			static constexpr bool value = false;
 		};

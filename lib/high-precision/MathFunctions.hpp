@@ -405,8 +405,8 @@ namespace math {
 		return lgamma(static_cast<const UnderlyingHP<Rr>&>(a));
 	}
 
-	// These will be available in C++17, we could use the ones from boost, if they become necessary.
-	// This kind of functions are covered (and added to) lib/high-precision/MathSpecialFunctions.hpp
+	// C++17 provides these special functions for built-in floating-point types.
+	// Multiprecision wrappers belong in lib/high-precision/MathSpecialFunctions.hpp.
 	//
 	//YADE_WRAP_FUNC_1(riemann_zeta)
 	//YADE_WRAP_FUNC_2(beta)

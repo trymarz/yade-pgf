@@ -795,7 +795,7 @@ Shared pointers
 ^^^^^^^^^^^^^^^^^
 Yade makes extensive use of shared pointers ``shared_ptr``. [#sharedptr]_ Although it probably has some performance impacts, it greatly simplifies memory management, ownership management of c++ objects in python and so forth. To obtain raw pointer from a ``shared_ptr``, use its ``get()`` method; raw pointers should be used in case the object will be used only for short time (during a function call, for instance) and not stored anywhere.
  
-.. [#sharedptr] Either ``boost::shared_ptr`` or ``tr1::shared_ptr`` is used, but it is always imported with the ``using`` statement so that unqualified ``shared_ptr`` can be used.
+.. [#sharedptr] ``boost::shared_ptr`` is imported with the ``using`` statement so that unqualified ``shared_ptr`` can be used.
 
 Python defines thin wrappers for most c++ Yade classes (for all those registered with :ref:`YADE_CLASS_BASE_DOC` and several others), which can be constructed from ``shared_ptr``; in this way, Python reference counting blends with the ``shared_ptr`` reference counting model, preventing crashes due to python objects pointing to c++ objects that were destructed in the meantime.
 
@@ -1158,9 +1158,6 @@ Expected parameters are indicated by macro name components separated with unders
 	This will make accessing ``oldName1`` attribute *from Python* return value of ``newName``, but displaying warning message about the attribute name change, displaying provided explanation. This happens whether the access is read or write.
 
 	If the explanation's first character is ``!`` (*bang*), the message will be displayed upon attribute access, but exception will be thrown immediately. Use this in cases where attribute is no longer meaningful or was not straightforwardsly replaced by another, but more complex adaptation of user's script is needed. You still have to give ``newName2``, although its value will never be used -- you can use any variable you like, but something must be given for syntax reasons).
-
-	.. warning::
-		Due to compiler limitations, this feature only works if Yade is compiled with gcc >= 4.4. In the contrary case, deprecated attribute functionality is disabled, even if such attributes are declared.
 
 ``init``
 	Parethesized list of the form:

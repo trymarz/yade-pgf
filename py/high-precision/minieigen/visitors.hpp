@@ -7,9 +7,10 @@
 *************************************************************************/
 
 #pragma once
+#include "common.hpp"
 #include <Eigen/Eigenvalues>
 #include <Eigen/SVD>
-#include "common.hpp"
+#include <type_traits>
 // classes dealing with exposing actual types, with many switches inside depending on template arguments
 
 // helper function conv::val for converting strings to int, RealHP or ComplexHP
@@ -129,13 +130,8 @@ private:
 	static bool isApprox(const MatrixBaseT& a, const MatrixBaseT& b, const RealScalar& prec) { return a.isApprox(b, prec); }
 	static bool __ne__(const MatrixBaseT& a, const MatrixBaseT& b) { return !__eq__(a, b); }
 
-	// older compilers don't have std::void_t
-	template <typename... Ts> struct make_void {
-		typedef void type;
-	};
-	template <typename... Ts> using void_type = typename make_void<Ts...>::type;
 	template <typename T, class = void> struct HasNegation : std::false_type { };
-	template <typename T> struct HasNegation<T, void_type<decltype(std::declval<T>().operator-())>> : std::true_type { };
+	template <typename T> struct HasNegation<T, std::void_t<decltype(std::declval<T>().operator-())>> : std::true_type { };
 	// in older versions of Eigen AlignedVector3 has no negation operator. Following detection if it's present means that it will be used if a newer version of Eigen is used.
 	template <typename MatrixBaseT2, typename boost::enable_if<HasNegation<MatrixBaseT2>, int>::type = 0> static MatrixBaseT __neg__(const MatrixBaseT& a)
 	{
