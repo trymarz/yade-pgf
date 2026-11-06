@@ -6,8 +6,8 @@
 #ifdef NDEBUG
 #undef NDEBUG
 #endif
-#include <CGAL/convex_hull_3.h>
 #include "Polyhedra.hpp"
+#include <CGAL/convex_hull_3.h>
 
 namespace yade { // Cannot have #include directive inside.
 
@@ -141,7 +141,6 @@ void Polyhedra::Initialize()
 		inertia     = Vector3r(inertia_tensor(0, 0), inertia_tensor(1, 1), inertia_tensor(2, 2));
 	} else {
 		// calculate eigenvectors of I
-		Vector3r rot;
 		Matrix3r I_rot(Matrix3r::Zero()), I_new(Matrix3r::Zero());
 		matrixEigenDecomposition(inertia_tensor, I_rot, I_new);
 		// I_rot = eigenvectors of inertia_tensors in columns

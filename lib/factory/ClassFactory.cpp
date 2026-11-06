@@ -9,15 +9,45 @@
 *************************************************************************/
 
 #include "ClassFactory.hpp"
+#include "Factorable.hpp"
 
 #include <lib/base/Logging.hpp>
 #include <boost/algorithm/string/regex.hpp>
+#include <sstream>
 
 SINGLETON_SELF(yade::ClassFactory);
 
 namespace yade { // Cannot have #include directive inside.
 
 CREATE_LOGGER(ClassFactory);
+
+string detail::factorableBaseClassName(const char* baseClasses, unsigned int index)
+{
+	string             token;
+	vector<string>     tokens;
+	string             str = baseClasses;
+	std::istringstream iss(str);
+	while (!iss.eof()) {
+		iss >> token;
+		tokens.push_back(token);
+	}
+	if (index >= token.size()) return "";
+	else
+		return tokens[index];
+}
+
+int detail::factorableBaseClassNumber(const char* baseClasses)
+{
+	string             token;
+	vector<string>     tokens;
+	string             str = baseClasses;
+	std::istringstream iss(str);
+	while (!iss.eof()) {
+		iss >> token;
+		tokens.push_back(token);
+	}
+	return tokens.size();
+}
 
 class Factorable;
 

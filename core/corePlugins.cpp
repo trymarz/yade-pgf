@@ -7,6 +7,7 @@
 #include <core/Callbacks.hpp>
 #include <core/Cell.hpp>
 #include <core/Dispatcher.hpp>
+#include <core/DisplayParameters.hpp>
 #include <core/EnergyTracker.hpp>
 #include <core/Engine.hpp>
 #include <core/FileGenerator.hpp>
@@ -29,6 +30,13 @@ BOOST_CLASS_EXPORT_IMPLEMENT(yade::BodyContainer);
 BOOST_CLASS_EXPORT_IMPLEMENT(yade::InteractionContainer);
 
 namespace yade { // Cannot have #include directive inside.
+
+DEFINE_FACTORABLE(BodyContainer);
+DEFINE_SERIALIZABLE_BINDINGS(BodyContainer);
+DEFINE_FACTORABLE(InteractionContainer);
+DEFINE_SERIALIZABLE_ARCHIVES(InteractionContainer);
+DEFINE_FACTORABLE(DisplayParameters);
+DEFINE_SERIALIZABLE_ARCHIVES(DisplayParameters);
 
 YADE_PLUGIN((
         Body)(Bound)(Aabb)(Cell)(Dispatcher)(EnergyTracker)(Engine)(FileGenerator)(Functor)(GlobalEngine)(Interaction)(IGeom)(IPhys)(Material)(PartialEngine)(Shape)(State)(ThermalState)(TimeStepper)(IntrCallback)

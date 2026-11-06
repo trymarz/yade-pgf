@@ -11,10 +11,14 @@
 #include "ClassFactory.hpp"
 
 #include <boost/enable_shared_from_this.hpp>
-#include <sstream>
 #include <string>
 
 namespace yade { // Cannot have #include directive inside.
+
+namespace detail {
+	string factorableBaseClassName(const char* baseClasses, unsigned int index);
+	int    factorableBaseClassNumber(const char* baseClasses);
+}
 
 //! macro for registering both class and its base
 #define REGISTER_CLASS_AND_BASE(cn, bcn)                                                                                                                       \
@@ -29,34 +33,10 @@ public:                                                                         
 
 #define REGISTER_BASE_CLASS_NAME(bcn)                                                                                                                          \
 public:                                                                                                                                                        \
-	string getBaseClassName(unsigned int iTokenBaseClass = 0) const override                                                                               \
-	{                                                                                                                                                      \
-		string             token;                                                                                                                      \
-		vector<string>     tokens;                                                                                                                     \
-		string             str = #bcn;                                                                                                                 \
-		std::istringstream iss(str);                                                                                                                   \
-		while (!iss.eof()) {                                                                                                                           \
-			iss >> token;                                                                                                                          \
-			tokens.push_back(token);                                                                                                               \
-		}                                                                                                                                              \
-		if (iTokenBaseClass >= token.size()) return "";                                                                                                \
-		else                                                                                                                                           \
-			return tokens[iTokenBaseClass];                                                                                                        \
-	}                                                                                                                                                      \
+	string getBaseClassName(unsigned int iTokenBaseClass = 0) const override { return ::yade::detail::factorableBaseClassName(#bcn, iTokenBaseClass); }    \
                                                                                                                                                                \
 public:                                                                                                                                                        \
-	int getBaseClassNumber() const override                                                                                                                \
-	{                                                                                                                                                      \
-		string             token;                                                                                                                      \
-		vector<string>     tokens;                                                                                                                     \
-		string             str = #bcn;                                                                                                                 \
-		std::istringstream iss(str);                                                                                                                   \
-		while (!iss.eof()) {                                                                                                                           \
-			iss >> token;                                                                                                                          \
-			tokens.push_back(token);                                                                                                               \
-		}                                                                                                                                              \
-		return tokens.size();                                                                                                                          \
-	}
+	int getBaseClassNumber() const override { return ::yade::detail::factorableBaseClassNumber(#bcn); }
 
 
 class Factorable : public boost::enable_shared_from_this<Factorable> {

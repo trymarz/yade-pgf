@@ -13,6 +13,10 @@
 #include "DynLibManager.hpp"
 #include <lib/base/Math.hpp>
 #include <lib/base/Singleton.hpp>
+#include <boost/preprocessor/cat.hpp>
+#include <boost/preprocessor/seq/for_each.hpp>
+#include <boost/preprocessor/seq/seq.hpp>
+#include <boost/preprocessor/stringize.hpp>
 
 /*! define the following macro to enable experimenta boost::serialization support
 	Slows the compilation down about 2×.
@@ -40,6 +44,20 @@ namespace yade { // Cannot have #include directive inside.
 	inline Factorable*            Create##name() { return new name; }                                                                                      \
 	inline void*                  CreatePureCustom##name() { return new name; }                                                                            \
 	const bool                    registered##name __attribute__((unused))                                                                                 \
+	= ClassFactory::instance().registerFactorable(#name, Create##name, CreateShared##name, CreatePureCustom##name);
+
+
+// Serializable factories are defined once by their owning plugin.
+#define DECLARE_FACTORABLE(name)                                                                                                                               \
+	shared_ptr<Factorable> CreateShared##name();                                                                                                           \
+	Factorable*            Create##name();                                                                                                                 \
+	void*                  CreatePureCustom##name();
+
+#define DEFINE_FACTORABLE(name)                                                                                                                                \
+	shared_ptr<Factorable> CreateShared##name() { return shared_ptr<name>(new name); }                                                                     \
+	Factorable*            Create##name() { return new name; }                                                                                             \
+	void*                  CreatePureCustom##name() { return new name; }                                                                                   \
+	const bool             registered##name __attribute__((unused))                                                                                        \
 	= ClassFactory::instance().registerFactorable(#name, Create##name, CreateShared##name, CreatePureCustom##name);
 
 
@@ -152,6 +170,9 @@ public:
 
 
 #define _YADE_PLUGIN_REPEAT(x, y, z) BOOST_PP_STRINGIZE(z),
+#define _YADE_PLUGIN_FACTORABLE(x, y, z) DEFINE_FACTORABLE(z)
+// Serializable.hpp supplies Python bridges when Serializable classes are available.
+#define _YADE_PLUGIN_PYTHON_REGISTER(x, y, z)
 
 // If you get error "expected declaration before ‘}’ token" it means that you forgot put this macro inside yade namespace.
 // To keep things consistent with REGISTER_SERIALIZABLE the YADE_PLUGIN is assumed to be inside yade namespace.
@@ -159,6 +180,8 @@ public:
 // https://github.com/boostorg/serialization/blob/develop/include/boost/serialization/factory.hpp#L91
 // so here also to keep things inside single macro, there is closing and opening bracket for yade namespace.
 #define YADE_PLUGIN(plugins)                                                                                                                                   \
+	BOOST_PP_SEQ_FOR_EACH(_YADE_PLUGIN_FACTORABLE, ~, plugins)                                                                                             \
+	BOOST_PP_SEQ_FOR_EACH(_YADE_PLUGIN_PYTHON_REGISTER, ~, plugins)                                                                                        \
 	}                                                                                                                                                      \
 	namespace {                                                                                                                                            \
 		__attribute__((constructor)) void BOOST_PP_CAT(registerThisPluginClasses_, BOOST_PP_SEQ_HEAD(plugins))(void)                                   \
@@ -167,6 +190,7 @@ public:
 			::yade::ClassFactory::instance().registerPluginClasses(info);                                                                          \
 		}                                                                                                                                              \
 	}                                                                                                                                                      \
-	BOOST_PP_SEQ_FOR_EACH(_YADE_PLUGIN_BOOST_REGISTER, ~, plugins) namespace yade                                                                          \
+	BOOST_PP_SEQ_FOR_EACH(_YADE_PLUGIN_BOOST_REGISTER, ~, plugins)                                                                                         \
+	namespace yade                                                                                                                                         \
 	{
 } // namespace yade

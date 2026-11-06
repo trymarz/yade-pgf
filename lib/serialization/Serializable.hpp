@@ -18,8 +18,9 @@
 #include <boost/preprocessor/seq/size.hpp>
 #include <boost/preprocessor/stringize.hpp>
 #include <boost/preprocessor/tuple/elem.hpp>
-#include <boost/type_traits/integral_constant.hpp>
 #include <boost/python.hpp>
+#include <boost/type_traits/integral_constant.hpp>
+#include <type_traits>
 
 #include <lib/base/AliasNamespaces.hpp>
 #include <lib/base/Math.hpp>
@@ -108,34 +109,39 @@ template <class C, typename T, T C::* A> void make_setter_postLoad(C& instance, 
 /* Huh, add_static_property does not support doc argument (add_property does); if so, use add_property for now at least... */
 #define _DEF_READWRITE_BY_VALUE_STATIC(thisClass, attr, doc) _DEF_READWRITE_BY_VALUE(thisClass, attr, doc)
 
-// the conditional yade::py_wrap_ref should be eliminated by compiler at compile-time, as it depends only on types, not their values
-// most of this could be written with templates, including flags (ints can be template args)
-#define _DEF_READWRITE_CUSTOM(thisClass, attr)                                                                                                                 \
-	if (!(_ATTR_FLG(attr) & yade::Attr::hidden)) {                                                                                                         \
-		bool _ro(_ATTR_FLG(attr) & Attr::readonly), _post(_ATTR_FLG(attr) & Attr::triggerPostLoad),                                                    \
-		        _ref(yade::py_wrap_ref<decltype(thisClass::_ATTR_NAM(attr))>::value);                                                                  \
-		std::string docStr(_ATTR_DOC(attr));                                                                                                           \
-		docStr += " :yattrflags:`" + boost::lexical_cast<string>(_ATTR_FLG(attr)) + "` ";                                                              \
-                                                                                                                                                               \
-		if (_ref && !_ro && !_post) _classObj.def_readwrite(_ATTR_NAM_STR(attr), &thisClass::_ATTR_NAM(attr), docStr.c_str());                         \
-		else if (_ref && !_ro && _post)                                                                                                                \
-			_classObj.add_property(                                                                                                                \
-			        _ATTR_NAM_STR(attr),                                                                                                           \
-			        ::boost::python::make_getter(&thisClass::_ATTR_NAM(attr)),                                                                     \
-			        make_setter_postLoad<thisClass, decltype(thisClass::_ATTR_NAM(attr)), &thisClass::_ATTR_NAM(attr)>,                            \
-			        docStr.c_str());                                                                                                               \
-		else if (_ref && _ro)                                                                                                                          \
-			_classObj.def_readonly(_ATTR_NAM_STR(attr), &thisClass::_ATTR_NAM(attr), docStr.c_str());                                              \
-		else if (!_ref && !_ro && !_post)                                                                                                              \
-			_classObj._DEF_READWRITE_BY_VALUE(thisClass, _ATTR_NAM(attr), docStr.c_str());                                                         \
-		else if (!_ref && !_ro && _post)                                                                                                               \
-			_classObj._DEF_READWRITE_BY_VALUE_POSTLOAD(thisClass, _ATTR_NAM(attr), docStr.c_str());                                                \
-		else if (!_ref && _ro)                                                                                                                         \
-			_classObj._DEF_READONLY_BY_VALUE(thisClass, _ATTR_NAM(attr), docStr.c_str());                                                          \
-		if (_ro && _post)                                                                                                                              \
-			std::cerr << "WARN: " BOOST_PP_STRINGIZE(thisClass) "::" _ATTR_NAM_STR(attr) " with the yade::Attr::readonly flag also uselessly sets yade::Attr::triggerPostLoad."     \
-			        << std::endl;                                                                                                                  \
+template <int Flags, class C, typename T, T C::* Member, class PythonClass>
+void registerSerializableAttribute(PythonClass& classObj, const char* name, const char* doc, const char* className)
+{
+	if constexpr (!(Flags & Attr::hidden)) {
+		constexpr bool readonly = Flags & Attr::readonly, postload = Flags & Attr::triggerPostLoad;
+		std::string    docStr(doc);
+		docStr += " :yattrflags:`" + boost::lexical_cast<std::string>(Flags) + "` ";
+		if constexpr (!py_wrap_ref<T>::value) {
+			auto getter = ::boost::python::make_getter(Member, ::boost::python::return_value_policy<::boost::python::return_by_value>());
+			if constexpr (readonly) classObj.add_property(name, getter, docStr.c_str());
+			else if constexpr (postload)
+				classObj.add_property(name, getter, make_setter_postLoad<C, T, Member>, docStr.c_str());
+			else
+				classObj.add_property(
+				        name,
+				        getter,
+				        ::boost::python::make_setter(Member, ::boost::python::return_value_policy<::boost::python::return_by_value>()),
+				        docStr.c_str());
+		} else if constexpr (readonly)
+			classObj.def_readonly(name, Member, docStr.c_str());
+		else if constexpr (postload)
+			classObj.add_property(name, ::boost::python::make_getter(Member), make_setter_postLoad<C, T, Member>, docStr.c_str());
+		else
+			classObj.def_readwrite(name, Member, docStr.c_str());
+		if constexpr (readonly && postload)
+			std::cerr << "WARN: " << className << "::" << name
+			          << " with the yade::Attr::readonly flag also uselessly sets yade::Attr::triggerPostLoad." << std::endl;
 	}
+}
+
+#define _DEF_READWRITE_CUSTOM(thisClass, attr)                                                                                                                 \
+	yade::registerSerializableAttribute<_ATTR_FLG(attr), thisClass, decltype(thisClass::_ATTR_NAM(attr)), &thisClass::_ATTR_NAM(attr)>(                    \
+	        _classObj, _ATTR_NAM_STR(attr), _ATTR_DOC(attr), BOOST_PP_STRINGIZE(thisClass));
 #define _DEF_READWRITE_CUSTOM_STATIC(thisClass, attr, doc)                                                                                                     \
 	{                                                                                                                                                      \
 		_classObj.def_readwrite(BOOST_PP_STRINGIZE(attr), &thisClass::attr, doc);                                                                      \
@@ -200,10 +206,13 @@ template <class C, typename T, T C::* A> void make_setter_postLoad(C& instance, 
 #define _PYKEYS_ATTR(x, y, z) ret.append(_ATTR_NAM_STR(z));
 #define _PYHASKEY_ATTR(x, y, z)                                                                                                                                \
 	if (key == _ATTR_NAM_STR(z)) return true;
-#define _PYDICT_ATTR(x, y, z)                                                                                                                                  \
-	if (!(_ATTR_FLG(z) & yade::Attr::hidden)) ret[_ATTR_NAM_STR(z)] = ::boost::python::object(_ATTR_NAM(z));
+template <int Flags, class T> void addSerializableDictAttribute(::boost::python::dict& dictionary, const char* name, const T& value)
+{
+	if constexpr (!(Flags & Attr::hidden)) dictionary[name] = ::boost::python::object(value);
+}
+#define _PYDICT_ATTR(x, y, z) addSerializableDictAttribute<_ATTR_FLG(z)>(ret, _ATTR_NAM_STR(z), _ATTR_NAM(z));
 #define _REGISTER_BOOST_ATTRIBUTES_REPEAT(x, y, z)                                                                                                             \
-	if ((_ATTR_FLG(z) & yade::Attr::noSave) == 0) {                                                                                                        \
+	if constexpr ((_ATTR_FLG(z) & yade::Attr::noSave) == 0) {                                                                                              \
 		ar& BOOST_SERIALIZATION_NVP(_ATTR_NAM(z));                                                                                                     \
 	}
 #define _REGISTER_BOOST_ATTRIBUTES(baseClass, attrs)                                                                                                           \
@@ -290,19 +299,48 @@ _REGISTER_BOOST_ATTRIBUTES(baseClass, attrs) public : void pySetAttr(const std::
 #define _DEPREC_COMMENT(x) BOOST_PP_TUPLE_ELEM(3, 2, x) "" // if the argument is omited, return empty string instead of nothing
 
 
+// Bindings are instantiated only by the class's owning plugin, not by header consumers.
+template <class...> using SerializableBindingVoid = void;
+template <class C, class = void> struct SerializableHasOwnBindings : std::false_type { };
+template <class C>
+struct SerializableHasOwnBindings<C, SerializableBindingVoid<typename C::YadePyRegistrationOwner>> : std::is_same<C, typename C::YadePyRegistrationOwner> { };
+
+template <class C>
+typename std::enable_if<SerializableHasOwnBindings<C>::value>::type registerSerializableClassImplementation(C& instance, const ::boost::python::object& scope)
+{
+	instance.template pyRegisterClassImpl<C>(scope);
+}
+template <class C>
+typename std::enable_if<!SerializableHasOwnBindings<C>::value>::type registerSerializableClassImplementation(C&, const ::boost::python::object&)
+{
+	// Handwritten classes retain their existing virtual registration implementation.
+}
+
+#define _YADE_DECLARE_PYTHON_BINDINGS(thisClass)                                                                                                               \
+	using YadePyRegistrationOwner = thisClass;                                                                                                             \
+	void pyRegisterClass(::boost::python::object scope) override { registerSerializableClassImplementation(*this, scope); }                                \
+	template <class YadeBindingClass = thisClass> void pyRegisterClassImpl(const ::boost::python::object& _scope)
+
+#define DEFINE_SERIALIZABLE_BINDINGS(name)                                                                                                                     \
+	template void registerSerializableClassImplementation<name>(name&, const ::boost::python::object&);                                                    \
+	DEFINE_SERIALIZABLE_ARCHIVES(name)
+
+#undef _YADE_PLUGIN_PYTHON_REGISTER
+#define _YADE_PLUGIN_PYTHON_REGISTER(x, y, z) DEFINE_SERIALIZABLE_BINDINGS(z)
+
+
 #define _YADE_CLASS_BASE_DOC_ATTRS_DEPREC_PY(thisClass, baseClass, docString, attrs, deprec, extras)                                                           \
 	_REGISTER_ATTRIBUTES_DEPREC(thisClass, baseClass, attrs, deprec)                                                                                       \
 	REGISTER_CLASS_AND_BASE(thisClass, baseClass)                                                                                                          \
 	/* accessors for deprecated attributes, with warnings */ BOOST_PP_SEQ_FOR_EACH(                                                                        \
-	        _ACCESS_DEPREC, thisClass, deprec) /* python class registration */ virtual void                                                                \
-	pyRegisterClass(::boost::python::object _scope) override                                                                                               \
+	        _ACCESS_DEPREC, thisClass, deprec) /* python class registration */ _YADE_DECLARE_PYTHON_BINDINGS(thisClass)                                    \
 	{                                                                                                                                                      \
 		checkPyClassRegistersItself(#thisClass);                                                                                                       \
 		::boost::python::scope thisScope(_scope);                                                                                                      \
 		YADE_SET_DOCSTRING_OPTS;                                                                                                                       \
-		::boost::python::PyClassCustom<thisClass, shared_ptr<thisClass>, ::boost::python::bases<baseClass>, boost::noncopyable> _classObj(             \
-		        #thisClass, docString);                                                                                                                \
-		_classObj.def("__init__", ::boost::python::raw_constructor(Serializable_ctor_kwAttrs<thisClass>));                                             \
+		::boost::python::PyClassCustom<YadeBindingClass, shared_ptr<YadeBindingClass>, ::boost::python::bases<baseClass>, boost::noncopyable>          \
+		        _classObj(#thisClass, docString);                                                                                                      \
+		_classObj.def("__init__", ::boost::python::raw_constructor(Serializable_ctor_kwAttrs<YadeBindingClass>));                                      \
 		BOOST_PP_SEQ_FOR_EACH(_PYATTR_DEF, thisClass, attrs);                                                                                          \
 		(void)_classObj BOOST_PP_SEQ_FOR_EACH(_PYATTR_DEPREC_DEF, thisClass, deprec);                                                                  \
 		(void)_classObj extras;                                                                                                                        \
@@ -335,15 +373,15 @@ _REGISTER_BOOST_ATTRIBUTES(baseClass, attrs) public : void pySetAttr(const std::
 
 
 #define _STATCLASS_PY_REGISTER_CLASS(thisClass, baseClass, docString, attrs)                                                                                   \
-	void pyRegisterClass(::boost::python::object _scope) override                                                                                          \
+	_YADE_DECLARE_PYTHON_BINDINGS(thisClass)                                                                                                               \
 	{                                                                                                                                                      \
 		checkPyClassRegistersItself(#thisClass);                                                                                                       \
 		initSetStaticAttributesValue();                                                                                                                \
 		::boost::python::scope thisScope(_scope);                                                                                                      \
 		YADE_SET_DOCSTRING_OPTS;                                                                                                                       \
-		::boost::python::PyClassCustom<thisClass, shared_ptr<thisClass>, ::boost::python::bases<baseClass>, boost::noncopyable> _classObj(             \
-		        #thisClass, docString "\n\n" BOOST_PP_SEQ_FOR_EACH(_STATATTR_MAKE_DOC, thisClass, attrs));                                             \
-		_classObj.def("__init__", ::boost::python::raw_constructor(Serializable_ctor_kwAttrs<thisClass>));                                             \
+		::boost::python::PyClassCustom<YadeBindingClass, shared_ptr<YadeBindingClass>, ::boost::python::bases<baseClass>, boost::noncopyable>          \
+		        _classObj(#thisClass, docString "\n\n" BOOST_PP_SEQ_FOR_EACH(_STATATTR_MAKE_DOC, thisClass, attrs));                                   \
+		_classObj.def("__init__", ::boost::python::raw_constructor(Serializable_ctor_kwAttrs<YadeBindingClass>));                                      \
 		BOOST_PP_SEQ_FOR_EACH(_STATATTR_PY, thisClass, attrs);                                                                                         \
 	}
 
@@ -351,15 +389,14 @@ _REGISTER_BOOST_ATTRIBUTES(baseClass, attrs) public : void pySetAttr(const std::
 	_REGISTER_ATTRIBUTES_DEPREC(thisClass, baseClass, attrs, deprec)                                                                                       \
 	REGISTER_CLASS_AND_BASE(pyClassName, baseClass)                                                                                                        \
 	/* accessors for deprecated attributes, with warnings */ BOOST_PP_SEQ_FOR_EACH(                                                                        \
-	        _ACCESS_DEPREC, thisClass, deprec) /* python class registration */ virtual void                                                                \
-	pyRegisterClass(::boost::python::object _scope) override                                                                                               \
+	        _ACCESS_DEPREC, thisClass, deprec) /* python class registration */ _YADE_DECLARE_PYTHON_BINDINGS(thisClass)                                    \
 	{                                                                                                                                                      \
 		checkPyClassRegistersItself(#pyClassName);                                                                                                     \
 		::boost::python::scope thisScope(_scope);                                                                                                      \
 		YADE_SET_DOCSTRING_OPTS;                                                                                                                       \
-		::boost::python::PyClassCustom<thisClass, shared_ptr<thisClass>, ::boost::python::bases<baseClass>, boost::noncopyable> _classObj(             \
-		        #pyClassName, docString);                                                                                                              \
-		_classObj.def("__init__", ::boost::python::raw_constructor(Serializable_ctor_kwAttrs<thisClass>));                                             \
+		::boost::python::PyClassCustom<YadeBindingClass, shared_ptr<YadeBindingClass>, ::boost::python::bases<baseClass>, boost::noncopyable>          \
+		        _classObj(#pyClassName, docString);                                                                                                    \
+		_classObj.def("__init__", ::boost::python::raw_constructor(Serializable_ctor_kwAttrs<YadeBindingClass>));                                      \
 		BOOST_PP_SEQ_FOR_EACH(_PYATTR_DEF, thisClass, attrs);                                                                                          \
 		(void)_classObj BOOST_PP_SEQ_FOR_EACH(_PYATTR_DEPREC_DEF, thisClass, deprec);                                                                  \
 		(void)_classObj extras;                                                                                                                        \
@@ -405,10 +442,30 @@ public:                                                                         
 // https://github.com/boostorg/serialization/blob/develop/include/boost/serialization/export.hpp#L173
 // So to keep things inside single macro, there is closing     ↓      and opening bracket for        yade namespace ↓
 #define REGISTER_SERIALIZABLE(name)                                                                                                                            \
-	REGISTER_FACTORABLE(name);                                                                                                                             \
+	DECLARE_FACTORABLE(name);                                                                                                                              \
+	extern template void registerSerializableClassImplementation<name>(name&, const ::boost::python::object&);                                             \
 	}                                                                                                                                                      \
 	BOOST_CLASS_EXPORT_KEY(yade::name);                                                                                                                    \
+	namespace yade {                                                                                                                                       \
+		DECLARE_SERIALIZABLE_ARCHIVES(name);
+
+// Archive implementations have the same owning plugin as factories and Python bindings.
+#define YADE_SERIALIZABLE_ARCHIVE_INSTANCES(prefix, name)                                                                                                      \
+	}                                                                                                                                                      \
+	namespace boost {                                                                                                                                      \
+		namespace archive {                                                                                                                            \
+			namespace detail {                                                                                                                     \
+				prefix template class iserializer<binary_iarchive, ::yade::name>;                                                              \
+				prefix template class iserializer<xml_iarchive, ::yade::name>;                                                                 \
+				prefix template class oserializer<binary_oarchive, ::yade::name>;                                                              \
+				prefix template class oserializer<xml_oarchive, ::yade::name>;                                                                 \
+			}                                                                                                                                      \
+		}                                                                                                                                              \
+	}                                                                                                                                                      \
 	namespace yade {
+
+#define DECLARE_SERIALIZABLE_ARCHIVES(name) YADE_SERIALIZABLE_ARCHIVE_INSTANCES(extern, name)
+#define DEFINE_SERIALIZABLE_ARCHIVES(name) YADE_SERIALIZABLE_ARCHIVE_INSTANCES(, name)
 
 // for static classes (Gl1 functors, for instance)
 #define YADE_CLASS_BASE_DOC_STATICATTRS(thisClass, baseClass, docString, attrs)                                                                                \
