@@ -2,6 +2,16 @@
 YADE — Yet Another Dynamic Engine
 ===============================
 
+.. note::
+
+   **yade-pgf** is an unofficial, modified copy of Yade, not maintained by the Yade
+   developers. Branch ``main`` is the official Yade release ``2026.1.0``
+   (https://gitlab.com/yade-dev/trunk, also kept here as branch ``yade-2026.1.0`` and
+   tag ``2026.1.0``) plus a per-particle ``lambda`` state and the ``PgfCoupling``
+   engine for coupling with porousGasificationFoam (OpenFOAM v2606). See
+   ``git log 2026.1.0..main`` for the exact changes. Like Yade, it is distributed
+   under the GNU General Public License v2 or later (see ``LICENSE``).
+
 An extensible open‑source framework for discrete numerical models, focused on the
 Discrete Element Method. Performance‑critical parts are written in C++ using a flexible
 object model that allows independent implementation of new algorithms and interfaces.
