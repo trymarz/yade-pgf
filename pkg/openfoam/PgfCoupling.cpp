@@ -1,3 +1,9 @@
+/*************************************************************************
+*  Copyright (C) 2026 by Tadeusz Rymarz                                  *
+*                                                                        *
+*  This program is free software; it is licensed under the terms of the  *
+*  GNU General Public License v2 or later. See file LICENSE for details. *
+*************************************************************************/
 // Minimal Yade side of the porousGasificationFoam coupling; protocol in PgfCoupling.hpp.
 #ifdef YADE_MPI
 
