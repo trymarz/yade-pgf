@@ -223,6 +223,18 @@ def configure():  # calling this function will import mpi4py.MPI,
 configure()  # needed at import time, else we can't check rank or numThreads right after import
 
 
+def _closePgfCoupling():
+	"""Close PgfCoupling's bridge before mpi4py finalises MPI, so a DEM run that ends first stops OpenFOAM (PGF #328)."""
+	for e in O.engines:
+		if e.__class__.__name__ == "PgfCoupling":
+			e.close()
+
+
+import atexit
+
+atexit.register(_closePgfCoupling)  # registered after mpi4py's finalizer, so it runs first
+
+
 def disconnect():
 	'''
 	Kill all mpi processes, leaving python interpreter to rank 0 as in single-threaded execution.
