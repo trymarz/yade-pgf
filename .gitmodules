@@ -2,3 +2,6 @@
 	path = data
 	url = ../yade-data.git
 	branch = main
+[submodule "extra/PgfDemBridge"]
+	path = extra/PgfDemBridge
+	url = https://github.com/trymarz/PgfDemBridge.git
