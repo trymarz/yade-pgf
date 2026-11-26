@@ -74,7 +74,6 @@ public:
 		if (myComm_p == NULL) LOG_ERROR("invalid COMM received from Python");
 	}
 	PyObject* getMyComm() { return PyMPIComm_New(selfComm()); }
-	void      setFoamSolver(const std::string&, unsigned);
 	void      close();
 	void      action() override;
 	virtual ~PgfCoupling() {};
@@ -100,8 +99,6 @@ public:
 	.def("eraseId", &PgfCoupling::eraseId, boost::python::arg("idToErase"), "Remove a body from the coupling.")
 	.def("getIdList", &PgfCoupling::getIdList, "Ids of the bodies in the coupling.")
 	.def("getNumBodies", &PgfCoupling::getNumBodies, "Number of bodies in the coupling.")
-	.def("setNumParticles", +[](PgfCoupling&, int) {}, boost::python::arg("numparticles"), "Ignored; kept so FoamCoupling scripts run unchanged.")
-	.def("SetOpenFoamSolver", &PgfCoupling::setFoamSolver, (boost::python::arg("OpenFOAMSolverName"), boost::python::arg("numOpenFOAMProcesses")), "Ignored since protocol v2; kept so v1 scripts run.")
 	.def("close", &PgfCoupling::close, "Collective on all ranks of both programs: end the coupling (stops OpenFOAM if it is still running). yade.mpy calls it at exit.")
 	.add_property("comm", &PgfCoupling::getMyComm, &PgfCoupling::setMyComm, "Communicator to be used for MPI (converts mpi4py comm <-> c++ comm)")
 	)

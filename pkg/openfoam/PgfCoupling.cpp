@@ -32,11 +32,6 @@ bool PgfCoupling::eraseId(int id)
 	return true;
 }
 
-void PgfCoupling::setFoamSolver(const std::string&, unsigned)
-{
-	LOG_WARN("PgfCoupling.SetOpenFoamSolver is ignored: protocol v2 starts OpenFOAM in the same mpirun (PGF #328)");
-}
-
 // Collective with OpenFOAM: every DEM rank, mpy's master included, joins the bridge.
 void PgfCoupling::open()
 {
