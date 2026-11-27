@@ -10,6 +10,20 @@ IF (NOT YADE_VERSION)
       OUTPUT_VARIABLE YADE_VERSION
       OUTPUT_STRIP_TRAILING_WHITESPACE
     )
+    # yade-pgf: in a git checkout, append the commit (2026.1.0-git-1a2b3c4),
+    # so yade -v names the commit that PGF checks against its pin.
+    IF (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/.git)
+      execute_process(
+        COMMAND git rev-parse --short=7 HEAD
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        OUTPUT_VARIABLE VERSION_GIT
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+        ERROR_QUIET
+      )
+      IF (VERSION_GIT)
+        SET(YADE_VERSION "${YADE_VERSION}-git-${VERSION_GIT}")
+      ENDIF (VERSION_GIT)
+    ENDIF (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/.git)
   ELSEIF (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/.git)
     #Use git for version defining
     execute_process(
